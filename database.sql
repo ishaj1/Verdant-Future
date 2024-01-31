@@ -14,8 +14,8 @@ CREATE TABLE Company_eval(
     company_size int not null,
     green_credits float(20,3) not null,
     -- To be determined later
-    primary key (company_username)
-    foreign key (company_username) references Company(company_username)
+    primary key (company_username),
+    foreign key (company_username) references Company(company_username),
     foreign key (green_credits) references Company(green_credits)
 );
 
@@ -31,22 +31,22 @@ CREATE TABLE Project{
     funds_required float(20,3) not null
 };
 
-CREATE Company_Transaction{
-    transaction_name varchar(50),
+CREATE TABLE Company_Transaction{
+    transaction_name varchar(50) not null,
     sender_username varchar(50),
     receiver_username varchar(50),
     amount_transferred varchar(50) not null,
-    primary key (transaction_name, sender_username, receiver_username)
-    foreign key (sender_username) references Company(company_username)
+    primary key (transaction_name, sender_username, receiver_username),
+    foreign key (sender_username) references Company(company_username),
     foreign key (receiver_username) references Company(company_username)
 };
 
-CREATE Project_Transaction{
-    transaction_name varchar(50),
+CREATE TABLE Project_Transaction{
+    transaction_name varchar(50) not null,
     sender_username varchar(50),
     receiver_username varchar(50),
     amount_transferred varchar(50) not null,
-    primary key (transaction_name, sender_username, receiver_username)
-    foreign key (sender_username) references Company(company_username)
+    primary key (transaction_name, sender_username, receiver_username),
+    foreign key (sender_username) references Company(company_username),
     foreign key (receiver_username) references Project(project_username)
 };
