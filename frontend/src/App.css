@@ -1,0 +1,7 @@
+.LoginWindow > button.selected {
+  background-color: yellow;
+}
+
+.OrganizationCard {
+  background-color: lightgray;
+}
