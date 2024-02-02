@@ -2,7 +2,7 @@ import { useState } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import Home from "./pages/Home";
-import ProjectsDirectory from "./pages/OrganizationsDirectory";
+import OrganizationsDirectory from "./pages/OrganizationsDirectory";
 import Profile from "./pages/Profile";
 import Register from "./pages/Register";
 
@@ -42,7 +42,7 @@ function App() {
     {
       path: "/projects",
       element: (
-        <ProjectsDirectory
+        <OrganizationsDirectory
           isLoggedIn={isLoggedIn}
           setIsLoggedIn={setIsLoggedIn}
           userInformation={userInformation}
