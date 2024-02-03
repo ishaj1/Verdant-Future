@@ -10,10 +10,6 @@ from flask import (
 )
 from flask_cors import CORS
 import hashlib
-import datetime
-import random
-import uuid
-from datetime import datetime
 
 app = Flask(__name__)
 CORS(app)
@@ -24,7 +20,7 @@ conn = pymysql.connect(
     host="localhost",
     user="root",
     password="",
-    db="airline",
+    db="verdant_future",
     charset="utf8mb4",
     cursorclass=pymysql.cursors.DictCursor,
 )
@@ -40,10 +36,12 @@ def login():
     cursor = conn.cursor()
 
     if isCompany:
-        query = ("") # find the company from the company table
+        query = ("SELECT company_username, company_password FROM Company WHERE"
+                 "company_username = %s and company_password = %s")
 
     else:
-        query = ("") # find the project from the project table
+        query = ("SELECT project_username, project_password FROM Project WHERE"
+                 "project_username = %s and project_password = %s") 
 
     cursor.execute(query, (username, str(hashlib.md5(password.encode()).digest())))
     
@@ -54,7 +52,7 @@ def login():
         
         return {
             "user": True,
-            "userName": data["fname"]
+            "userName": data["username"]
         }  
         
     else:
@@ -70,23 +68,32 @@ def registerAuth():
     password = request.form["password"]
     isCompany = request.form["isCustomer"]
     username = request.form["username"]
-    contactname = request.form["contactname"]
-    contactemail = request.form["contactemail"]
-    description = request.form["description"]
+    if isCompany:
+        company_name = request.form["companyname"]
+    else:
+        project_name = request.form["project_name"]
+        project_association = request.form["project_association"]
+    contact_name = request.form["contactname"]
+    contact_email = request.form["contactemail"]
+    details = request.form["details"]
+    funds_required = request.form["funds_required"]
 
-    if isCompany == "true":
-        #TODO: upload document
-        pass
-
+    # if isCompany == "true":
+        #TODO: certificate of existence？
 
     cursor = conn.cursor()
 
     # TODO: queries
-    # if isCompany:
-    #     query = from the company table 
-    # else:
-    #     query = from the project table
+    if isCompany:
+        query = (
+            "SELECT company_username FROM Company WHERE company_username = %s"
+        )
+    else:
+        query = (
+            "SELECT project_username FROM project WHERE project_username = %s"
+        )
 
+    cursor.execute(query, (username))
 
     # stores the results in a variable
     data = cursor.fetchone()
@@ -97,22 +104,38 @@ def registerAuth():
         }
     else:
         if isCompany == "true":
-            # TODO insert into company table
-            # ins = ()
-            # cursor.execute(
-            #     ins,
-            #     (),
-            # )
-            pass
+            ins = (
+                "INSERT INTO Company VALUES(%s, %s, %s, %s, %s, %s, %s, %s)"
+            )
+            cursor.execute(
+                ins,
+                (username,
+                 str(hashlib.md5(password.encode()).digest()),
+                 company_name,
+                 contact_name,
+                 contact_email,
+                 details,
+                 0,
+                 funds_required
+                 ),
+            )
 
         else:
-            # TODO insert into project table
-            # ins = ()
-            # cursor.execute(
-            #     ins,
-            #     (),
-            # )
-            pass
+            ins = (
+                "INSERT INTO Project VALUES(%s, %s, %s, %s, %s, %s, %s, %s)"
+            )
+            cursor.execute(
+                ins,
+                (username,
+                 str(hashlib.md5(password.encode()).digest()),
+                 project_name,
+                 project_association,
+                 contact_name,
+                 contact_email,
+                 details,
+                 funds_required
+                 ),
+            )
         
         conn.commit()
         cursor.close()
