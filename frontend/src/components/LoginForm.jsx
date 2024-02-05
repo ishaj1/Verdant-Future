@@ -1,20 +1,14 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import useAuth from "../hooks/useAuth";
 
-function LoginForm({
-  isLoggedIn,
-  setIsLoggedIn,
-  setLoginActive,
-  setUserInformation,
-}) {
+function LoginForm({ setLoginActive }) {
+  const { setAuth } = useAuth();
   const [isProject, setIsProject] = useState();
   const loginRef = useRef(null);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (isLoggedIn) navigate(`/projects`);
-  }, [isLoggedIn, setIsLoggedIn]);
-
+  // handles getting rid of the login popup box when clicking outside of it
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (loginRef.current && !loginRef.current.contains(event.target)) {
@@ -33,9 +27,8 @@ function LoginForm({
 
   const loginUser = (e) => {
     e.preventDefault();
-    setUserInformation({ username: "test" });
-    setIsLoggedIn(true);
-    localStorage.setItem("token", "tmptoken");
+    setAuth({ username: "username" });
+    navigate("/projects");
   };
 
   return (

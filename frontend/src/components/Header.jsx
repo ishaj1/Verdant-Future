@@ -1,23 +1,24 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import useAuth from "../hooks/useAuth";
+import useLogout from "../hooks/useLogout";
 
-export default function Header({
-  isLoggedIn,
-  setIsLoggedIn,
-  userInformation,
-  setUserInformation,
-}) {
-  const logout = () => {
-    setUserInformation({});
-    setIsLoggedIn(false);
+export default function Header() {
+  const { auth } = useAuth();
+  const navigate = useNavigate();
+  const logout = useLogout();
+
+  const signOut = async () => {
+    await logout();
+    navigate("/");
   };
   return (
     <header>
       <nav>
-        {isLoggedIn && <Link to="/projects">Organizations Directory</Link>}
-        {isLoggedIn && (
-          <Link to={`/profile/${userInformation.username}`}>Profile</Link>
+        {auth?.username && <Link to="/projects">Organizations Directory</Link>}
+        {auth?.username && (
+          <Link to={`/profile/${auth?.username}`}>Profile</Link>
         )}
-        {isLoggedIn && <button onClick={logout}>Logout</button>}
+        {auth?.username && <button onClick={signOut}>Logout</button>}
       </nav>
     </header>
   );

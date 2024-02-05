@@ -8,27 +8,11 @@ const profile = {
   description: "description",
 };
 
-export default function ProfilePage({
-  isLoggedIn,
-  setIsLoggedIn,
-  userInformation,
-  setUserInformation,
-}) {
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (!isLoggedIn) navigate("/");
-  });
-
+export default function ProfilePage() {
   const uid = useParams().id;
   return (
     <>
-      <Header
-        isLoggedIn={isLoggedIn}
-        setIsLoggedIn={setIsLoggedIn}
-        setUserInformation={setUserInformation}
-        userInformation={userInformation}
-      />
+      <Header />
 
       <h1>{profile.name}</h1>
       <h2>ID: {uid}</h2>

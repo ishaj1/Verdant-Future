@@ -3,23 +3,13 @@ import { useState } from "react";
 import LoginForm from "../components/LoginForm";
 import Header from "../components/Header";
 
-export default function HomePage({
-  isLoggedIn,
-  setIsLoggedIn,
-  userInformation,
-  setUserInformation,
-}) {
+export default function HomePage() {
   const [loginForm, setLoginForm] = useState(false);
 
   return (
     <>
       <h1>Home</h1>
-      <Header
-        isLoggedIn={isLoggedIn}
-        setIsLoggedIn={setIsLoggedIn}
-        setUserInformation={setUserInformation}
-        userInformation={userInformation}
-      />
+      <Header />
       <button
         onClick={() => {
           setLoginForm(true);
@@ -28,13 +18,7 @@ export default function HomePage({
         Login
       </button>
       {loginForm && (
-        <LoginForm
-          isLoggedIn={isLoggedIn}
-          loginActive={loginForm}
-          setIsLoggedIn={setIsLoggedIn}
-          setLoginActive={setLoginForm}
-          setUserInformation={setUserInformation}
-        />
+        <LoginForm loginActive={loginForm} setLoginActive={setLoginForm} />
       )}
     </>
   );

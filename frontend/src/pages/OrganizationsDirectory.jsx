@@ -16,25 +16,10 @@ const test_orgs = [
   },
 ];
 
-export default function OrganizationsDirectory({
-  isLoggedIn,
-  setIsLoggedIn,
-  setUserInformation,
-  userInformation,
-}) {
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (!isLoggedIn) navigate("/");
-  });
+export default function OrganizationsDirectory() {
   return (
     <>
-      <Header
-        isLoggedIn={isLoggedIn}
-        setIsLoggedIn={setIsLoggedIn}
-        setUserInformation={setUserInformation}
-        userInformation={userInformation}
-      />
+      <Header />
       {test_orgs.map((org, index) => (
         <OrganizationCard
           description={org.description}
