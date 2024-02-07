@@ -1,9 +1,9 @@
 # from flask import Flask, jsonify, request
-# from flask_cors import CORS
+from flask_cors import CORS
 # import stripe
 
 # app = Flask(__name__)
-# CORS(app)  # Enable CORS for all routes
+
 
 # # Set your Stripe API key
 # stripe.api_key = 'sk_test_51Oe5AZKlgwtgt0eBACDFWMTEWAP1XzGbXa4MhgJRUaPIxza3JMJqcaNj4E2820ioJgPLJZiEQyAr3Y7CODV8Hxsm00BxyqGbKO'
@@ -49,6 +49,8 @@ from flask import Flask, render_template, jsonify, request
 
 app = Flask(__name__, static_folder='public',
             static_url_path='', template_folder='public')
+
+CORS(app)  # Enable CORS for all routes
 
 def calculate_order_amount(items):
     # Replace this constant with a calculation of the order's amount
