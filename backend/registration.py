@@ -83,7 +83,6 @@ def registerAuth():
 
     cursor = conn.cursor()
 
-    # TODO: queries
     if isCompany:
         query = (
             "SELECT company_username FROM Company WHERE company_username = %s"
@@ -140,3 +139,31 @@ def registerAuth():
         conn.commit()
         cursor.close()
         return {"register": True}
+
+@app.route('/display_company_profile', methods=['GET'])
+def display_company_profiles():
+    company_username = request.form["company_username"]
+    cursor = conn.cursor()
+
+    cursor.execute('SELECT * FROM Company WHERE company_username =  %s', (company_username))
+    record = cursor.fetchone()
+
+    if not record:
+        return jsonify({'message': 'No company found!'})
+
+    record_dict = {
+        'company_username': record[0],
+        'company_password': record[1],
+        'company_name': record[2],
+        'contact_name': record[3],
+        'contact_detail': record[4],
+        'company_details': record[5],
+        'green_credits': record[6],
+        'funds_required': record[7]
+    }
+
+    conn.close()
+    return jsonify({'company_records': record_dict})
+
+
+        
