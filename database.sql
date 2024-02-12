@@ -6,7 +6,9 @@ CREATE TABLE Company(
     contact_detail varchar(50) not null,
     company_details varchar(500) not null,
     green_credits float(20,3) not null,
-    funds_required float(20,3)
+    funds_required float(20,3),
+    funds_received float(20,3),
+    payment_id varchar(200)
 );
 
 CREATE TABLE Company_eval(
@@ -29,6 +31,8 @@ CREATE TABLE Project{
     contact_detail varchar(50) not null,
     project_details varchar(500) not null,
     funds_required float(20,3) not null
+    funds_received float(20,3),
+    payment_id varchar(200)
 };
 
 CREATE TABLE Company_Transaction{
