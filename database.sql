@@ -8,7 +8,7 @@ CREATE TABLE Company(
     green_credits float(20,3) not null,
     funds_required float(20,3),
     funds_received float(20,3),
-    payment_id varchar(200)
+    payment_id varchar(200) not null
 );
 
 CREATE TABLE Company_eval(
@@ -32,7 +32,7 @@ CREATE TABLE Project{
     project_details varchar(500) not null,
     funds_required float(20,3) not null
     funds_received float(20,3),
-    payment_id varchar(200)
+    payment_id varchar(200) not null
 };
 
 CREATE TABLE Company_Transaction{
