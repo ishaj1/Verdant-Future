@@ -5,6 +5,7 @@ import useAuth from "../hooks/useAuth";
 function LoginForm({ setLoginActive }) {
   const { setAuth } = useAuth();
   const [isProject, setIsProject] = useState();
+  const [errors, setErrors] = useState();
   const loginRef = useRef(null);
   const navigate = useNavigate();
 
@@ -27,6 +28,33 @@ function LoginForm({ setLoginActive }) {
 
   const loginUser = (e) => {
     e.preventDefault();
+
+    const form = e.currentTarget;
+    const username = form.username.value;
+    const password = form.password.value;
+    const loginData = {
+      isCompany: !isProject,
+      username,
+      password,
+    };
+
+    axios
+      .post("/login", {
+        data: loginData,
+      })
+      .then((response) => {
+        if (response.data.user == true) {
+          setAuth({ username });
+        } else {
+          setErrors(
+            "Incorrect login information. Please check your username and password, and try again."
+          );
+        }
+      })
+      .catch((errors) => {
+        setErrors("Error logging in. Please try again.");
+      });
+
     setAuth({ username: "username" });
     navigate("/projects");
   };
@@ -47,6 +75,7 @@ function LoginForm({ setLoginActive }) {
       >
         Company
       </button>
+      <p>{errors}</p>
       <form className="LoginForm" onSubmit={(e) => loginUser(e)}>
         <label htmlFor="username">Username</label>
         <input type="text" name="username" required />

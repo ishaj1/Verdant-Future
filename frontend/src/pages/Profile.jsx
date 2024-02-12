@@ -1,7 +1,5 @@
 import { useParams } from "react-router";
-import { useNavigate } from "react-router-dom";
 import Header from "../components/Header";
-import { useEffect } from "react";
 
 const profile = {
   name: "name",
