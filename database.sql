@@ -8,7 +8,7 @@ CREATE TABLE Company(
     green_credits float(20,3) not null,
     funds_required float(20,3),
     funds_received float(20,3),
-    payment_id varchar(200) not null
+    payment_id varchar(200) primary key
 );
 
 CREATE TABLE Company_eval(
@@ -16,7 +16,6 @@ CREATE TABLE Company_eval(
     company_size int not null,
     green_credits float(20,3) not null,
     -- To be determined later
-    primary key (company_username),
     foreign key (company_username) references Company(company_username),
     foreign key (green_credits) references Company(green_credits)
 );
@@ -32,7 +31,7 @@ CREATE TABLE Project(
     project_details varchar(500) not null,
     funds_required float(20,3) not null,
     funds_received float(20,3),
-    payment_id varchar(200) not null
+    payment_id varchar(200) primary key
 );
 
 CREATE TABLE Company_Transaction(
@@ -42,7 +41,7 @@ CREATE TABLE Company_Transaction(
     sender_username varchar(50),
     receiver_username varchar(50),
     amount_transferred varchar(50) not null,
-    primary key (transaction_name, sender_username, receiver_username),
+    primary key (transaction_name),
     foreign key (sender_username) references Company(company_username),
     foreign key (receiver_username) references Company(company_username),
     foreign key (payer_id) references Company(payment_id),
@@ -56,7 +55,7 @@ CREATE TABLE Project_Transaction(
     sender_username varchar(50),
     receiver_username varchar(50),
     amount_transferred varchar(50) not null,
-    primary key (transaction_name, sender_username, receiver_username),
+    primary key (transaction_name),
     foreign key (sender_username) references Company(company_username),
     foreign key (receiver_username) references Project(project_username),
     foreign key (payer_id) references Company(payment_id),
