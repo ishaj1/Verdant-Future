@@ -36,21 +36,29 @@ CREATE TABLE Project{
 };
 
 CREATE TABLE Company_Transaction{
+    payer_id varchar(200),
+    payee_id varchar(200),
     transaction_name varchar(50) not null,
     sender_username varchar(50),
     receiver_username varchar(50),
     amount_transferred varchar(50) not null,
     primary key (transaction_name, sender_username, receiver_username),
     foreign key (sender_username) references Company(company_username),
-    foreign key (receiver_username) references Company(company_username)
+    foreign key (receiver_username) references Company(company_username),
+    foreign key (payer_id) references Company(payment_id),
+    foreign key (payee_id) references Company(payment_id)
 };
 
 CREATE TABLE Project_Transaction{
+    payer_id varchar(200),
+    payee_id varchar(200),
     transaction_name varchar(50) not null,
     sender_username varchar(50),
     receiver_username varchar(50),
     amount_transferred varchar(50) not null,
     primary key (transaction_name, sender_username, receiver_username),
     foreign key (sender_username) references Company(company_username),
-    foreign key (receiver_username) references Project(project_username)
+    foreign key (receiver_username) references Project(project_username),
+    foreign key (payer_id) references Company(payment_id),
+    foreign key (payee_id) references Company(payment_id)
 };
