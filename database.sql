@@ -21,7 +21,7 @@ CREATE TABLE Company_eval(
     foreign key (green_credits) references Company(green_credits)
 );
 
-CREATE TABLE Project{
+CREATE TABLE Project(
     project_username varchar(50) primary key,
     project_password varchar(50) not null,
     project_name varchar(50) not null,
@@ -30,12 +30,12 @@ CREATE TABLE Project{
     contact_name varchar(50) not null,
     contact_detail varchar(50) not null,
     project_details varchar(500) not null,
-    funds_required float(20,3) not null
+    funds_required float(20,3) not null,
     funds_received float(20,3),
     payment_id varchar(200) not null
-};
+);
 
-CREATE TABLE Company_Transaction{
+CREATE TABLE Company_Transaction(
     payer_id varchar(200),
     payee_id varchar(200),
     transaction_name varchar(50) not null,
@@ -47,9 +47,9 @@ CREATE TABLE Company_Transaction{
     foreign key (receiver_username) references Company(company_username),
     foreign key (payer_id) references Company(payment_id),
     foreign key (payee_id) references Company(payment_id)
-};
+);
 
-CREATE TABLE Project_Transaction{
+CREATE TABLE Project_Transaction(
     payer_id varchar(200),
     payee_id varchar(200),
     transaction_name varchar(50) not null,
@@ -61,4 +61,4 @@ CREATE TABLE Project_Transaction{
     foreign key (receiver_username) references Project(project_username),
     foreign key (payer_id) references Company(payment_id),
     foreign key (payee_id) references Company(payment_id)
-};
+);
