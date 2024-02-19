@@ -53,11 +53,11 @@ def calculate_rating(company_input, benchmark, negative=False):
 def get_evaluated():
     company_username = request.form["company_username"]
 
-    # grabs info from the form and pass them to another function
+    # Grabs info from the form
     ## General info
     company_size = request.form['company_size'] # number of employee
     revenue = request.form['revenue']
-    ## GHG
+    ## Greenhouse Gas Emission
     emission = request.form['emission']
     ## Energy
     energy = request.form['energy']
@@ -67,7 +67,7 @@ def get_evaluated():
     waste = request.form['waste']
     recycled = request.form['recycled']
 
-    # calculate rating for each categories
+    # Calculate rating for each categories
     ## Greenhouse Gas Emission
     ghg_ratio = round(emission / company_size, 3)
     ghg_rating = calculate_rating(ghg_ratio, EMISSION_INTENSITY, negative=True)
