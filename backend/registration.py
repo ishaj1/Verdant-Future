@@ -68,10 +68,8 @@ def registerAuth():
     password = request.form["password"]
     isCompany = request.form["isCompany"]
     username = request.form["username"]
-    if isCompany:
-        company_name = request.form["companyname"]
-    else:
-        project_name = request.form["project_name"]
+    name = request.form['name'] #company or project name
+    if not isCompany:
         project_association = request.form["project_association"]
     contact_name = request.form["contact_name"]
     contact_email = request.form["contact_email"]
@@ -112,7 +110,7 @@ def registerAuth():
                 ins,
                 (username,
                  str(hashlib.md5(password.encode()).digest()),
-                 company_name,
+                 name,
                  contact_name,
                  contact_email,
                  details,
@@ -131,7 +129,7 @@ def registerAuth():
                 ins,
                 (username,
                  str(hashlib.md5(password.encode()).digest()),
-                 project_name,
+                 name,
                  project_association,
                  contact_name,
                  contact_email,
