@@ -247,3 +247,6 @@ def view_projects():
     cursor.close()
 
     return jsonify(projects_lst)
+
+if __name__ == '__main__':
+    app.run(port=4242)
