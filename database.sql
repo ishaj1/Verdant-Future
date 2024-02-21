@@ -9,7 +9,7 @@ CREATE TABLE Company(
     funds_required float(20,3),
     funds_received float(20,3),
     payment_id varchar(200) not null,
-    primary key(company_username, green_credits, payment_id)
+    primary key(company_username, payment_id, green_credits)
 );
 
 CREATE TABLE Company_eval(
