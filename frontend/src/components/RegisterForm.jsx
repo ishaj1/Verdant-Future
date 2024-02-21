@@ -26,9 +26,10 @@ function RegisterForm() {
     const contactEmail = form.contactEmail.value;
     const orgDescription = form.orgDescription.value;
     const funds = form.funds.value;
+    const paymentID = form.paymentID.value;
 
     const registrationData = {
-      orgName,
+      name: orgName,
       isCompany: !isProject,
       ...(isProject ? { project_association: projectAssociation } : {}),
       username,
@@ -37,11 +38,13 @@ function RegisterForm() {
       contact_email: contactEmail,
       details: orgDescription,
       funds_required: funds,
+      funds_received: 0,
+      payment_id: paymentID,
     };
 
     axios
-      .post("/registerAuth", {
-        data: registrationData,
+      .post("/registerAuth", registrationData, {
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
       })
       .then((response) => {
         if (response.data.register === true) {
@@ -107,6 +110,8 @@ function RegisterForm() {
           name="funds"
           required
         />
+        <label htmlFor="paymentID">Payment ID</label>
+        <input type="text" name="paymentID" required />
         <button type="submit">Register</button>
       </form>
     </div>
