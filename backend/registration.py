@@ -104,7 +104,7 @@ def registerAuth():
     else:
         if isCompany == "true":
             ins = (
-                "INSERT INTO Company VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s)"
+                "INSERT INTO Company VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
             )
             cursor.execute(
                 ins,
@@ -123,7 +123,7 @@ def registerAuth():
 
         else:
             ins = (
-                "INSERT INTO Project VALUES(%s, %s, %s, %s, %s, %s, %s, %s)"
+                "INSERT INTO Project VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
             )
             cursor.execute(
                 ins,
