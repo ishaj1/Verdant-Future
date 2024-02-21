@@ -7,6 +7,7 @@ from flask import (
     url_for,
     redirect,
     jsonify,
+    abort,
 )
 
 from flask_cors import CORS
@@ -32,6 +33,24 @@ ENERGY_INTENSITY = 3.4 # megajoules (MJ) per USD
 WATER_EFFICIENCY = 50 # USD / cubic meter
 WASTE_DIVERSE_RATE = 0.75 # percent recycled
 
+# aborts if an unregistered user attempts to access a company specific page
+def abort_if_not_company():
+    # if guest, abort
+    if ('username' not in session):
+        abort(403, description="This page is not available for guest, please log in and try again")
+
+    # check if current user is company
+    cursor = conn.cursor()
+    username = session['username']
+
+    checkUser = "SELECT * FROM company WHERE company_username = %s"
+    cursor.execute(checkUser, (username))
+    checkResult = cursor.fetchall()
+    cursor.close()
+    # if check result shows None indicating current user is not company, abort
+    if (not checkResult):
+        abort(403, description="You don't have access to this page. Access only avaliable to company account")
+
 # Helper function to calculation evaluation for each of the four categories
 ## if company_input = benchmark, the rating will be 50 (initital rating)
 ## for any input better than benchmark, points will be added on top of initial rating
@@ -51,12 +70,22 @@ def calculate_rating(company_input, benchmark, negative=False):
 # Store information into database
 @app.route('/get_evaluated', methods=['GET', 'POST'])
 def get_evaluated():
-    company_username = request.form["company_username"]
+    # Check if user is logged in as company
+    abort_if_not_company()
+    
+    company_username = session["username"]
 
     # Grabs info from the form
     ## General info
-    company_size = int(request.form['company_size']) # number of employee
-    revenue = int(request.form['revenue'])
+    company_size = int(request.form.get('company_size', '0')) # number of employee
+    if company_size <= 0:
+        error1 = "Invalid input: Number of employee must be >= 1"
+        return {"evaluate": False, "error": error1}
+    
+    rev = int(request.form.get('revenue', '0'))
+    revenue = 0 if (rev < 0) else rev # revenue should be positive or 0
+        
+
     ## Greenhouse Gas Emission
     emission = int(request.form.get('emission', '0'))
     ## Energy
@@ -75,9 +104,11 @@ def get_evaluated():
     ghg_ratio = round(emission / company_size, 3)
     ghg_rating = calculate_rating(ghg_ratio, EMISSION_INTENSITY, negative=True)
     ## Energy
-    energy = e_convert * electricity + ng_convert * natural_gas
-    energy_ratio = round(energy / revenue, 3)
-    energy_rating = calculate_rating(energy_ratio, ENERGY_INTENSITY, negative=True)
+    energy_rating = 0
+    if(revenue > 0):
+        energy = e_convert * electricity + ng_convert * natural_gas
+        energy_ratio = round(energy / revenue, 3)
+        energy_rating = calculate_rating(energy_ratio, ENERGY_INTENSITY, negative=True)
     ## Water
     water_rating = 0
     if(water > 0):
