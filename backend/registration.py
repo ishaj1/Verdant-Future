@@ -31,17 +31,15 @@ conn = pymysql.connect(
 def login():
     username = request.form["username"]
     password = request.form["password"]
-    isCompany = request.form["isCustomer"]
+    isCompany = request.form["isCompany"]
 
     cursor = conn.cursor()
 
-    if isCompany:
-        query = ("SELECT company_username, company_password FROM Company WHERE"
-                 "company_username = %s and company_password = %s")
+    if isCompany == "true":
+        query = ("SELECT company_username, company_password FROM Company WHERE company_username = %s and company_password = %s")
 
     else:
-        query = ("SELECT project_username, project_password FROM Project WHERE"
-                 "project_username = %s and project_password = %s") 
+        query = ("SELECT project_username, project_password FROM Project WHERE project_username = %s and project_password = %s")
 
     cursor.execute(query, (username, str(hashlib.md5(password.encode()).digest())))
     
@@ -50,11 +48,17 @@ def login():
     if data:
         session["user"] = True
         
-        return {
-            "user": True,
-            "userName": data["username"]
-        }  
-        
+        if isCompany == "true":
+            return {
+                "user": True,
+                "userName": data["company_username"]
+            }
+        else:
+            return {
+                "user":True,
+                "userName": data["project_username"]
+            }
+
     else:
         return {
             "user": False,
