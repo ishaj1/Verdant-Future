@@ -69,7 +69,7 @@ def registerAuth():
     isCompany = request.form["isCompany"]
     username = request.form["username"]
     name = request.form['name'] #company or project name
-    if not isCompany:
+    if isCompany == "false":
         project_association = request.form["project_association"]
     contact_name = request.form["contact_name"]
     contact_email = request.form["contact_email"]
