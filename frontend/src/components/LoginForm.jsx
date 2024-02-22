@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "../api/axios";
 import useAuth from "../hooks/useAuth";
 
 function LoginForm({ setLoginActive }) {
@@ -39,12 +40,13 @@ function LoginForm({ setLoginActive }) {
     };
 
     axios
-      .post("/login", {
-        data: loginData,
+      .post("/login", loginData, {
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
       })
       .then((response) => {
         if (response.data.user == true) {
           setAuth({ username });
+          navigate("/projects");
         } else {
           setErrors(
             "Incorrect login information. Please check your username and password, and try again."
@@ -54,9 +56,6 @@ function LoginForm({ setLoginActive }) {
       .catch((errors) => {
         setErrors("Error logging in. Please try again.");
       });
-
-    setAuth({ username: "username" });
-    navigate("/projects");
   };
 
   return (
