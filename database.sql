@@ -5,10 +5,6 @@ CREATE TABLE Company(
     contact_name varchar(50) not null,
     contact_detail varchar(50) not null,
     company_details varchar(500) not null,
-<<<<<<< Updated upstream
-    green_credits float(20,3) not null,
-=======
->>>>>>> Stashed changes
     funds_required float(20,3),
     funds_received float(20,3),
     payment_id varchar(200) not null,
