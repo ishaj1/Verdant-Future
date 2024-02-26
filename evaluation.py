@@ -77,27 +77,24 @@ def get_evaluated():
 
     # Grabs info from the form
     ## General info
-    company_size = int(request.form.get('company_size', '0')) # number of employee
-    if company_size <= 0:
-        error1 = "Invalid input: Number of employee must be >= 1"
-        return {"evaluate": False, "error": error1}
+    company_size = int(request.form["company_size"]) # number of employee
     
-    rev = int(request.form.get('revenue', '0'))
-    revenue = 0 if (rev < 0) else rev # revenue should be positive or 0
-        
+    revenue = int(request.form['revenue']) # in USD
+
+    eval_date = request.form["date"]
 
     ## Greenhouse Gas Emission
-    emission = int(request.form.get('emission', '0'))
+    emission = int(request.form['emission']) # in metric ton
     ## Energy
-    electricity = int(request.form.get('electricity', '0')) # in kWh
+    electricity = int(request.form['electricity']) # in kWh
     e_convert = 3.6 # conversion unit for electricity: 1 kWh = 3.6 MJ
-    natural_gas = int(request.form.get('natural_gas', '0')) # in cf 
+    natural_gas = int(request.form['natural_gas']) # in cf 
     ng_convert = 1.055 # conversion unit for natural gas: 1 cf = 1.055 MJ
     ## Water
-    water = int(request.form.get('water', '0'))
+    water = int(request.form['water']) # in cubic meter
     ## Waste
-    waste = int(request.form.get('waste', '0'))
-    recycled = int(request.form.get('recycled', '0'))
+    waste = int(request.form['waste']) # in kg
+    recycled = int(request.form['recycled'])
 
     # Calculate rating for each categories
     ## Greenhouse Gas Emission
@@ -125,25 +122,56 @@ def get_evaluated():
     # Green Company level: green credits >= 50
     final_rating = 0.35*ghg_rating + 0.3*energy_rating + 0.15*water_rating + 0.2*waste_rating
     green_credits = round(final_rating, 3)
-    green_company = green_credits >= 50     # Boolean value
+
+    print(green_credits)
 
     # Update the company's green credit into database
     cursor = conn.cursor()
     query1 = ("UPDATE Company SET green_credits = %s WHERE company_username = %s")
     cursor.execute(query1, (green_credits, company_username))
 
-    # TODO: Update Company_eval table
-    query2 = "INSERT INTO Company_eval VALUES(%s, %s, %s, %s)"
+    # Update Company_eval table
+    query2 = "INSERT INTO Company_eval VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
     cursor.execute(
         query2,
         (
             company_username,
+            eval_date,
+            green_credits,
             company_size,
             revenue,
-            green_credits
+            emission,
+            electricity,
+            natural_gas,
+            water,
+            waste,
+            recycled            
         ),
     )
 
     conn.commit()
     cursor.close()
     return {"evaluate": True}
+
+@app.route('/get_green_credit', methods=['GET'])
+def get_green_credit():
+    # Check if user is logged in as company
+    abort_if_not_company()
+    
+    company_username = session["username"]
+    
+    cursor = conn.cursor()
+    query = "SELECT company_name, green_credits FROM company WHERE company_username = %s"
+    cursor.execute(query, (company_username))
+    green_credit = cursor.fetchone()
+
+    cursor.close()
+    print(green_credit)
+
+    if not green_credit:
+        return jsonify({'message': 'No company found!'})
+
+    return jsonify(green_credit)
+
+if __name__ == '__main__':
+    app.run(port=4242)
