@@ -127,13 +127,11 @@ def get_evaluated():
 
     # Update the company's green credit into database
     cursor = conn.cursor()
-    query1 = ("UPDATE Company SET green_credits = %s WHERE company_username = %s")
-    cursor.execute(query1, (green_credits, company_username))
 
     # Update Company_eval table
-    query2 = "INSERT INTO Company_eval VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+    query = "INSERT INTO Company_eval VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
     cursor.execute(
-        query2,
+        query,
         (
             company_username,
             eval_date,
@@ -161,7 +159,7 @@ def get_green_credit():
     company_username = session["username"]
     
     cursor = conn.cursor()
-    query = "SELECT company_name, green_credits FROM company WHERE company_username = %s"
+    query = "SELECT company_name, green_credits FROM Company_eval WHERE company_username = %s"
     cursor.execute(query, (company_username))
     green_credit = cursor.fetchone()
 
