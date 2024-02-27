@@ -30,7 +30,7 @@ function EvaluationSuccess() {
       {errors && <p>{errors}</p>}
       {greenCredit && (
         <div>
-        <p>{greenCredit.company_name}'s Green Credit: {greenCredit.green_credits}</p>
+        <p>Your Company's Calculated Green Credit is: {greenCredit.green_credits}</p>
         {/* Go back to whatever page, subject to change */}
         <Link to="/">Go to Home Page</Link> 
         </div> 
