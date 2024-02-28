@@ -314,8 +314,6 @@ def get_evaluated():
     final_rating = 0.35*ghg_rating + 0.3*energy_rating + 0.15*water_rating + 0.2*waste_rating
     green_credits = round(final_rating, 3)
 
-    print(green_credits)
-
     # Update the company's green credit into database
     cursor = conn.cursor()
     query = "INSERT INTO Company_eval VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
@@ -349,7 +347,6 @@ def get_green_credit():
     green_credit = cursor.fetchone()
 
     cursor.close()
-    print(green_credit)
 
     if not green_credit:
         return jsonify({'message': 'No company found!'})
