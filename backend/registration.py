@@ -255,24 +255,6 @@ def view_projects():
 
     return jsonify(projects_lst)
 
-# aborts if an unregistered user attempts to access a company specific page
-def abort_if_not_company():
-    # if guest, abort
-    if ('username' not in session):
-        abort(403, description="This page is not available for guest, please log in and try again")
-
-    # check if current user is company
-    cursor = conn.cursor()
-    username = session['username']
-
-    checkUser = "SELECT * FROM company WHERE company_username = %s"
-    cursor.execute(checkUser, (username))
-    checkResult = cursor.fetchall()
-    cursor.close()
-    # if check result shows None indicating current user is not company, abort
-    if (not checkResult):
-        abort(403, description="You don't have access to this page. Access only avaliable to company account")
-
 # Helper function to calculation evaluation for each of the four categories
 def calculate_rating(company_input, benchmark, negative=False):
     initial = 50
@@ -284,11 +266,8 @@ def calculate_rating(company_input, benchmark, negative=False):
     return rating
 
 @app.route('/get_evaluated', methods=['GET', 'POST'])
-def get_evaluated():
-    # Check if user is logged in as company
-    abort_if_not_company()
-    
-    company_username = session["username"]
+def get_evaluated():    
+    company_username = request.form["username"]
 
     # Grabs info from the form
     ## General info
@@ -363,10 +342,7 @@ def get_evaluated():
 
 @app.route('/get_green_credit', methods=['GET'])
 def get_green_credit():
-    # Check if user is logged in as company
-    abort_if_not_company()
-    
-    company_username = session["username"]
+    company_username = request.form["username"]
     cursor = conn.cursor()
     query = "SELECT green_credits FROM Company_eval WHERE company_username = %s"
     cursor.execute(query, (company_username))
