@@ -1,6 +1,7 @@
 import { useState } from "react";
 import axios from "./api/axios";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../hooks/useAuth";
 
 function CompanyEvaluationForm() {
   const currentDate = new Date();
@@ -10,6 +11,8 @@ function CompanyEvaluationForm() {
   const [errors, setErrors] = useState("");
 
   const navigate = useNavigate();
+
+  const { auth } = useAuth();
 
   const evaluateCompany = (e) => {
     e.preventDefault();
@@ -24,6 +27,7 @@ function CompanyEvaluationForm() {
     const recycled = form.recycled.value;
 
     const evaluationData = {
+      username: auth.username,
       company_size: companySize,
       revenue: revenue,
       date: currentDateLocal,
@@ -32,7 +36,7 @@ function CompanyEvaluationForm() {
       natural_gas: naturalGas,
       water: water,
       waste: waste,
-      recycled: recycled
+      recycled: recycled,
     };
 
     axios
@@ -43,11 +47,10 @@ function CompanyEvaluationForm() {
         if (response.data.evaluate == true) {
           navigate("/EvaluationSuccess");
         } else {
-          setErrors("Error with evaluation process")
+          setErrors("Error with evaluation process");
         }
-        
       })
-      .catch(error => {
+      .catch((error) => {
         setErrors("Error submitting evaluation. Please try again.");
       });
   };
@@ -61,7 +64,7 @@ function CompanyEvaluationForm() {
           <label htmlFor="companySize">Number of Employees:</label>
           <input type="number" name="companySize" min="1" required />
         </div>
-  
+
         <div>
           <label htmlFor="revenue">Revenue (USD):</label>
           <input type="number" name="revenue" min="0" required />
@@ -69,18 +72,24 @@ function CompanyEvaluationForm() {
 
         <div>
           <label htmlFor="date">Evaluation Date:</label>
-          <input type="date" name="date" value={currentDateLocal.split('T')[0]} required disabled />
+          <input
+            type="date"
+            name="date"
+            value={currentDateLocal.split("T")[0]}
+            required
+            disabled
+          />
         </div>
 
         <div>
           <label htmlFor="emission">Emission (metric ton):</label>
-          <input type="number" name="emission" min="0"required />
+          <input type="number" name="emission" min="0" required />
         </div>
-        
+
         <div>
           <label htmlFor="electricity">Electricity (kWh):</label>
           <input type="number" name="electricity" min="0" required />
-        </div>  
+        </div>
 
         <div>
           <label htmlFor="naturalGas">Natural Gas (cf):</label>
@@ -101,11 +110,11 @@ function CompanyEvaluationForm() {
           <label htmlFor="recycled">Recycled waste (kg):</label>
           <input type="number" name="recycled" min="0" required />
         </div>
-        
+
         <button type="submit">Submit</button>
       </form>
     </div>
-  );  
+  );
 }
 
 export default CompanyEvaluationForm;
