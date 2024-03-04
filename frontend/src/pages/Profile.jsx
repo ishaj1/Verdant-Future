@@ -35,7 +35,6 @@ export default function ProfilePage() {
 
   useEffect(() => {
     queryProfileData(uid);
-    console.log(profileData);
   }, [uid]);
 
   return (
