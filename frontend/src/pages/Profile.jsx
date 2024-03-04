@@ -3,11 +3,6 @@ import Header from "../components/Header";
 import { useEffect, useState } from "react";
 import axios from "../api/axios";
 
-const profile = {
-  name: "name",
-  description: "description",
-};
-
 export default function ProfilePage() {
   const uid = useParams().id;
   const [profileData, setProfileData] = useState({});
@@ -15,8 +10,8 @@ export default function ProfilePage() {
 
   const queryProfileData = (username) => {
     axios
-      .post("/display_company_profile", {
-        company_username: username,
+      .get("/display_company_profile", {
+        params: { company_username: username },
       })
       .then((response) => {
         if (response.data.message == "No company found!") {
@@ -31,7 +26,7 @@ export default function ProfilePage() {
   };
 
   useEffect(() => {
-    setProfileData(queryProfileData());
+    setProfileData(queryProfileData(uid));
   });
 
   return (
