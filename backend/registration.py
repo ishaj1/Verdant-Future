@@ -164,21 +164,8 @@ def display_company_profiles():
 
     if not record:
         return jsonify({'message': 'No company found!'})
-
-    record_dict = {
-        'company_username': record[0],
-        'company_password': record[1],
-        'company_name': record[2],
-        'contact_name': record[3],
-        'contact_detail': record[4],
-        'company_details': record[5],
-        'green_credits': record[6],
-        'funds_required': record[7],
-        'funds_received': record[8],
-        'payment_id': record[9]
-    }
-
-    return jsonify({'company_records': record_dict})
+    
+    return jsonify({'company_records': record})
 
 @app.route('/display_project_profile', methods=['GET'])
 def display_project_profiles():
