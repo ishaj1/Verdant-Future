@@ -155,7 +155,7 @@ def registerAuth():
 
 @app.route('/display_company_profile', methods=['GET'])
 def display_company_profiles():
-    company_username = request.form["company_username"]
+    company_username = request.args["company_username"]
     cursor = conn.cursor()
 
     cursor.execute('SELECT * FROM Company WHERE company_username =  %s', (company_username))
