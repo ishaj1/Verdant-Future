@@ -160,6 +160,7 @@ def display_company_profiles():
 
     cursor.execute('SELECT * FROM Company WHERE company_username =  %s', (company_username))
     record = cursor.fetchone()
+    cursor.close()
 
     if not record:
         return jsonify({'message': 'No company found!'})
@@ -177,7 +178,6 @@ def display_company_profiles():
         'payment_id': record[9]
     }
 
-    conn.close()
     return jsonify({'company_records': record_dict})
 
 @app.route('/display_project_profile', methods=['GET'])
