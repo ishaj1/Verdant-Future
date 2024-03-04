@@ -45,7 +45,7 @@ function LoginForm({ setLoginActive }) {
       })
       .then((response) => {
         if (response.data.user == true) {
-          setAuth({ username });
+          setAuth({ username, isProject });
           navigate("/projects");
         } else {
           setErrors(

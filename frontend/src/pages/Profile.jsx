@@ -2,22 +2,30 @@ import { useParams } from "react-router";
 import Header from "../components/Header";
 import { useEffect, useState } from "react";
 import axios from "../api/axios";
+import useAuth from "../hooks/useAuth";
 
 export default function ProfilePage() {
   const uid = useParams().id;
-  const [profileData, setProfileData] = useState({});
-  const [errors, setErrors] = useState("");
+  const { auth } = useAuth();
+  const [profileData, setProfileData] = useState();
+  const [errors, setErrors] = useState();
 
   const queryProfileData = (username) => {
     axios
-      .get("/display_company_profile", {
-        params: { company_username: username },
-      })
+      .get(
+        auth.isProject
+          ? "/display_project_profile"
+          : "/display_company_profile",
+        {
+          params: { company_username: username },
+        }
+      )
       .then((response) => {
-        if (response.data.message == "No company found!") {
-          setErrors("User Not Found");
+        if (response?.data?.company_records) {
+          setErrors();
+          setProfileData(response.data.company_records);
         } else {
-          return response.data;
+          setErrors("User Not Found");
         }
       })
       .catch((error) => {
@@ -26,8 +34,9 @@ export default function ProfilePage() {
   };
 
   useEffect(() => {
-    setProfileData(queryProfileData(uid));
-  });
+    queryProfileData(uid);
+    console.log(profileData);
+  }, [uid]);
 
   return (
     <>
@@ -40,7 +49,7 @@ export default function ProfilePage() {
           <p>Funding Goal: {profileData.funds_required}</p>
           <p>Username: {profileData.company_username}</p>
           <p>Contact Name: {profileData.contact_name}</p>
-          <p>Contact Details: {profileData.contact_details}</p>
+          <p>Contact Details: {profileData.contact_detail}</p>
           <p>Description: {profileData.company_details}</p>
         </>
       )}
