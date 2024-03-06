@@ -175,50 +175,28 @@ def display_company_profiles():
 @app.route("/view_companies", methods=['GET'])
 def view_companies():
     cursor = conn.cursor()
-    query = ("SELECT company_name, contact_name, contact_detail"
+    query = ("SELECT company_username, company_name, contact_name, contact_detail"
             +"company_details, funds_requires, funds_received FROM Company")
     
     cursor.execute(query)
     companies = cursor.fetchall()
-    companies_lst = []
-    for c in companies:
-        company = {
-            "company_name": c['company_name'],
-            "contact_name": c['contact_name'],
-            "contact_detail": c['contact_detail'],
-            "company_details": c['company_details'],
-            "funds_requires": c['funds_requires'],
-            "funds_received": c['funds_received']
-        }
-        companies_lst.append(company)
    
     cursor.close()
 
-    return jsonify(companies_lst)
+    return jsonify(companies)
 
 @app.route("/view_projects", methods=['GET'])
 def view_projects():
     cursor = conn.cursor()
-    query = ("SELECT project_name, project_association, contact_name, contact_detail"
+    query = ("SELECT project_username, project_name, project_association, contact_name, contact_detail"
             +"project_details, funds_requires, funds_received FROM Project")
     
     cursor.execute(query)
     projects = cursor.fetchall()
-    projects_lst = []
-    for c in projects:
-        project = {
-            "company_name": c['company_name'],
-            "contact_name": c['contact_name'],
-            "contact_detail": c['contact_detail'],
-            "company_details": c['company_details'],
-            "funds_requires": c['funds_requires'],
-            "funds_received": c['funds_received']
-        }
-        projects_lst.append(project)
-   
+    
     cursor.close()
 
-    return jsonify(projects_lst)
+    return jsonify(projects)
 
 # Helper function to calculation evaluation for each of the four categories
 def calculate_rating(company_input, benchmark, negative=False):
