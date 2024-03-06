@@ -59,30 +59,39 @@ function LoginForm({ setLoginActive }) {
   };
 
   return (
-    <div className="LoginWindow" ref={loginRef}>
-      <button
-        className={isProject ? "selected" : ""}
-        id="project"
-        onClick={changeLogin}
-      >
-        Project
-      </button>
-      <button
-        className={isProject ? "" : "selected"}
-        id="company"
-        onClick={changeLogin}
-      >
-        Company
-      </button>
-      <p>{errors}</p>
-      <form className="LoginForm" onSubmit={(e) => loginUser(e)}>
-        <label htmlFor="username">Username</label>
-        <input type="text" name="username" required />
-        <label htmlFor="password">Password</label>
-        <input type="password" name="password" required />
+    <div className="LoginWindow">
+      <div className="LoginContent" ref={loginRef}>
+        <div className="TypeSelector">
+          <button
+            className={isProject ? "selected" : ""}
+            id="project"
+            onClick={changeLogin}
+          >
+            Project
+          </button>
+          <button
+            className={isProject ? "" : "selected"}
+            id="company"
+            onClick={changeLogin}
+          >
+            Company
+          </button>
+        </div>
+        {errors && <p>{errors}</p>}
+        <h2>{isProject ? "Project" : "Company"} Login</h2>
+        <form
+          id="loginform"
+          className="LoginForm"
+          onSubmit={(e) => loginUser(e)}
+        >
+          <label htmlFor="username">Username</label>
+          <input type="text" name="username" required />
+          <label htmlFor="password">Password</label>
+          <input type="password" name="password" required />
 
-        <button type="submit">Login</button>
-      </form>
+          <input type="submit" value="Login" />
+        </form>
+      </div>
     </div>
   );
 }
