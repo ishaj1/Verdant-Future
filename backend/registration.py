@@ -153,46 +153,24 @@ def registerAuth():
         cursor.close()
         return {"register": True}
 
-@app.route('/display_company_profile', methods=['GET'])
+@app.route('/display_profile', methods=['GET'])
 def display_company_profiles():
-    company_username = request.args["company_username"]
+    username = request.args["username"]
+    isProject = request.args["isProject"]
     cursor = conn.cursor()
-
-    cursor.execute('SELECT * FROM Company WHERE company_username =  %s', (company_username))
+    if isProject == "true":
+        cursor.execute('SELECT * FROM Project WHERE project_username =  %s', (username))
+    else:
+        cursor.execute('SELECT * FROM Company WHERE company_username =  %s', (username))
     record = cursor.fetchone()
     cursor.close()
 
     if not record:
         return jsonify({'message': 'No company found!'})
     
-    return jsonify({'company_records': record})
+    return jsonify({'records': record})
 
-@app.route('/display_project_profile', methods=['GET'])
-def display_project_profiles():
-    project_username = request.form["project_username"]
-    cursor = conn.cursor()
 
-    cursor.execute('SELECT * FROM Project WHERE project_username =  %s', (project_username))
-    record = cursor.fetchone()
-
-    if not record:
-        return jsonify({'message': 'No project found!'})
-
-    record_dict = {
-        'project_username': record[0],
-        'project_password': record[1],
-        'project_name': record[2],
-        'project_association': record[3],
-        'contact_name': record[4],
-        'contact_detail': record[5],
-        'project_details': record[6],
-        'funds_required': record[7],
-        'funds_received': record[8],
-        'payment_id': record[9]
-    }
-
-    conn.close()
-    return jsonify({'project_records': record_dict})
 
 @app.route("/view_companies", methods=['GET'])
 def view_companies():
