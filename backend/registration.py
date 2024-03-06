@@ -157,12 +157,17 @@ def registerAuth():
 def display_company_profiles():
     username = request.args["username"]
     isProject = request.args["isProject"]
+    
     cursor = conn.cursor()
+    
     if isProject == "true":
         cursor.execute('SELECT * FROM Project WHERE project_username =  %s', (username))
     else:
         cursor.execute('SELECT * FROM Company WHERE company_username =  %s', (username))
+    
     record = cursor.fetchone()
+    record.pop("project_password" if isProject == "true" else "company_password")
+    
     cursor.close()
 
     if not record:
