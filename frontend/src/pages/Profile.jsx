@@ -43,7 +43,6 @@ export default function ProfilePage() {
         break;
     }
     queryProfileData(uid, isProject);
-    console.log(profileData?.project_name);
   }, []);
 
   return (
