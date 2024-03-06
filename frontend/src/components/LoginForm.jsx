@@ -5,7 +5,7 @@ import useAuth from "../hooks/useAuth";
 
 function LoginForm({ setLoginActive }) {
   const { setAuth } = useAuth();
-  const [isProject, setIsProject] = useState();
+  const [isProject, setIsProject] = useState(true);
   const [errors, setErrors] = useState();
   const loginRef = useRef(null);
   const navigate = useNavigate();

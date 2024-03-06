@@ -10,20 +10,15 @@ export default function ProfilePage() {
   const [profileData, setProfileData] = useState();
   const [errors, setErrors] = useState();
 
-  const queryProfileData = (username) => {
+  const queryProfileData = (username, isProject) => {
     axios
-      .get(
-        auth.isProject
-          ? "/display_project_profile"
-          : "/display_company_profile",
-        {
-          params: { company_username: username },
-        }
-      )
+      .get("/display_profile", {
+        params: { username, isProject },
+      })
       .then((response) => {
-        if (response?.data?.company_records) {
+        if (response?.data?.records) {
           setErrors();
-          setProfileData(response.data.company_records);
+          setProfileData(response.data.records);
         } else {
           setErrors("User Not Found");
         }
@@ -34,7 +29,7 @@ export default function ProfilePage() {
   };
 
   useEffect(() => {
-    queryProfileData(uid);
+    queryProfileData(uid, auth.isProject);
   }, [uid]);
 
   return (
