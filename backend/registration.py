@@ -353,6 +353,64 @@ def get_green_credit():
 
     return jsonify(green_credit)
 
+@app.route('/update_profile', methods=['GET', 'POST'])
+def update_profile():
+    # Extract fields from the form data
+    isProject = request.args["isProject"]
+    username = request.form["username"]
+    password = request.form["password"]
+    name = request.form["name"]
+    if isProject == "true":
+        project_association = request.form["association"]
+    contact_name = request.form["contact_name"]
+    contact_email = request.form["contact_email"]
+    details = request.form["details"]
+    funds_required = request.form["funds_required"]
+    funds_received = request.form["funds_received"]
+    payment_id = request.form["payment_id"]
+
+    # Update the database based on the provided information
+    cursor = conn.cursor()
+
+    if isProject == "true":
+        update_query = (
+            " UPDATE Project SET project_password = %s, project_name = %s, project_association = %s," 
+            + "contact_name = %s, contact_detail = %s, project_details = %s, funds_required = %s, "
+            + "funds_received = %s, payment_id = %s WHERE project_username = %s") 
+
+        cursor.execute(update_query, (
+            str(hashlib.md5(password.encode()).digest()),
+            name,
+            project_association,
+            contact_name,
+            contact_email,
+            details,
+            funds_required,
+            funds_received,
+            payment_id,
+            username
+        ))
+    else: 
+        update_query = (
+            " UPDATE Company SET company_password = %s, company_name = %s, "
+            + "contact_name = %s, contact_detail = %s, company_details = %s, "
+            + "funds_required = %s, funds_received = %s, payment_id = %s WHERE username = %s")
+        cursor.execute(update_query, (
+            str(hashlib.md5(password.encode()).digest()),
+            name,
+            contact_name,
+            contact_email,
+            details,
+            funds_required,
+            funds_received,
+            payment_id,
+            username
+        ))
+
+    conn.commit()
+    cursor.close()
+
+    return {"update": True}
 
 if __name__ == '__main__':
     app.run(port=4242)
