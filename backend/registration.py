@@ -166,12 +166,13 @@ def display_company_profiles():
         cursor.execute('SELECT * FROM Company WHERE company_username =  %s', (username))
     
     record = cursor.fetchone()
-    record.pop("project_password" if isProject == "true" else "company_password")
     
     cursor.close()
 
     if not record:
         return jsonify({'message': 'No company found!'})
+    
+    record.pop("project_password" if isProject == "true" else "company_password")
     
     return jsonify({'records': record})
 
