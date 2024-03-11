@@ -40,7 +40,7 @@ function App() {
       ),
     },
     {
-      path: "/projects",
+      path: "/organizations",
       element: <RequireAuth children={<OrganizationsDirectory />} />,
     },
     {

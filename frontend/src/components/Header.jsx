@@ -14,7 +14,9 @@ export default function Header() {
   return (
     <header>
       <nav>
-        {auth?.username && <Link to="/projects">Organizations Directory</Link>}
+        {auth?.username && (
+          <Link to="/organizations">Organizations Directory</Link>
+        )}
         {auth?.username && (
           <Link to={`/profile/${auth?.username}`}>Profile</Link>
         )}
