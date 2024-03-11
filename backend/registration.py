@@ -210,19 +210,20 @@ def display_project_profiles():
 @app.route("/view_companies", methods=['GET'])
 def view_companies():
     cursor = conn.cursor()
-    query = ("SELECT company_name, contact_name, contact_detail"
-            +"company_details, funds_requires, funds_received FROM Company")
+    query = ("SELECT company_username, company_name, contact_name, contact_detail, "
+            +"company_details, funds_required, funds_received FROM Company")
     
     cursor.execute(query)
     companies = cursor.fetchall()
     companies_lst = []
     for c in companies:
         company = {
+            "company_username": c['company_username'],
             "company_name": c['company_name'],
             "contact_name": c['contact_name'],
             "contact_detail": c['contact_detail'],
             "company_details": c['company_details'],
-            "funds_requires": c['funds_requires'],
+            "funds_required": c['funds_required'],
             "funds_received": c['funds_received']
         }
         companies_lst.append(company)
@@ -234,19 +235,20 @@ def view_companies():
 @app.route("/view_projects", methods=['GET'])
 def view_projects():
     cursor = conn.cursor()
-    query = ("SELECT project_name, project_association, contact_name, contact_detail"
-            +"project_details, funds_requires, funds_received FROM Project")
+    query = ("SELECT project_username, project_name, project_association, contact_name, contact_detail, "
+            +"project_details, funds_required, funds_received FROM Project")
     
     cursor.execute(query)
     projects = cursor.fetchall()
     projects_lst = []
     for c in projects:
         project = {
-            "company_name": c['company_name'],
+            "project_username": c['project_username'],
+            "project_name": c['project_name'],
             "contact_name": c['contact_name'],
             "contact_detail": c['contact_detail'],
-            "company_details": c['company_details'],
-            "funds_requires": c['funds_requires'],
+            "project_details": c['project_details'],
+            "funds_required": c['funds_required'],
             "funds_received": c['funds_received']
         }
         projects_lst.append(project)
@@ -355,4 +357,4 @@ def get_green_credit():
 
 
 if __name__ == '__main__':
-    app.run(port=4242)
+    app.run(port=4242, threaded=False, debug=True)
