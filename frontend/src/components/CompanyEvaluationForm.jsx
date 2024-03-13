@@ -1,7 +1,7 @@
 import { useState } from "react";
-import axios from "./api/axios";
+import axios from "../api/axios";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../hooks/useAuth";
+import useAuth from "../hooks/useAuth";
 
 function CompanyEvaluationForm() {
   const currentDate = new Date();
