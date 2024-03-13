@@ -5,6 +5,7 @@ import OrganizationsDirectory from "./pages/OrganizationsDirectory";
 import Profile from "./pages/Profile";
 import Register from "./pages/Register";
 import Transaction from "./pages/Transaction";
+import Evaluation from "./pages/Evaluation";
 import RequireAuth from "./components/RequireAuth";
 
 import "./App.css";
@@ -47,6 +48,7 @@ function App() {
       path: "/transaction",
       element: <Transaction />,
     },
+    { path: "/evaluation", element: <Evaluation /> },
   ]);
 
   return (

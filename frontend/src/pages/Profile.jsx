@@ -3,6 +3,7 @@ import Header from "../components/Header";
 import { useEffect, useState } from "react";
 import axios from "../api/axios";
 import useAuth from "../hooks/useAuth";
+import { Link } from "react-router-dom";
 
 export default function ProfilePage() {
   const path = useLocation().pathname;
@@ -56,6 +57,9 @@ export default function ProfilePage() {
               ? profileData.project_name
               : profileData.company_name}
           </h1>
+          {!profileData.isProject && auth?.username === uid && (
+            <Link to="/evaluation">Request Evaluation</Link>
+          )}
           <p>Funds Received: {profileData.funds_received}</p>
           <p>Funding Goal: {profileData.funds_required}</p>
           {auth?.username === uid && (
