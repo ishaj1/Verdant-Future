@@ -58,7 +58,9 @@ export default function ProfilePage() {
           </h1>
           <p>Funds Received: {profileData.funds_received}</p>
           <p>Funding Goal: {profileData.funds_required}</p>
-          <p>Payment ID: {profileData.payment_id}</p>
+          {auth?.username === uid && (
+            <p>Payment ID: {profileData.payment_id}</p>
+          )}
           {profileData.isProject ? (
             <>
               <p>Project Association: {profileData.project_association}</p>

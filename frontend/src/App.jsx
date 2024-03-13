@@ -24,7 +24,23 @@ function App() {
       element: <RequireAuth children={<Profile />}></RequireAuth>,
     },
     {
-      path: "/projects",
+      path: "/project/:id",
+      element: (
+        <RequireAuth>
+          <Profile />
+        </RequireAuth>
+      ),
+    },
+    {
+      path: "/company/:id",
+      element: (
+        <RequireAuth>
+          <Profile />
+        </RequireAuth>
+      ),
+    },
+    {
+      path: "/organizations",
       element: <RequireAuth children={<OrganizationsDirectory />} />,
     },
     {
