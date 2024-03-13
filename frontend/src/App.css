@@ -1,0 +1,13 @@
+.LoginWindow > button.selected,
+.RegistrationWindow > button.selected {
+  background-color: yellow;
+}
+
+.RegisterForm > input,
+textarea {
+  display: block;
+}
+
+.OrganizationCard {
+  background-color: lightgray;
+}
