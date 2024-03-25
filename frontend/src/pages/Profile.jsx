@@ -57,14 +57,13 @@ export default function ProfilePage() {
               ? profileData.project_name
               : profileData.company_name}
           </h1>
+          {auth?.username === uid && <Link to="/profile/update">Update Profile</Link>}
           {!profileData.isProject && auth?.username === uid && (
             <Link to="/evaluation">Request Evaluation</Link>
           )}
           <p>Funds Received: {profileData.funds_received}</p>
           <p>Funding Goal: {profileData.funds_required}</p>
-          {auth?.username === uid && (
-            <p>Payment ID: {profileData.payment_id}</p>
-          )}
+          {auth?.username === uid && <p>Payment ID: {profileData.payment_id}</p>}
           {profileData.isProject ? (
             <>
               <p>Project Association: {profileData.project_association}</p>
