@@ -8,7 +8,7 @@ function RegisterForm() {
 
   const navigate = useNavigate();
 
-  const [isProject, setIsProject] = useState();
+  const [isProject, setIsProject] = useState(true);
   const [errors, setErrors] = useState();
 
   const changeRegistration = (e) => {
@@ -48,7 +48,7 @@ function RegisterForm() {
       })
       .then((response) => {
         if (response.data.register === true) {
-          setAuth({ username });
+          setAuth({ username, isProject });
           navigate("/organizations");
         } else {
           setErrors("Error registering. Check information submitted.");
@@ -76,9 +76,7 @@ function RegisterForm() {
       </button>
       <p>{errors}</p>
       <form className="RegisterForm" onSubmit={(e) => registerUser(e)}>
-        <label htmlFor="orgName">
-          {isProject ? "Project" : "Company"} Name
-        </label>
+        <label htmlFor="orgName">{isProject ? "Project" : "Company"} Name</label>
         <input type="text" name="orgName" required />
         {isProject && (
           <>
@@ -98,8 +96,7 @@ function RegisterForm() {
         <label htmlFor="orgDescription">Description of Your Organization</label>
         <textarea maxLength={500} name="orgDescription" required></textarea>
         <label htmlFor="funds">
-          Amount of Funds You Are Aiming to Reach (0 if you are not looking for
-          funds)
+          Amount of Funds You Are Aiming to Reach (0 if you are not looking for funds)
         </label>
         <input
           type="number"
