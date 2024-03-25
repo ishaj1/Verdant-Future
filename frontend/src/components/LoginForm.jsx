@@ -5,7 +5,7 @@ import useAuth from "../hooks/useAuth";
 
 function LoginForm({ setLoginActive }) {
   const { setAuth } = useAuth();
-  const [isProject, setIsProject] = useState();
+  const [isProject, setIsProject] = useState(true);
   const [errors, setErrors] = useState();
   const loginRef = useRef(null);
   const navigate = useNavigate();
@@ -45,8 +45,8 @@ function LoginForm({ setLoginActive }) {
       })
       .then((response) => {
         if (response.data.user == true) {
-          setAuth({ username });
-          navigate("/projects");
+          setAuth({ username, isProject });
+          navigate("/organizations");
         } else {
           setErrors(
             "Incorrect login information. Please check your username and password, and try again."

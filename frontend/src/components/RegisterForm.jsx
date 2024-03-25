@@ -49,7 +49,7 @@ function RegisterForm() {
       .then((response) => {
         if (response.data.register === true) {
           setAuth({ username });
-          navigate("/projects");
+          navigate("/organizations");
         } else {
           setErrors("Error registering. Check information submitted.");
         }
