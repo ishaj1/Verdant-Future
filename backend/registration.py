@@ -332,7 +332,7 @@ def get_green_credit():
 @app.route('/update_profile', methods=['GET', 'POST'])
 def update_profile():
     # Extract fields from the form data
-    isProject = request.args["isProject"]
+    isProject = request.form["isProject"]
     username = request.form["username"]
     password = request.form["password"]
     name = request.form["name"]
