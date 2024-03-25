@@ -1,18 +1,23 @@
 import { useEffect, useState } from "react";
-import { Link } from 'react-router-dom';
-import axios from "./api/axios";
+import { Link } from "react-router-dom";
+import axios from "../api/axios";
+import useAuth from "../hooks/useAuth";
+import Header from "./Header";
 
 function EvaluationSuccess() {
   const [greenCredit, setGreenCredit] = useState(null);
   const [errors, setErrors] = useState("");
+  const { auth } = useAuth();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("/get_green_credit");
+        const username = auth.username;
+        const response = await axios.get("/get_green_credit", { params: { username } });
         if (response.data.message === "No company found!") {
           setErrors("User Not Found");
         } else {
+          setErrors();
           setGreenCredit(response.data);
         }
       } catch (error) {
