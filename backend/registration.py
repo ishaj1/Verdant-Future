@@ -370,7 +370,7 @@ def update_profile():
         update_query = (
             " UPDATE Company SET company_password = %s, company_name = %s, "
             + "contact_name = %s, contact_detail = %s, company_details = %s, "
-            + "funds_required = %s, funds_received = %s, payment_id = %s WHERE username = %s")
+            + "funds_required = %s, funds_received = %s, payment_id = %s WHERE company_username = %s")
         cursor.execute(update_query, (
             str(hashlib.md5(password.encode()).digest()),
             name,
