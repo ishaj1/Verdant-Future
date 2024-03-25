@@ -1,31 +1,62 @@
 import { useEffect } from "react";
 import Header from "../components/Header";
 import OrganizationCard from "../components/OrganizationCard";
-import { useNavigate } from "react-router-dom";
-
-const test_orgs = [
-  {
-    name: "proj1",
-    description: "desc1",
-    id: 1,
-  },
-  {
-    name: "comp2",
-    description: "desc2",
-    id: 2,
-  },
-];
+import { useState } from "react";
+import axios from "../api/axios";
 
 export default function OrganizationsDirectory() {
+  const [companiesData, setCompaniesData] = useState([]);
+  const [projectsData, setProjectsData] = useState([]);
+  const [errors, setErrors] = useState("");
+
+  const queryOrganizations = () => {
+    axios
+      .get("/view_companies")
+      .then((response) => {
+        if (response?.data) {
+          setErrors();
+          setCompaniesData(response.data);
+        }
+      })
+      .catch((error) => {
+        setErrors("Error retrieving company data.");
+      });
+
+    axios
+      .get("/view_projects")
+      .then((response) => {
+        if (response?.data) {
+          setErrors();
+          setProjectsData(response.data);
+        }
+      })
+      .catch((error) => {
+        setErrors(errors + "Error retreiving project data.");
+      });
+  };
+
+  useEffect(() => {
+    queryOrganizations();
+  }, []);
+
   return (
     <>
       <Header />
-      {test_orgs.map((org, index) => (
+      {errors}
+      {projectsData.map((org, index) => (
         <OrganizationCard
-          description={org.description}
-          id={org.id}
+          description={org.project_details}
           key={index}
-          name={org.name}
+          name={org.project_name}
+          profile_link={`/project/${org.project_username}`}
+        />
+      ))}
+      {companiesData.map((org, index) => (
+        <OrganizationCard
+          description={org.company_details}
+          key={index}
+          name={org.company_name}
+          profile_link={`/company/${org.company_username}`}
         />
       ))}
     </>
