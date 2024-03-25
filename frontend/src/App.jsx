@@ -9,6 +9,7 @@ import Evaluation from "./pages/Evaluation";
 import RequireAuth from "./components/RequireAuth";
 
 import "./App.css";
+import EvaluationSuccess from "./components/EvaluationSuccess";
 
 function App() {
   const router = createBrowserRouter([
@@ -48,7 +49,11 @@ function App() {
       path: "/transaction",
       element: <Transaction />,
     },
-    { path: "/evaluation", element: <Evaluation /> },
+    { path: "/evaluation", element: <RequireAuth children={<Evaluation />} /> },
+    {
+      path: "/evaluation-success",
+      element: <RequireAuth children={<EvaluationSuccess />} />,
+    },
   ]);
 
   return (
