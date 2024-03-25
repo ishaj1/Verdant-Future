@@ -7,9 +7,10 @@ import Register from "./pages/Register";
 import Transaction from "./pages/Transaction";
 import Evaluation from "./pages/Evaluation";
 import RequireAuth from "./components/RequireAuth";
+import EvaluationSuccess from "./components/EvaluationSuccess";
+import UpdateProfileForm from "./components/UpdateProfileForm";
 
 import "./App.css";
-import EvaluationSuccess from "./components/EvaluationSuccess";
 
 function App() {
   const router = createBrowserRouter([
@@ -24,6 +25,10 @@ function App() {
     {
       path: "/profile/:id",
       element: <RequireAuth children={<Profile />}></RequireAuth>,
+    },
+    {
+      path: "/profile/update",
+      element: <RequireAuth children={<UpdateProfileForm />} />,
     },
     {
       path: "/project/:id",
