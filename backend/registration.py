@@ -307,9 +307,6 @@ def get_evaluated():
         ),
     )
 
-    query = "UPDATE Company SET green_credits=%s WHERE company_username=%s"
-    cursor.execute(query, (green_credits, company_username))
-
     conn.commit()
     cursor.close()
     return {"evaluate": True}
