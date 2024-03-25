@@ -30,7 +30,7 @@ function CompanyEvaluationForm() {
       username: auth.username,
       company_size: companySize,
       revenue: revenue,
-      date: currentDateLocal,
+      date: currentDate.toISOString().slice(0, 19).replace("T", " "),
       emission: emission,
       electricity: electricity,
       natural_gas: naturalGas,
@@ -45,7 +45,7 @@ function CompanyEvaluationForm() {
       })
       .then((response) => {
         if (response.data.evaluate == true) {
-          navigate("/EvaluationSuccess");
+          navigate("/evaluation-success");
         } else {
           setErrors("Error with evaluation process");
         }
