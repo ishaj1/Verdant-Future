@@ -2,91 +2,72 @@ import { useState } from "react";
 import axios from "../api/axios";
 import useAuth from "../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
+import Header from "./Header";
 
-function RegisterForm() {
-  const { setAuth } = useAuth();
-
+function UpdateProfileForm() {
+  const { auth } = useAuth();
   const navigate = useNavigate();
 
-  const [isProject, setIsProject] = useState(true);
   const [errors, setErrors] = useState();
 
-  const changeRegistration = (e) => {
-    setIsProject(e.target.id === "project");
-  };
-
-  const registerUser = (e) => {
+  const updateProfile = (e) => {
     e.preventDefault();
     const form = e.currentTarget;
     const orgName = form.orgName.value;
     const projectAssociation = form.projectAssociation?.value;
-    const username = form.username.value;
     const password = form.password.value;
     const contactName = form.contactName.value;
     const contactEmail = form.contactEmail.value;
     const orgDescription = form.orgDescription.value;
-    const funds = form.funds.value;
+    const fundsRequired = form.fundsRequired.value;
+    const fundsReceived = form.fundsReceived.value;
     const paymentID = form.paymentID.value;
 
-    const registrationData = {
+    const profileData = {
       name: orgName,
-      isCompany: !isProject,
-      ...(isProject ? { project_association: projectAssociation } : {}),
-      username,
+      isProject: auth.isProject,
+      ...(auth.isProject ? { association: projectAssociation } : {}),
+      username: auth.username,
       password,
       contact_name: contactName,
       contact_email: contactEmail,
       details: orgDescription,
-      funds_required: funds,
-      funds_received: 0,
+      funds_required: fundsRequired,
+      funds_received: fundsReceived,
       payment_id: paymentID,
     };
 
     axios
-      .post("/registerAuth", registrationData, {
+      .post("/update_profile", profileData, {
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
       })
       .then((response) => {
-        if (response.data.register === true) {
-          setAuth({ username, isProject });
-          navigate("/organizations");
+        if (response.data.update === true) {
+          setErrors();
+          navigate(`/profile/${auth.username}`);
         } else {
-          setErrors("Error registering. Check information submitted.");
+          setErrors("Could not update profile. Please check information submitted.");
         }
       })
       .catch((error) => {
-        setErrors("Error registering. Please try again.");
+        setErrors("Error updating profile. Please try again.");
       });
   };
+
   return (
-    <div className="RegistrationWindow">
-      <button
-        className={isProject ? "selected" : ""}
-        id="project"
-        onClick={changeRegistration}
-      >
-        Project
-      </button>
-      <button
-        className={isProject ? "" : "selected"}
-        id="company"
-        onClick={changeRegistration}
-      >
-        Company
-      </button>
+    <>
+      <Header />
       <p>{errors}</p>
-      <form className="RegisterForm" onSubmit={(e) => registerUser(e)}>
-        <label htmlFor="orgName">{isProject ? "Project" : "Company"} Name</label>
+      <form className="UpdateProfileForm" onSubmit={(e) => updateProfile(e)}>
+        <label htmlFor="orgName">{auth.isProject ? "Project" : "Company"} Name</label>
         <input type="text" name="orgName" required />
-        {isProject && (
+        {auth.isProject && (
           <>
             <label htmlFor="projectAssociation">Project Association</label>
             <input type="text" name="projectAssociation" required />
           </>
         )}
 
-        <label htmlFor="username">Username</label>
-        <input type="text" name="username" required />
         <label htmlFor="password">Password</label>
         <input type="password" name="password" required />
         <label htmlFor="contactName">Contact Name</label>
@@ -95,7 +76,7 @@ function RegisterForm() {
         <input type="email" name="contactEmail" required />
         <label htmlFor="orgDescription">Description of Your Organization</label>
         <textarea maxLength={500} name="orgDescription" required></textarea>
-        <label htmlFor="funds">
+        <label htmlFor="fundsRequired">
           Amount of Funds You Are Aiming to Reach (0 if you are not looking for funds)
         </label>
         <input
@@ -104,15 +85,25 @@ function RegisterForm() {
           max="99999999999999999.99"
           step=".01"
           defaultValue="0"
-          name="funds"
+          name="fundsRequired"
+          required
+        />
+        <label htmlFor="fundsReceived">Amount of Funds You Have Received</label>
+        <input
+          type="number"
+          min="0"
+          max="99999999999999999.99"
+          step=".01"
+          defaultValue="0"
+          name="fundsReceived"
           required
         />
         <label htmlFor="paymentID">Payment ID</label>
         <input type="text" name="paymentID" required />
-        <button type="submit">Register</button>
+        <button type="submit">Update</button>
       </form>
-    </div>
+    </>
   );
 }
 
-export default RegisterForm;
+export default UpdateProfileForm;
