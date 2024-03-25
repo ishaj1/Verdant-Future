@@ -313,7 +313,7 @@ def get_evaluated():
 
 @app.route('/get_green_credit', methods=['GET'])
 def get_green_credit():
-    company_username = request.form["username"]
+    company_username = request.args["username"]
     cursor = conn.cursor()
     query = "SELECT green_credits FROM Company_eval WHERE company_username = %s"
     cursor.execute(query, (company_username))
