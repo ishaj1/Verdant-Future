@@ -166,6 +166,13 @@ def display_company_profiles():
         cursor.execute('SELECT * FROM Company WHERE company_username =  %s', (username))
     
     record = cursor.fetchone()
+
+    if isProject == "false":
+        query1 = "SELECT green_credits FROM Company_eval WHERE company_username = %s ORDER BY entry_date DESC"
+        cursor.execute(query1, (username))
+        green_credit = cursor.fetchone()
+        if green_credit:
+            record["green_credits"] = green_credit["green_credits"]
     
     cursor.close()
 
