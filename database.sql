@@ -5,6 +5,7 @@ CREATE TABLE Company(
     contact_name varchar(50) not null,
     contact_detail varchar(50) not null,
     company_details varchar(500) not null,
+    total_credits float(20,3) not null,
     funds_required float(20,3),
     funds_received float(20,3),
     payment_id varchar(200) not null,
@@ -50,6 +51,8 @@ CREATE TABLE Company_Transaction(
     sender_username varchar(50) not null,
     receiver_username varchar(50) not null,
     amount_transferred varchar(50) not null,
+    credits_transferred varchar(50) not null,
+    status varchar(10) default 'pending' check (status in ('pending', 'accepted', 'declined', 'canceled'))
     primary key (transaction_name, sender_username, receiver_username),
     foreign key (sender_username, payer_id) references Company(company_username, payment_id),
     foreign key (receiver_username, payee_id) references Company(company_username, payment_id)
