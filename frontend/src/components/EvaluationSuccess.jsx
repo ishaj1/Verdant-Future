@@ -18,7 +18,7 @@ function EvaluationSuccess() {
           setErrors("User Not Found");
         } else {
           setErrors();
-          setGreenCredit(response.data);
+          setGreenCredit(response.data.credits);
         }
       } catch (error) {
         setErrors("Error fetching green credit. Please try again.");
@@ -33,15 +33,18 @@ function EvaluationSuccess() {
     <>
       <Header />
       <div className="EvaluationSuccess">
-        <h2>Evaluation Successful</h2>
+        <h2>Evaluation Successful!</h2>
         {errors && <p>{errors}</p>}
         {greenCredit && (
           <div>
             <p>
-              Your Company's Calculated Green Credit is: {greenCredit.green_credits}
+              Your Company's Calculated Green Credit for this evaluation is: {greenCredit.green_credit}
             </p>
-            {/* Go back to whatever page, subject to change */}
-            <Link to="/">Go to Home Page</Link>
+            <p>
+              Your Company's Total Green Credit is updated to: {greenCredit.total_credit}
+            </p>
+            
+            <Link to={`/profile/${auth?.username}`}>Back to Profile</Link>
           </div>
         )}
       </div>

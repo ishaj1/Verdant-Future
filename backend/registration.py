@@ -330,28 +330,78 @@ def get_evaluated():
     cursor.close()
     return {"evaluate": True}
 
-""" temperary function for testing """
 @app.route('/get_green_credit', methods=['GET'])
 def get_green_credit():
     company_username = request.args["username"]
     cursor = conn.cursor()
-    query = "SELECT green_credits FROM Company_eval WHERE company_username = %s"
+    query = "SELECT green_credits FROM Company_eval WHERE company_username = %s ORDER BY entry_date DESC"
     cursor.execute(query, (company_username))
     green_credit = cursor.fetchone()
 
+    query1 = "SELECT total_credits FROM Company WHERE company_username = %s"
+    cursor.execute(query1, (company_username))
+    total_credit = cursor.fetchone()
+
     cursor.close()
 
-    if not green_credit:
+    if not green_credit or not total_credit:
         return jsonify({'message': 'No company found!'})
 
-    return jsonify(green_credit)
+    credits = {
+        'green_credit': green_credit[0],
+        'total_credit': total_credit[0]
+    }
+
+    return jsonify({'credits': credits})
+
+@app.route('/update_password', methods=['GET', 'POST'])
+def update_password():
+    username = request.form["username"]
+    isProject = request.form["isProject"]
+
+    old_password = request.form["old_password"]
+    new_password = request.form["new_password"]
+
+    cursor = conn.cursor()
+
+    if isProject == "true":
+        query = ("SELECT company_username, company_password FROM Company WHERE company_username = %s and company_password = %s")
+
+    else:
+        query = ("SELECT project_username, project_password FROM Project WHERE project_username = %s and project_password = %s")
+
+    cursor.execute(query, (username, str(hashlib.md5(old_password.encode()).digest())))
+    data = cursor.fetchone()
+
+    if data:
+        
+        if isProject == "true":
+            query1 = ("UPDATE Project SET project_password = %s WHERE project_username = %s")
+            cursor.execute(query1, (str(hashlib.md5(new_password.encode()).digest()), username))
+                           
+            return {
+                "changePassword": True
+            }
+        else:
+            query1 = ("UPDATE Company SET company_password = %s WHERE company_username = %s")
+            cursor.execute(query1, (str(hashlib.md5(new_password.encode()).digest()), username))
+
+            return {
+                "changePassword": True
+            }
+
+    else:
+        return {
+            "changePassword": False
+        }
+
+
 
 @app.route('/update_profile', methods=['GET', 'POST'])
 def update_profile():
     # Extract fields from the form data
     isProject = request.form["isProject"]
     username = request.form["username"]
-    password = request.form["password"]
     name = request.form["name"]
     if isProject == "true":
         project_association = request.form["association"]
@@ -368,12 +418,11 @@ def update_profile():
 
     if isProject == "true":
         update_query = (
-            " UPDATE Project SET project_password = %s, project_name = %s, project_association = %s," 
+            " UPDATE Project SET project_name = %s, project_association = %s," 
             + "contact_name = %s, contact_detail = %s, project_details = %s, funds_required = %s, "
             + "funds_received = %s, payment_id = %s WHERE project_username = %s") 
 
         cursor.execute(update_query, (
-            str(hashlib.md5(password.encode()).digest()),
             name,
             project_association,
             contact_name,
@@ -386,11 +435,10 @@ def update_profile():
         ))
     else: 
         update_query = (
-            " UPDATE Company SET company_password = %s, company_name = %s, "
-            + "contact_name = %s, contact_detail = %s, company_details = %s, "
-            + "funds_required = %s, funds_received = %s, payment_id = %s WHERE company_username = %s")
+            " UPDATE Company SET company_name = %s, contact_name = %s, "
+            + "contact_detail = %s, company_details = %s, funds_required = %s, "
+            + "funds_received = %s, payment_id = %s WHERE company_username = %s")
         cursor.execute(update_query, (
-            str(hashlib.md5(password.encode()).digest()),
             name,
             contact_name,
             contact_email,
