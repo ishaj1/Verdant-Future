@@ -355,8 +355,6 @@ def update_profile():
     name = request.form["name"]
     if isProject == "true":
         project_association = request.form["association"]
-    else:
-        total_credits = request.form["total_credits"]
     contact_name = request.form["contact_name"]
     contact_email = request.form["contact_email"]
     details = request.form["details"]
@@ -389,7 +387,7 @@ def update_profile():
     else: 
         update_query = (
             " UPDATE Company SET company_password = %s, company_name = %s, "
-            + "contact_name = %s, contact_detail = %s, company_details = %s, total_credits = %s,"
+            + "contact_name = %s, contact_detail = %s, company_details = %s, "
             + "funds_required = %s, funds_received = %s, payment_id = %s WHERE company_username = %s")
         cursor.execute(update_query, (
             str(hashlib.md5(password.encode()).digest()),
@@ -397,7 +395,6 @@ def update_profile():
             contact_name,
             contact_email,
             details,
-            total_credits,
             funds_required,
             funds_received,
             payment_id,
