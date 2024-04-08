@@ -72,7 +72,7 @@ export default function ProfilePage() {
             </>
           ) : (
             <>
-              <p>Green Credits: {profileData.green_credits}</p>
+              <p>Green Credits: {profileData.total_credits}</p>
               <p>Username: {profileData.company_username}</p>
               <p>Description: {profileData.company_details}</p>
             </>

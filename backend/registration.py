@@ -166,13 +166,6 @@ def display_company_profiles():
         cursor.execute('SELECT * FROM Company WHERE company_username =  %s', (username))
     
     record = cursor.fetchone()
-
-    if isProject == "false":
-        query1 = "SELECT green_credits FROM Company_eval WHERE company_username = %s ORDER BY entry_date DESC"
-        cursor.execute(query1, (username))
-        green_credit = cursor.fetchone()
-        if green_credit:
-            record["green_credits"] = green_credit["green_credits"]
     
     cursor.close()
 
@@ -248,7 +241,16 @@ def calculate_rating(company_input, benchmark, negative=False):
 @app.route('/get_evaluated', methods=['GET', 'POST'])
 def get_evaluated():    
     company_username = request.form["username"]
-
+    
+    cursor = conn.cursor()
+    # get most recent evaluation data (is available)
+    query1 = "SELECT green_credits FROM Company_eval WHERE company_username = %s ORDER BY entry_date DESC"
+    cursor.execute(query1, (company_username))
+    green_credit_data = cursor.fetchone()
+    past_credits = 0
+    if green_credit_data:
+        past_credits = int(green_credit_data)
+    
     # Grabs info from the form
     ## General info
     company_size = int(request.form["company_size"]) # number of employee
@@ -293,9 +295,9 @@ def get_evaluated():
     # Green Company level: green credits >= 50
     final_rating = 0.35*ghg_rating + 0.3*energy_rating + 0.15*water_rating + 0.2*waste_rating
     green_credits = round(final_rating, 3)
+    credits_diff = green_credits - past_credits
 
-    # Update the company's green credit into database
-    cursor = conn.cursor()
+    # Store the company's evaluated green credit into database
     query = "INSERT INTO Company_eval VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
     cursor.execute(
         query,
@@ -314,10 +316,21 @@ def get_evaluated():
         ),
     )
 
+    # Update the total credit in the Company table
+    query2 = "UPDATE Company SET total_credits = total credits + %s WHERE username = %s"
+    cursor.execute(
+        query2,
+        (
+            credits_diff,
+            company_username          
+        ),
+    )
+
     conn.commit()
     cursor.close()
     return {"evaluate": True}
 
+""" temperary function for testing """
 @app.route('/get_green_credit', methods=['GET'])
 def get_green_credit():
     company_username = request.args["username"]
@@ -342,12 +355,15 @@ def update_profile():
     name = request.form["name"]
     if isProject == "true":
         project_association = request.form["association"]
+    else:
+        total_credits = request.form["total_credits"]
     contact_name = request.form["contact_name"]
     contact_email = request.form["contact_email"]
     details = request.form["details"]
     funds_required = request.form["funds_required"]
     funds_received = request.form["funds_received"]
     payment_id = request.form["payment_id"]
+    
 
     # Update the database based on the provided information
     cursor = conn.cursor()
@@ -373,7 +389,7 @@ def update_profile():
     else: 
         update_query = (
             " UPDATE Company SET company_password = %s, company_name = %s, "
-            + "contact_name = %s, contact_detail = %s, company_details = %s, "
+            + "contact_name = %s, contact_detail = %s, company_details = %s, total_credits = %s,"
             + "funds_required = %s, funds_received = %s, payment_id = %s WHERE company_username = %s")
         cursor.execute(update_query, (
             str(hashlib.md5(password.encode()).digest()),
@@ -381,6 +397,7 @@ def update_profile():
             contact_name,
             contact_email,
             details,
+            total_credits,
             funds_required,
             funds_received,
             payment_id,
