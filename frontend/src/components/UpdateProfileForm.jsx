@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "../api/axios";
 import useAuth from "../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
@@ -9,6 +9,18 @@ function UpdateProfileForm() {
   const navigate = useNavigate();
 
   const [errors, setErrors] = useState();
+  const [curProfileData, setCurProfileData] = useState({});
+
+  const queryProfileData = (username, isProject) => {
+    axios
+      .get("/display_profile", {
+        params: { username, isProject },
+      })
+      .then((response) => {
+        setCurProfileData({ ...response.data.records, isProject });
+      })
+      .catch((error) => {});
+  };
 
   const updateProfile = (e) => {
     e.preventDefault();
@@ -30,7 +42,7 @@ function UpdateProfileForm() {
       username: auth.username,
       password,
       contact_name: contactName,
-      contact_email: contactEmail,
+      contact_detail: contactEmail,
       details: orgDescription,
       funds_required: fundsRequired,
       funds_received: fundsReceived,
@@ -54,28 +66,63 @@ function UpdateProfileForm() {
       });
   };
 
+  useEffect(() => {
+    queryProfileData(auth.username, auth.isProject);
+  }, []);
+
   return (
     <>
       <Header />
       <p>{errors}</p>
       <form className="UpdateProfileForm" onSubmit={(e) => updateProfile(e)}>
         <label htmlFor="orgName">{auth.isProject ? "Project" : "Company"} Name</label>
-        <input type="text" name="orgName" required />
+        <input
+          type="text"
+          name="orgName"
+          defaultValue={
+            auth.isProject ? curProfileData?.project_name : curProfileData?.company_name
+          }
+          required
+        />
         {auth.isProject && (
           <>
             <label htmlFor="projectAssociation">Project Association</label>
-            <input type="text" name="projectAssociation" required />
+            <input
+              type="text"
+              name="projectAssociation"
+              defaultValue={curProfileData?.project_association}
+              required
+            />
           </>
         )}
 
         <label htmlFor="password">Password</label>
         <input type="password" name="password" required />
         <label htmlFor="contactName">Contact Name</label>
-        <input type="text" name="contactName" required />
+        <input
+          type="text"
+          name="contactName"
+          defaultValue={curProfileData?.contact_name}
+          required
+        />
         <label htmlFor="contactEmail">Contact Email</label>
-        <input type="email" name="contactEmail" required />
+        <input
+          type="email"
+          name="contactEmail"
+          defaultValue={curProfileData?.contact_detail}
+          required
+        />
         <label htmlFor="orgDescription">Description of Your Organization</label>
-        <textarea maxLength={500} name="orgDescription" required></textarea>
+        <textarea
+          maxLength={500}
+          name="orgDescription"
+          defaultValue={
+            auth.isProject
+              ? curProfileData?.project_details
+              : curProfileData?.company_details
+          }
+          required
+        ></textarea>
         <label htmlFor="fundsRequired">
           Amount of Funds You Are Aiming to Reach (0 if you are not looking for funds)
         </label>
@@ -84,7 +131,7 @@ function UpdateProfileForm() {
           min="0"
           max="99999999999999999.99"
           step=".01"
-          defaultValue="0"
+          defaultValue={curProfileData?.funds_required}
           name="fundsRequired"
           required
         />
@@ -94,12 +141,17 @@ function UpdateProfileForm() {
           min="0"
           max="99999999999999999.99"
           step=".01"
-          defaultValue="0"
+          defaultValue={curProfileData?.funds_received}
           name="fundsReceived"
           required
         />
         <label htmlFor="paymentID">Payment ID</label>
-        <input type="text" name="paymentID" required />
+        <input
+          type="text"
+          name="paymentID"
+          defaultValue={curProfileData?.payment_id}
+          required
+        />
         <button type="submit">Update</button>
       </form>
     </>
