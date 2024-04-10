@@ -81,28 +81,32 @@ export default function ProfilePage() {
           )}
           <p>Contact Name: {profileData.contact_name}</p>
           <p>Contact Details: {profileData.contact_detail}</p>
-          <p style={{ display: "inline" }}>Password: ********</p>
-          <button
-            onClick={() => {
-              setShowPasswordForm(true);
-              setErrors();
-            }}
-          >
-            Update Password
-          </button>
-          {showPasswordForm && (
+          {auth?.username === uid && (
             <>
-              <UpdatePasswordForm
-                setReturnMessage={setErrors}
-                setShowForm={setShowPasswordForm}
-              />
+              <p style={{ display: "inline" }}>Password: ********</p>
               <button
                 onClick={() => {
-                  setShowPasswordForm(false);
+                  setShowPasswordForm(true);
+                  setErrors();
                 }}
               >
-                Cancel
+                Update Password
               </button>
+              {showPasswordForm && (
+                <>
+                  <UpdatePasswordForm
+                    setReturnMessage={setErrors}
+                    setShowForm={setShowPasswordForm}
+                  />
+                  <button
+                    onClick={() => {
+                      setShowPasswordForm(false);
+                    }}
+                  >
+                    Cancel
+                  </button>
+                </>
+              )}
             </>
           )}
         </>
