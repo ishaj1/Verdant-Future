@@ -52,7 +52,7 @@ CREATE TABLE Company_Transaction(
     receiver_username varchar(50) not null,
     amount_transferred varchar(50) not null,
     credits_transferred varchar(50) not null,
-    status varchar(10) default 'pending' check (status in ('pending', 'accepted', 'declined', 'canceled'))
+    status varchar(10) default 'pending' check (status in ('pending', 'accepted', 'declined', 'canceled')),
     primary key (transaction_name, sender_username, receiver_username),
     foreign key (sender_username, payer_id) references Company(company_username, payment_id),
     foreign key (receiver_username, payee_id) references Company(company_username, payment_id)

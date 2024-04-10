@@ -154,7 +154,7 @@ def registerAuth():
         return {"register": True}
 
 @app.route('/display_profile', methods=['GET'])
-def display_company_profiles():
+def display_profiles():
     username = request.args["username"]
     isProject = request.args["isProject"]
     
@@ -249,7 +249,7 @@ def get_evaluated():
     green_credit_data = cursor.fetchone()
     past_credits = 0
     if green_credit_data:
-        past_credits = int(green_credit_data)
+        past_credits = float(green_credit_data['green_credits'])
     
     # Grabs info from the form
     ## General info
@@ -317,7 +317,7 @@ def get_evaluated():
     )
 
     # Update the total credit in the Company table
-    query2 = "UPDATE Company SET total_credits = total credits + %s WHERE username = %s"
+    query2 = "UPDATE Company SET total_credits = total_credits + %s WHERE company_username = %s"
     cursor.execute(
         query2,
         (
@@ -348,8 +348,8 @@ def get_green_credit():
         return jsonify({'message': 'No company found!'})
 
     credits = {
-        'green_credit': green_credit[0],
-        'total_credit': total_credit[0]
+        'green_credit': green_credit['green_credits'],
+        'total_credit': total_credit['total_credits']
     }
 
     return jsonify({'credits': credits})
