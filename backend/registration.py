@@ -365,10 +365,10 @@ def update_password():
     cursor = conn.cursor()
 
     if isProject == "true":
-        query = ("SELECT company_username, company_password FROM Company WHERE company_username = %s and company_password = %s")
+        query = ("SELECT project_username, project_password FROM Project WHERE project_username = %s and project_password = %s")
 
     else:
-        query = ("SELECT project_username, project_password FROM Project WHERE project_username = %s and project_password = %s")
+        query = ("SELECT company_username, company_password FROM Company WHERE company_username = %s and company_password = %s")
 
     cursor.execute(query, (username, str(hashlib.md5(old_password.encode()).digest())))
     data = cursor.fetchone()
