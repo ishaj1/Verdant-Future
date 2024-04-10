@@ -46,7 +46,7 @@ def login():
     else:
         query = ("SELECT project_username, project_password FROM Project WHERE project_username = %s and project_password = %s")
 
-    cursor.execute(query, (username, str(hashlib.md5(password.encode()).digest())))
+    cursor.execute(query, (username, str(hashlib.md5(password.encode()).hexdigest())))
     
     data = cursor.fetchone()
     cursor.close()
@@ -118,7 +118,7 @@ def registerAuth():
             cursor.execute(
                 ins,
                 (username,
-                 str(hashlib.md5(password.encode()).digest()),
+                 str(hashlib.md5(password.encode()).hexdigest()),
                  name,
                  contact_name,
                  contact_email,
@@ -137,7 +137,7 @@ def registerAuth():
             cursor.execute(
                 ins,
                 (username,
-                 str(hashlib.md5(password.encode()).digest()),
+                 str(hashlib.md5(password.encode()).hexdigest()),
                  name,
                  project_association,
                  contact_name,
@@ -370,21 +370,21 @@ def update_password():
     else:
         query = ("SELECT company_username, company_password FROM Company WHERE company_username = %s and company_password = %s")
 
-    cursor.execute(query, (username, str(hashlib.md5(old_password.encode()).digest())))
+    cursor.execute(query, (username, str(hashlib.md5(old_password.encode()).hexdigest())))
     data = cursor.fetchone()
 
     if data:
         
         if isProject == "true":
             query1 = ("UPDATE Project SET project_password = %s WHERE project_username = %s")
-            cursor.execute(query1, (str(hashlib.md5(new_password.encode()).digest()), username))
+            cursor.execute(query1, (str(hashlib.md5(new_password.encode()).hexdigest()), username))
                            
             return {
                 "changePassword": True
             }
         else:
             query1 = ("UPDATE Company SET company_password = %s WHERE company_username = %s")
-            cursor.execute(query1, (str(hashlib.md5(new_password.encode()).digest()), username))
+            cursor.execute(query1, (str(hashlib.md5(new_password.encode()).hexdigest()), username))
 
             return {
                 "changePassword": True
