@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import axios from "../api/axios";
 import useAuth from "../hooks/useAuth";
 import { Link } from "react-router-dom";
+import UpdatePasswordForm from "../components/UpdatePasswordForm";
 
 export default function ProfilePage() {
   const path = useLocation().pathname;
@@ -11,6 +12,7 @@ export default function ProfilePage() {
   const { auth } = useAuth();
   const [profileData, setProfileData] = useState();
   const [errors, setErrors] = useState();
+  const [showPasswordForm, setShowPasswordForm] = useState(false);
 
   const queryProfileData = (username, isProject) => {
     axios
@@ -72,14 +74,41 @@ export default function ProfilePage() {
             </>
           ) : (
             <>
-              <p>Green Credits: {profileData.green_credits}</p>
+              <p>Green Credits: {profileData.total_credits}</p>
               <p>Username: {profileData.company_username}</p>
               <p>Description: {profileData.company_details}</p>
             </>
           )}
-
           <p>Contact Name: {profileData.contact_name}</p>
           <p>Contact Details: {profileData.contact_detail}</p>
+          {auth?.username === uid && (
+            <>
+              <p style={{ display: "inline" }}>Password: ********</p>
+              <button
+                onClick={() => {
+                  setShowPasswordForm(true);
+                  setErrors();
+                }}
+              >
+                Update Password
+              </button>
+              {showPasswordForm && (
+                <>
+                  <UpdatePasswordForm
+                    setReturnMessage={setErrors}
+                    setShowForm={setShowPasswordForm}
+                  />
+                  <button
+                    onClick={() => {
+                      setShowPasswordForm(false);
+                    }}
+                  >
+                    Cancel
+                  </button>
+                </>
+              )}
+            </>
+          )}
         </>
       )}
     </>

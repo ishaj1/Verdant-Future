@@ -46,7 +46,7 @@ def login():
     else:
         query = ("SELECT project_username, project_password FROM Project WHERE project_username = %s and project_password = %s")
 
-    cursor.execute(query, (username, str(hashlib.md5(password.encode()).digest())))
+    cursor.execute(query, (username, str(hashlib.md5(password.encode()).hexdigest())))
     
     data = cursor.fetchone()
     cursor.close()
@@ -118,7 +118,7 @@ def registerAuth():
             cursor.execute(
                 ins,
                 (username,
-                 str(hashlib.md5(password.encode()).digest()),
+                 str(hashlib.md5(password.encode()).hexdigest()),
                  name,
                  contact_name,
                  contact_email,
@@ -137,7 +137,7 @@ def registerAuth():
             cursor.execute(
                 ins,
                 (username,
-                 str(hashlib.md5(password.encode()).digest()),
+                 str(hashlib.md5(password.encode()).hexdigest()),
                  name,
                  project_association,
                  contact_name,
@@ -154,7 +154,7 @@ def registerAuth():
         return {"register": True}
 
 @app.route('/display_profile', methods=['GET'])
-def display_company_profiles():
+def display_profiles():
     username = request.args["username"]
     isProject = request.args["isProject"]
     
@@ -241,7 +241,16 @@ def calculate_rating(company_input, benchmark, negative=False):
 @app.route('/get_evaluated', methods=['GET', 'POST'])
 def get_evaluated():    
     company_username = request.form["username"]
-
+    
+    cursor = conn.cursor()
+    # get most recent evaluation data (is available)
+    query1 = "SELECT green_credits FROM Company_eval WHERE company_username = %s ORDER BY entry_date DESC"
+    cursor.execute(query1, (company_username))
+    green_credit_data = cursor.fetchone()
+    past_credits = 0
+    if green_credit_data:
+        past_credits = float(green_credit_data['green_credits'])
+    
     # Grabs info from the form
     ## General info
     company_size = int(request.form["company_size"]) # number of employee
@@ -286,9 +295,9 @@ def get_evaluated():
     # Green Company level: green credits >= 50
     final_rating = 0.35*ghg_rating + 0.3*energy_rating + 0.15*water_rating + 0.2*waste_rating
     green_credits = round(final_rating, 3)
+    credits_diff = green_credits - past_credits
 
-    # Update the company's green credit into database
-    cursor = conn.cursor()
+    # Store the company's evaluated green credit into database
     query = "INSERT INTO Company_eval VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
     cursor.execute(
         query,
@@ -307,6 +316,16 @@ def get_evaluated():
         ),
     )
 
+    # Update the total credit in the Company table
+    query2 = "UPDATE Company SET total_credits = total_credits + %s WHERE company_username = %s"
+    cursor.execute(
+        query2,
+        (
+            credits_diff,
+            company_username          
+        ),
+    )
+
     conn.commit()
     cursor.close()
     return {"evaluate": True}
@@ -315,23 +334,74 @@ def get_evaluated():
 def get_green_credit():
     company_username = request.args["username"]
     cursor = conn.cursor()
-    query = "SELECT green_credits FROM Company_eval WHERE company_username = %s"
+    query = "SELECT green_credits FROM Company_eval WHERE company_username = %s ORDER BY entry_date DESC"
     cursor.execute(query, (company_username))
     green_credit = cursor.fetchone()
 
+    query1 = "SELECT total_credits FROM Company WHERE company_username = %s"
+    cursor.execute(query1, (company_username))
+    total_credit = cursor.fetchone()
+
     cursor.close()
 
-    if not green_credit:
+    if not green_credit or not total_credit:
         return jsonify({'message': 'No company found!'})
 
-    return jsonify(green_credit)
+    credits = {
+        'green_credit': green_credit['green_credits'],
+        'total_credit': total_credit['total_credits']
+    }
+
+    return jsonify({'credits': credits})
+
+@app.route('/update_password', methods=['GET', 'POST'])
+def update_password():
+    username = request.form["username"]
+    isProject = request.form["isProject"]
+
+    old_password = request.form["old_password"]
+    new_password = request.form["new_password"]
+
+    cursor = conn.cursor()
+
+    if isProject == "true":
+        query = ("SELECT project_username, project_password FROM Project WHERE project_username = %s and project_password = %s")
+
+    else:
+        query = ("SELECT company_username, company_password FROM Company WHERE company_username = %s and company_password = %s")
+
+    cursor.execute(query, (username, str(hashlib.md5(old_password.encode()).hexdigest())))
+    data = cursor.fetchone()
+
+    if data:
+        
+        if isProject == "true":
+            query1 = ("UPDATE Project SET project_password = %s WHERE project_username = %s")
+            cursor.execute(query1, (str(hashlib.md5(new_password.encode()).hexdigest()), username))
+                           
+            return {
+                "changePassword": True
+            }
+        else:
+            query1 = ("UPDATE Company SET company_password = %s WHERE company_username = %s")
+            cursor.execute(query1, (str(hashlib.md5(new_password.encode()).hexdigest()), username))
+
+            return {
+                "changePassword": True
+            }
+
+    else:
+        return {
+            "changePassword": False
+        }
+
+
 
 @app.route('/update_profile', methods=['GET', 'POST'])
 def update_profile():
     # Extract fields from the form data
     isProject = request.form["isProject"]
     username = request.form["username"]
-    password = request.form["password"]
     name = request.form["name"]
     if isProject == "true":
         project_association = request.form["association"]
@@ -341,18 +411,18 @@ def update_profile():
     funds_required = request.form["funds_required"]
     funds_received = request.form["funds_received"]
     payment_id = request.form["payment_id"]
+    
 
     # Update the database based on the provided information
     cursor = conn.cursor()
 
     if isProject == "true":
         update_query = (
-            " UPDATE Project SET project_password = %s, project_name = %s, project_association = %s," 
+            " UPDATE Project SET project_name = %s, project_association = %s," 
             + "contact_name = %s, contact_detail = %s, project_details = %s, funds_required = %s, "
             + "funds_received = %s, payment_id = %s WHERE project_username = %s") 
 
         cursor.execute(update_query, (
-            str(hashlib.md5(password.encode()).digest()),
             name,
             project_association,
             contact_name,
@@ -365,11 +435,10 @@ def update_profile():
         ))
     else: 
         update_query = (
-            " UPDATE Company SET company_password = %s, company_name = %s, "
-            + "contact_name = %s, contact_detail = %s, company_details = %s, "
-            + "funds_required = %s, funds_received = %s, payment_id = %s WHERE company_username = %s")
+            " UPDATE Company SET company_name = %s, contact_name = %s, "
+            + "contact_detail = %s, company_details = %s, funds_required = %s, "
+            + "funds_received = %s, payment_id = %s WHERE company_username = %s")
         cursor.execute(update_query, (
-            str(hashlib.md5(password.encode()).digest()),
             name,
             contact_name,
             contact_email,
