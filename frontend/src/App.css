@@ -1,4 +1,3 @@
-
 .abeezee-regular {
   font-family: "ABeeZee", sans-serif;
   font-weight: 400;
@@ -34,7 +33,7 @@
 }
 .LoginContent > .TypeSelector > button {
   border: none;
-  background-color:#7eaf65e1;
+  background-color: #7eaf65e1;
   width: 50%;
   padding: 15px;
   transition: background-color 0.2s;
@@ -48,13 +47,16 @@
 }
 
 .LoginContent > .TypeSelector > button.selected {
-  background-color: white
-  
+  background-color: white;
 }
 
 .LoginContent > .TypeSelector > button:hover {
   background-color: #bde0b1;
   cursor: pointer;
+}
+.LoginContent > .TypeSelector > button.selected:hover {
+  background-color: white;
+  cursor: default;
 }
 .LoginContent > h2,
 .LoginContent > p {
@@ -88,4 +90,3 @@
 .OrganizationCard {
   background-color: lightgray;
 }
-
