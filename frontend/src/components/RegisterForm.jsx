@@ -9,7 +9,7 @@ function RegisterForm() {
 
   const navigate = useNavigate();
 
-  const [isProject, setIsProject] = useState();
+  const [isProject, setIsProject] = useState(true);
   const [errors, setErrors] = useState();
 
   const changeRegistration = () => {
@@ -49,8 +49,8 @@ function RegisterForm() {
       })
       .then((response) => {
         if (response.data.register === true) {
-          setAuth({ username });
-          navigate("/projects");
+          setAuth({ username, isProject });
+          navigate("/organizations");
         } else {
           setErrors("Error registering. Check information submitted.");
         }

@@ -46,7 +46,7 @@ def login():
     else:
         query = ("SELECT project_username, project_password FROM Project WHERE project_username = %s and project_password = %s")
 
-    cursor.execute(query, (username, str(hashlib.md5(password.encode()).digest())))
+    cursor.execute(query, (username, str(hashlib.md5(password.encode()).hexdigest())))
     
     data = cursor.fetchone()
     cursor.close()
@@ -118,7 +118,7 @@ def registerAuth():
             cursor.execute(
                 ins,
                 (username,
-                 str(hashlib.md5(password.encode()).digest()),
+                 str(hashlib.md5(password.encode()).hexdigest()),
                  name,
                  contact_name,
                  contact_email,
@@ -137,7 +137,7 @@ def registerAuth():
             cursor.execute(
                 ins,
                 (username,
-                 str(hashlib.md5(password.encode()).digest()),
+                 str(hashlib.md5(password.encode()).hexdigest()),
                  name,
                  project_association,
                  contact_name,
@@ -153,107 +153,80 @@ def registerAuth():
         cursor.close()
         return {"register": True}
 
-@app.route('/display_company_profile', methods=['GET'])
-def display_company_profiles():
-    company_username = request.form["company_username"]
+@app.route('/display_profile', methods=['GET'])
+def display_profiles():
+    username = request.args["username"]
+    isProject = request.args["isProject"]
+    
     cursor = conn.cursor()
-
-    cursor.execute('SELECT * FROM Company WHERE company_username =  %s', (company_username))
+    
+    if isProject == "true":
+        cursor.execute('SELECT * FROM Project WHERE project_username =  %s', (username))
+    else:
+        cursor.execute('SELECT * FROM Company WHERE company_username =  %s', (username))
+    
     record = cursor.fetchone()
+    
+    cursor.close()
 
     if not record:
         return jsonify({'message': 'No company found!'})
+    
+    record.pop("project_password" if isProject == "true" else "company_password")
+    
+    return jsonify({'records': record})
 
-    record_dict = {
-        'company_username': record[0],
-        'company_password': record[1],
-        'company_name': record[2],
-        'contact_name': record[3],
-        'contact_detail': record[4],
-        'company_details': record[5],
-        'green_credits': record[6],
-        'funds_required': record[7],
-        'funds_received': record[8],
-        'payment_id': record[9]
-    }
 
-    conn.close()
-    return jsonify({'company_records': record_dict})
-
-@app.route('/display_project_profile', methods=['GET'])
-def display_project_profiles():
-    project_username = request.form["project_username"]
-    cursor = conn.cursor()
-
-    cursor.execute('SELECT * FROM Project WHERE project_username =  %s', (project_username))
-    record = cursor.fetchone()
-
-    if not record:
-        return jsonify({'message': 'No project found!'})
-
-    record_dict = {
-        'project_username': record[0],
-        'project_password': record[1],
-        'project_name': record[2],
-        'project_association': record[3],
-        'contact_name': record[4],
-        'contact_detail': record[5],
-        'project_details': record[6],
-        'funds_required': record[7],
-        'funds_received': record[8],
-        'payment_id': record[9]
-    }
-
-    conn.close()
-    return jsonify({'project_records': record_dict})
 
 @app.route("/view_companies", methods=['GET'])
 def view_companies():
     cursor = conn.cursor()
-    query = ("SELECT company_name, contact_name, contact_detail"
-            +"company_details, funds_requires, funds_received FROM Company")
+    query = ("SELECT company_username, company_name, contact_name, contact_detail, "
+            +"company_details, funds_required, funds_received FROM Company")
     
     cursor.execute(query)
     companies = cursor.fetchall()
     companies_lst = []
     for c in companies:
         company = {
+            "company_username": c['company_username'],
             "company_name": c['company_name'],
             "contact_name": c['contact_name'],
             "contact_detail": c['contact_detail'],
             "company_details": c['company_details'],
-            "funds_requires": c['funds_requires'],
+            "funds_required": c['funds_required'],
             "funds_received": c['funds_received']
         }
         companies_lst.append(company)
    
     cursor.close()
 
-    return jsonify(companies_lst)
+    return jsonify(companies)
 
 @app.route("/view_projects", methods=['GET'])
 def view_projects():
     cursor = conn.cursor()
-    query = ("SELECT project_name, project_association, contact_name, contact_detail"
-            +"project_details, funds_requires, funds_received FROM Project")
+    query = ("SELECT project_username, project_name, project_association, contact_name, contact_detail, "
+            +"project_details, funds_required, funds_received FROM Project")
     
     cursor.execute(query)
     projects = cursor.fetchall()
     projects_lst = []
     for c in projects:
         project = {
-            "company_name": c['company_name'],
+            "project_username": c['project_username'],
+            "project_name": c['project_name'],
             "contact_name": c['contact_name'],
             "contact_detail": c['contact_detail'],
-            "company_details": c['company_details'],
-            "funds_requires": c['funds_requires'],
+            "project_details": c['project_details'],
+            "funds_required": c['funds_required'],
             "funds_received": c['funds_received']
         }
         projects_lst.append(project)
    
     cursor.close()
 
-    return jsonify(projects_lst)
+    return jsonify(projects)
 
 # Helper function to calculation evaluation for each of the four categories
 def calculate_rating(company_input, benchmark, negative=False):
@@ -268,7 +241,16 @@ def calculate_rating(company_input, benchmark, negative=False):
 @app.route('/get_evaluated', methods=['GET', 'POST'])
 def get_evaluated():    
     company_username = request.form["username"]
-
+    
+    cursor = conn.cursor()
+    # get most recent evaluation data (is available)
+    query1 = "SELECT green_credits FROM Company_eval WHERE company_username = %s ORDER BY entry_date DESC"
+    cursor.execute(query1, (company_username))
+    green_credit_data = cursor.fetchone()
+    past_credits = 0
+    if green_credit_data:
+        past_credits = float(green_credit_data['green_credits'])
+    
     # Grabs info from the form
     ## General info
     company_size = int(request.form["company_size"]) # number of employee
@@ -313,9 +295,9 @@ def get_evaluated():
     # Green Company level: green credits >= 50
     final_rating = 0.35*ghg_rating + 0.3*energy_rating + 0.15*water_rating + 0.2*waste_rating
     green_credits = round(final_rating, 3)
+    credits_diff = green_credits - past_credits
 
-    # Update the company's green credit into database
-    cursor = conn.cursor()
+    # Store the company's evaluated green credit into database
     query = "INSERT INTO Company_eval VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
     cursor.execute(
         query,
@@ -334,25 +316,143 @@ def get_evaluated():
         ),
     )
 
+    # Update the total credit in the Company table
+    query2 = "UPDATE Company SET total_credits = total_credits + %s WHERE company_username = %s"
+    cursor.execute(
+        query2,
+        (
+            credits_diff,
+            company_username          
+        ),
+    )
+
     conn.commit()
     cursor.close()
     return {"evaluate": True}
 
 @app.route('/get_green_credit', methods=['GET'])
 def get_green_credit():
-    company_username = request.form["username"]
+    company_username = request.args["username"]
     cursor = conn.cursor()
-    query = "SELECT green_credits FROM Company_eval WHERE company_username = %s"
+    query = "SELECT green_credits FROM Company_eval WHERE company_username = %s ORDER BY entry_date DESC"
     cursor.execute(query, (company_username))
     green_credit = cursor.fetchone()
 
+    query1 = "SELECT total_credits FROM Company WHERE company_username = %s"
+    cursor.execute(query1, (company_username))
+    total_credit = cursor.fetchone()
+
     cursor.close()
 
-    if not green_credit:
+    if not green_credit or not total_credit:
         return jsonify({'message': 'No company found!'})
 
-    return jsonify(green_credit)
+    credits = {
+        'green_credit': green_credit['green_credits'],
+        'total_credit': total_credit['total_credits']
+    }
 
+    return jsonify({'credits': credits})
+
+@app.route('/update_password', methods=['GET', 'POST'])
+def update_password():
+    username = request.form["username"]
+    isProject = request.form["isProject"]
+
+    old_password = request.form["old_password"]
+    new_password = request.form["new_password"]
+
+    cursor = conn.cursor()
+
+    if isProject == "true":
+        query = ("SELECT project_username, project_password FROM Project WHERE project_username = %s and project_password = %s")
+
+    else:
+        query = ("SELECT company_username, company_password FROM Company WHERE company_username = %s and company_password = %s")
+
+    cursor.execute(query, (username, str(hashlib.md5(old_password.encode()).hexdigest())))
+    data = cursor.fetchone()
+
+    if data:
+        
+        if isProject == "true":
+            query1 = ("UPDATE Project SET project_password = %s WHERE project_username = %s")
+            cursor.execute(query1, (str(hashlib.md5(new_password.encode()).hexdigest()), username))
+                           
+            return {
+                "changePassword": True
+            }
+        else:
+            query1 = ("UPDATE Company SET company_password = %s WHERE company_username = %s")
+            cursor.execute(query1, (str(hashlib.md5(new_password.encode()).hexdigest()), username))
+
+            return {
+                "changePassword": True
+            }
+
+    else:
+        return {
+            "changePassword": False
+        }
+
+
+
+@app.route('/update_profile', methods=['GET', 'POST'])
+def update_profile():
+    # Extract fields from the form data
+    isProject = request.form["isProject"]
+    username = request.form["username"]
+    name = request.form["name"]
+    if isProject == "true":
+        project_association = request.form["association"]
+    contact_name = request.form["contact_name"]
+    contact_email = request.form["contact_email"]
+    details = request.form["details"]
+    funds_required = request.form["funds_required"]
+    funds_received = request.form["funds_received"]
+    payment_id = request.form["payment_id"]
+    
+
+    # Update the database based on the provided information
+    cursor = conn.cursor()
+
+    if isProject == "true":
+        update_query = (
+            " UPDATE Project SET project_name = %s, project_association = %s," 
+            + "contact_name = %s, contact_detail = %s, project_details = %s, funds_required = %s, "
+            + "funds_received = %s, payment_id = %s WHERE project_username = %s") 
+
+        cursor.execute(update_query, (
+            name,
+            project_association,
+            contact_name,
+            contact_email,
+            details,
+            funds_required,
+            funds_received,
+            payment_id,
+            username
+        ))
+    else: 
+        update_query = (
+            " UPDATE Company SET company_name = %s, contact_name = %s, "
+            + "contact_detail = %s, company_details = %s, funds_required = %s, "
+            + "funds_received = %s, payment_id = %s WHERE company_username = %s")
+        cursor.execute(update_query, (
+            name,
+            contact_name,
+            contact_email,
+            details,
+            funds_required,
+            funds_received,
+            payment_id,
+            username
+        ))
+
+    conn.commit()
+    cursor.close()
+
+    return {"update": True}
 
 if __name__ == '__main__':
-    app.run(port=4242)
+    app.run(port=4242, debug=True, threaded=False)
