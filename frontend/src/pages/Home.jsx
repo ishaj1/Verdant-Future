@@ -10,11 +10,11 @@ export default function HomePage() {
   return (
     <>
       <header className="flex items-center justify-between bg-customGreen-600 px-3 py-3 lg:px-12" aria-label="Main">
-        <h1 className="text-3xl font-bold text-white pt-5 pb-5 ">Verdant Future</h1>
+      <a href="/" className="text-3xl font-bold text-white pt-5 pb-5 ">Verdant Future</a>
         <nav>
           <ul className="hidden gap-8 md:flex text-white font-abeezee">
             <li>
-              <a href="#">About US</a>
+              <a href="#">About us</a>
             </li>
             <li>
               <a href="#">Projects</a>
