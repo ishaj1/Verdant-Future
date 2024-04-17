@@ -76,7 +76,7 @@ export default function ProfilePage() {
                     setShowForm={setShowTransactionForm}
                     uid={uid}
                   />
-                  <button></button>
+                  <button onClick={() => setShowTransactionForm(false)}>Cancel</button>
                 </>
               )}
             </>

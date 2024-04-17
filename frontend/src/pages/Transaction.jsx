@@ -51,6 +51,13 @@ export default function Transaction() {
         <div>Total Cost: ${state.total_cost / 100}</div>
       </div>
       <button onClick={submitPayment}>Confirm</button>
+      <button
+        onClick={() => {
+          navigate(-1);
+        }}
+      >
+        Cancel
+      </button>
     </div>
   );
 }
