@@ -5,6 +5,7 @@ import axios from "../api/axios";
 import useAuth from "../hooks/useAuth";
 import { Link } from "react-router-dom";
 import UpdatePasswordForm from "../components/UpdatePasswordForm";
+import InitiateTransactionForm from "../components/InitiateTransactionForm";
 
 export default function ProfilePage() {
   const path = useLocation().pathname;
@@ -13,6 +14,7 @@ export default function ProfilePage() {
   const [profileData, setProfileData] = useState();
   const [errors, setErrors] = useState();
   const [showPasswordForm, setShowPasswordForm] = useState(false);
+  const [showTransactionForm, setShowTransactionForm] = useState(false);
 
   const queryProfileData = (username, isProject) => {
     axios
@@ -46,7 +48,7 @@ export default function ProfilePage() {
         break;
     }
     queryProfileData(uid, isProject);
-  }, []);
+  }, [uid]);
 
   return (
     <>
@@ -59,6 +61,26 @@ export default function ProfilePage() {
               ? profileData.project_name
               : profileData.company_name}
           </h1>
+          {auth?.isProject === false && profileData.isProject && (
+            <>
+              <button
+                onClick={() => {
+                  setShowTransactionForm(true);
+                }}
+              >
+                Invest
+              </button>
+              {showTransactionForm && (
+                <>
+                  <InitiateTransactionForm
+                    setShowForm={setShowTransactionForm}
+                    uid={uid}
+                  />
+                  <button></button>
+                </>
+              )}
+            </>
+          )}
           {auth?.username === uid && <Link to="/profile/update">Update Profile</Link>}
           {!profileData.isProject && auth?.username === uid && (
             <Link to="/evaluation">Request Evaluation</Link>

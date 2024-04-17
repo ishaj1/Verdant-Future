@@ -72,11 +72,12 @@ def transfer_funds():
     source = request.form["source"]
     destination = request.form["destination"]
     
-    print(stripe.Charge.create(
+    result = stripe.Charge.create(
       amount= 100,
       currency="usd",
       source="acct_1P5t9bQSnkzLsREY",
-    ))
+    )
+    print(result)
 
     print(stripe.Transfer.create(
         amount= 50,
@@ -86,7 +87,7 @@ def transfer_funds():
         # source_transaction = charge.id
     ))
 
-    return {'message': 'Funds transferred successfully'}
+    return {'message': 'Funds transferred successfully', 'details': result}
 
 if __name__ == '__main__':
     app.run(debug=True)

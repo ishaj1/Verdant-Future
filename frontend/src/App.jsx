@@ -1,5 +1,7 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
+import "./App.css";
+
 import Home from "./pages/Home";
 import OrganizationsDirectory from "./pages/OrganizationsDirectory";
 import Profile from "./pages/Profile";
@@ -9,8 +11,7 @@ import Evaluation from "./pages/Evaluation";
 import RequireAuth from "./components/RequireAuth";
 import EvaluationSuccess from "./pages/EvaluationSuccess";
 import UpdateProfileForm from "./components/UpdateProfileForm";
-
-import "./App.css";
+import TransactionResult from "./pages/TransactionResult";
 
 function App() {
   const router = createBrowserRouter([
@@ -52,7 +53,11 @@ function App() {
     },
     {
       path: "/transaction",
-      element: <Transaction />,
+      element: <RequireAuth children={<Transaction />} />,
+    },
+    {
+      path: "/transaction-success",
+      element: <RequireAuth children={<TransactionResult />} />,
     },
     { path: "/evaluation", element: <RequireAuth children={<Evaluation />} /> },
     {
