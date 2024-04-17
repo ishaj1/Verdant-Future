@@ -7,7 +7,7 @@ import Register from "./pages/Register";
 import Transaction from "./pages/Transaction";
 import Evaluation from "./pages/Evaluation";
 import RequireAuth from "./components/RequireAuth";
-import EvaluationSuccess from "./components/EvaluationSuccess";
+import EvaluationSuccess from "./pages/EvaluationSuccess";
 import UpdateProfileForm from "./components/UpdateProfileForm";
 
 import "./App.css";
