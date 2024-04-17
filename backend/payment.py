@@ -68,7 +68,9 @@ stripe.api_key = 'sk_test_51Oe5AZKlgwtgt0eBACDFWMTEWAP1XzGbXa4MhgJRUaPIxza3JMJqc
 
 def transfer_funds():
     # Get data from the request
-    # amount = request.form["amount"]
+    amount = request.form["amount"]
+    source = request.form["source"]
+    destination = request.form["destination"]
     
     print(stripe.Charge.create(
       amount= 100,
