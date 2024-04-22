@@ -1,0 +1,7 @@
+
+# Ignore tests folder in this branch
+/tests/
+
+
+# Ignore all files in a specific directory and its subdirectories
+backend/__pycache__

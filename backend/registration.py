@@ -17,9 +17,9 @@ CORS(app)
 app.secret_key = "secret_key"
 
 conn = pymysql.connect(
-    host="localhost",
-    user="root",
-    password="",
+    host="verdant-future.cxwgwgwoub74.us-east-1.rds.amazonaws.com",
+    user="admin",
+    password="password",
     db="verdant_future",
     charset="utf8mb4",
     cursorclass=pymysql.cursors.DictCursor,
