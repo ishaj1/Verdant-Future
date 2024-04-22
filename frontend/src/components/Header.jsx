@@ -15,12 +15,13 @@ export default function Header() {
     <header>
       <nav>
         {auth?.username && (
-          <Link to="/organizations">Organizations Directory</Link>
+          <>
+            <Link to="/companies">Companies</Link>
+            <Link to="/projects">Projects</Link>
+            <Link to={`/profile/${auth?.username}`}>Profile</Link>
+            <button onClick={signOut}>Logout</button>
+          </>
         )}
-        {auth?.username && (
-          <Link to={`/profile/${auth?.username}`}>Profile</Link>
-        )}
-        {auth?.username && <button onClick={signOut}>Logout</button>}
       </nav>
     </header>
   );

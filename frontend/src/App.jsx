@@ -3,7 +3,8 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./App.css";
 
 import Home from "./pages/Home";
-import OrganizationsDirectory from "./pages/OrganizationsDirectory";
+import CompaniesDirectory from "./pages/CompaniesDirectory";
+import ProjectsDirectory from "./pages/ProjectsDirectory";
 import Profile from "./pages/Profile";
 import Register from "./pages/Register";
 import Transaction from "./pages/Transaction";
@@ -48,9 +49,10 @@ function App() {
       ),
     },
     {
-      path: "/organizations",
-      element: <RequireAuth children={<OrganizationsDirectory />} />,
+      path: "/companies",
+      element: <RequireAuth children={<CompaniesDirectory />} />,
     },
+    { path: "/projects", element: <RequireAuth children={<ProjectsDirectory />} /> },
     {
       path: "/transaction",
       element: <RequireAuth children={<Transaction />} />,

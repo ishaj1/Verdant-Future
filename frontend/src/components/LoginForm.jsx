@@ -46,7 +46,7 @@ function LoginForm({ setLoginActive }) {
       .then((response) => {
         if (response.data.user == true) {
           setAuth({ username, isProject });
-          navigate("/organizations");
+          navigate(`/profile/${username}`);
         } else {
           setErrors(
             "Incorrect login information. Please check your username and password, and try again."
