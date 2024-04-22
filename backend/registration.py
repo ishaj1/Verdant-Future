@@ -1,11 +1,8 @@
 import pymysql.cursors
 from flask import (
     Flask,
-    render_template,
     request,
     session,
-    url_for,
-    redirect,
     jsonify,
 )
 from flask_cors import CORS
