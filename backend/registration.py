@@ -31,6 +31,10 @@ ENERGY_INTENSITY = 3.4 # megajoules (MJ) per USD
 WATER_EFFICIENCY = 50 # USD / cubic meter
 WASTE_DIVERSE_RATE = 0.75 # percent recycled
 
+@app.route("/")
+def hello():
+    return "Hello World!"
+
 # Members API route
 @app.route("/login", methods=["POST"])
 def login():
