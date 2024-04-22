@@ -65,6 +65,7 @@ CREATE TABLE Project_Transaction(
     sender_username varchar(50),
     receiver_username varchar(50),
     amount_transferred varchar(50) not null,
+    credits_transferred varchar(50) not null,
     primary key (transaction_name, payer_id, payee_id),
     foreign key (sender_username, payer_id) references Company(company_username, payment_id),
     foreign key (receiver_username, payee_id) references Project(project_username, payment_id)
