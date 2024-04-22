@@ -57,7 +57,7 @@ conn = pymysql.connect(
     host="localhost",
     user="root",
     password="",
-    db="verdant_future",
+    db="Verdant-Future",
     charset="utf8mb4",
     cursorclass=pymysql.cursors.DictCursor,
 )
