@@ -455,4 +455,4 @@ def update_profile():
     return {"update": True}
 
 if __name__ == '__main__':
-    app.run(port=4242, debug=False)
+    app.run(port=4242, debug=True, threaded=False)
