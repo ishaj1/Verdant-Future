@@ -469,9 +469,9 @@ def project_transfer_funds():
   sender_username = request.form["source"]
   receiver_username = request.form["destination"]
   cursor.execute('SELECT payment_id FROM Project WHERE project_username =  %s', (receiver_username))
-  dest= cursor.fetchone()
+  dest= cursor.fetchone()['payment_id']
   cursor.execute('SELECT payment_id FROM Company WHERE company_username =  %s', (sender_username))
-  src = cursor.fetchone()
+  src = cursor.fetchone()['payment_id']
   result = stripe.Charge.create(
     amount= amount,
     currency="usd",
