@@ -464,14 +464,18 @@ def update_profile():
 @app.route('/project_transfer', methods=['POST'])
 def project_transfer_funds():
   # Get data from the request
+  cursor = conn.cursor()
   amount = request.form["amount"]
-  source = request.form["source"]
-  destination = request.form["destination"]
-    
+  sender_username = request.form["source"]
+  receiver_username = request.form["destination"]
+  cursor.execute('SELECT payment_id FROM Project WHERE project_username =  %s', (receiver_username))
+  dest= cursor.fetchone()
+  cursor.execute('SELECT payment_id FROM Company WHERE company_username =  %s', (sender_username))
+  src = cursor.fetchone()
   result = stripe.Charge.create(
     amount= amount,
     currency="usd",
-    src= "acct_1P5t9bQSnkzLsREY",
+    source= "acct_1P5t9bQSnkzLsREY",
   )
   print(result)
   #result.receipt_url
@@ -479,19 +483,14 @@ def project_transfer_funds():
   trans = stripe.Transfer.create(
     amount= amount,
     currency='usd',
-    dest= "acct_1P5t9bQSnkzLsREY"
+    destination= "acct_1P5t9bQSnkzLsREY"
     # source_transaction = 'acct_1Oe5AZKlgwtgt0eB' # Use the transfer ID from the previous transfer
     # source_transaction = charge.id
     )
-  cursor = conn.cursor()
-  payer_id = source
-  payee_id = destination
+  payer_id = src
+  payee_id = dest
   amount_transferred = amount
   transaction_name = trans.id
-  cursor.execute('SELECT project_username FROM Project WHERE payment_id =  %s', (destination))
-  receiver_username = cursor.fetchone()
-  cursor.execute('SELECT company_username FROM Company WHERE payment_id =  %s', (source))
-  sender_username = cursor.fetchone()
   credits_transferred = amount
   query = "INSERT INTO Project_Transaction VALUES(%s, %s, %s, %s, %s, %s, %s)"
   cursor.execute(
