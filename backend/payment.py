@@ -471,7 +471,7 @@ def project_transfer_funds():
   result = stripe.Charge.create(
     amount= amount,
     currency="usd",
-    source= "acct_1P5t9bQSnkzLsREY",
+    src= "acct_1P5t9bQSnkzLsREY",
   )
   print(result)
   #result.receipt_url
@@ -479,7 +479,7 @@ def project_transfer_funds():
   trans = stripe.Transfer.create(
     amount= amount,
     currency='usd',
-    destination= "acct_1P5t9bQSnkzLsREY"
+    dest= "acct_1P5t9bQSnkzLsREY"
     # source_transaction = 'acct_1Oe5AZKlgwtgt0eB' # Use the transfer ID from the previous transfer
     # source_transaction = charge.id
     )
@@ -488,11 +488,11 @@ def project_transfer_funds():
   payee_id = destination
   amount_transferred = amount
   transaction_name = trans.id
-  cursor.execute('SELECT * FROM Project WHERE payment_id =  %s', (destination))
+  cursor.execute('SELECT project_username FROM Project WHERE payment_id =  %s', (destination))
   receiver_username = cursor.fetchone()
-  cursor.execute('SELECT * FROM Company WHERE payment_id =  %s', (source))
+  cursor.execute('SELECT company_username FROM Company WHERE payment_id =  %s', (source))
   sender_username = cursor.fetchone()
-  credits_transferred = amount/1000
+  credits_transferred = amount
   query = "INSERT INTO Project_Transaction VALUES(%s, %s, %s, %s, %s, %s, %s)"
   cursor.execute(
     query,
@@ -517,7 +517,7 @@ def project_transfer_funds():
       ),
   )
 
-  query3 = "UPDATE Project SET funds_recieved = %s, funds_required = funds_required - %s WHERE project_username = %s"
+  query3 = "UPDATE Project SET funds_received = %s, funds_required = funds_required - %s WHERE project_username = %s"
   cursor.execute(
     query3,
       (
