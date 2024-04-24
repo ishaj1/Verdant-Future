@@ -29,7 +29,7 @@ export default function Transaction() {
       destination: state.sendToUser,
     };
     axios
-      .post("http://localhost:5000/transfer", formData, {
+      .post("http://localhost:4242/project_transfer", formData, {
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
       })
       .then((res) => {

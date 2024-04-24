@@ -1,38 +1,3 @@
-# Set your secret key. Remember to switch to your live secret key in production.
-# See your keys here: https://dashboard.stripe.com/apikeys
-# import stripe
-# stripe.api_key = "sk_test_4eC39HqLyjWDarjtT1zdp7dc"
-
-# stripe.Account.create(type="express")
-
-# stripe.AccountLink.create(
-#   account='acct_1OhG9CIpT4QrzBMJ',
-#   refresh_url="https://example.com/reauth",
-#   return_url="https://example.com/return",
-#   type="account_onboarding",
-# )
-
-# stripe.checkout.Session.create(
-#   mode="payment",
-#   line_items=[{"price": '{{PRICE_ID}}', "quantity": 1}],
-#   payment_intent_data={
-#     "application_fee_amount": 123,
-#     "transfer_data": {"destination": '{{CONNECTED_ACCOUNT_ID}}'},
-#   },
-#   success_url="https://example.com/success",
-#   cancel_url="https://example.com/cancel",
-# )
-
-
-# import stripe
-# stripe.api_key = "sk_test_51Oe5AZKlgwtgt0eBACDFWMTEWAP1XzGbXa4MhgJRUaPIxza3JMJqcaNj4E2820ioJgPLJZiEQyAr3Y7CODV8Hxsm00BxyqGbKO"
-# stripe.Customer.create(
-#   name="Jenny Rosen",
-#   email="jennyrosen@example.com",
-# )
-
-# print(stripe.Customer.list(limit=3))
-
 import pymysql.cursors
 import stripe
 from flask import (
@@ -497,7 +462,7 @@ def update_profile():
 
     return {"update": True}
 @app.route('/project_transfer', methods=['POST'])
-def transfer_funds():
+def project_transfer_funds():
   # Get data from the request
   amount = request.form["amount"]
   source = request.form["source"]
@@ -506,97 +471,158 @@ def transfer_funds():
   result = stripe.Charge.create(
     amount= amount,
     currency="usd",
-    source="acct_1P5t9bQSnkzLsREY",
+    source= source,
   )
   print(result)
   #result.receipt_url
-  amount *=0.95
+  # amount *=0.95
   trans = stripe.Transfer.create(
     amount= amount,
     currency='usd',
-    destination="acct_1P5t9bQSnkzLsREY"
+    destination= destination
     # source_transaction = 'acct_1Oe5AZKlgwtgt0eB' # Use the transfer ID from the previous transfer
     # source_transaction = charge.id
     )
+  cursor = conn.cursor()
+  payer_id = source
+  payee_id = destination
+  amount_transferred = amount
+  transaction_name = trans.id
+  cursor.execute('SELECT * FROM Project WHERE payment_id =  %s', (destination))
+  receiver_username = cursor.fetchone()
+  cursor.execute('SELECT * FROM Company WHERE payment_id =  %s', (source))
+  sender_username = cursor.fetchone()
+  credits_transferred = amount/1000
+  query = "INSERT INTO Project_Transaction VALUES(%s, %s, %s, %s, %s, %s, %s)"
+  cursor.execute(
+    query,
+      (
+        payer_id, 
+        payee_id,
+        transaction_name,
+        sender_username,
+        receiver_username,
+        amount_transferred,
+        credits_transferred
+    ),
+  )
 
-  #trans.id
+  # Update the total credit in the Company table
+  query2 = "UPDATE Company SET total_credits = total_credits + %s WHERE company_username = %s"
+  cursor.execute(
+    query2,
+      (
+        credits_transferred,
+        sender_username         
+      ),
+  )
+
+  query3 = "UPDATE Project SET funds_recieved = %s, funds_required = funds_required - %s WHERE project_username = %s"
+  cursor.execute(
+    query3,
+      (
+        amount_transferred,
+        amount_transferred,
+        receiver_username         
+      ),
+  )
+
+  conn.commit()
+  cursor.close()
 
   return {'message': 'Funds transferred successfully', 'details': result}
+
+# @app.route('/company_transfer', methods=['POST'])
+# def company_transfer_funds():
+
+#   cursor = conn.cursor()
+#   payer_id = source
+#   payee_id = destination
+#   amount_transferred = amount
+#   transaction_name = "Not available"
+#   cursor.execute('SELECT * FROM Company WHERE payment_id =  %s', (destination))
+#   receiver_username = cursor.fetchone()
+#   cursor.execute('SELECT * FROM Company WHERE payment_id =  %s', (source))
+#   sender_username = cursor.fetchone()
+#   credits_transferred = amount/1000
+#   transfer_status = "pending"
+#   query = "INSERT INTO Company_Transaction VALUES(%s, %s, %s, %s, %s, %s, %s, %s)"
+#   cursor.execute(
+#     query,
+#       (
+#         payer_id, 
+#         payee_id,
+#         transaction_name,
+#         sender_username,
+#         receiver_username,
+#         amount_transferred,
+#         credits_transferred,
+#         transfer_status
+#     ),
+#   )
+
+#   # Get data from the request
+#   amount = request.form["amount"]
+#   source = request.form["source"]
+#   destination = request.form["destination"]
+    
+#   result = stripe.Charge.create(
+#     amount= amount,
+#     currency="usd",
+#     source= source,
+#   )
+#   print(result)
+#   #result.receipt_url
+#   # amount *=0.95
+#   trans = stripe.Transfer.create(
+#     amount= amount,
+#     currency='usd',
+#     destination= destination
+#     # source_transaction = 'acct_1Oe5AZKlgwtgt0eB' # Use the transfer ID from the previous transfer
+#     # source_transaction = charge.id
+#     )
+  
+#   # Update the total credit in the Company table
+#   if(transaction is not approved):
+#       query2 = ""
+#       Remove the transaction with not available
+#   else:
+#     transaction_name = trans.id
+#     transaction_status = "approved"
+#     query2 = "UPDATE Company_Transaction SET transaction_name = %s, transaction_status = %s WHERE receiver_username = %s"
+#     cursor.execute(
+#         query2,
+#         (
+#         transaction_name,
+#         transaction_status,
+#         receiver_username
+#         )
+#     )
+#     query3 = "UPDATE Company SET total_credits = total_credits + %s WHERE company_username = %s"
+#     cursor.execute(
+#       query3,
+#         (
+#           credits_transferred,
+#           sender_username         
+#         ),
+#     )
+
+#     query4 = "UPDATE Project SET funds_recieved = %s, funds_required = funds_required - %s WHERE project_username = %s"
+#     cursor.execute(
+#       query4,
+#         (
+#           amount_transferred,
+#           amount_transferred,
+#           receiver_username         
+#         ),
+#     )
+
+#     conn.commit()
+#     cursor.close()
+
+#   return {'message': 'Funds transferred successfully', 'details': result}
+
 
 
 if __name__ == '__main__':
     app.run(port=4242, debug=True, threaded=False)
-
-
-# import pymysql.cursors
-# from flask import Flask, request
-# from flask_cors import CORS
-# from flask_cors import cross_origin
-
-# import stripe
-
-# app = Flask(__name__)
-# CORS(app, origins = "*")
-# app.secret_key = "secret_key"
-
-# conn = pymysql.connect(
-#     host="localhost",
-#     user="root",
-#     password="",
-#     db="Verdant-Future",
-#     charset="utf8mb4",
-#     cursorclass=pymysql.cursors.DictCursor,
-# )
-
-# # @app.after_request
-# # def set_cors_headers(response):
-# #     response.headers['Access-Control-Allow-Origin'] = 'http://localhost:5173'
-# #     response.headers['Access-Control-Allow-Headers'] = 'Content-Type'
-# #     response.headers['Access-Control-Allow-Methods'] = 'POST'
-# #     return response
-
-# # Initialize Stripe
-# stripe.api_key = 'sk_test_51Oe5AZKlgwtgt0eBACDFWMTEWAP1XzGbXa4MhgJRUaPIxza3JMJqcaNj4E2820ioJgPLJZiEQyAr3Y7CODV8Hxsm00BxyqGbKO'
-# @app.route('/transfer', methods=['POST'])
-
-# def create_payment_id():
-#   info = stripe.Account.create(
-#     country="US",
-#     type="custom",
-#     capabilities={"card_payments": {"requested": True}, "transfers": {"requested": True}},
-#   )
-
-# query = "INSERT INTO Company VALUES %s" 
-
-
-# # @cross_origin()
-
-# def transfer_funds():
-#     # Get data from the request
-#     amount = request.form["amount"]
-#     source = request.form["source"]
-#     destination = request.form["destination"]
-    
-#     result = stripe.Charge.create(
-#       amount= 100,
-#       currency="usd",
-#       source="acct_1P5t9bQSnkzLsREY",
-#     )
-#     print(result)
-
-#     result.id
-
-#     trans = stripe.Transfer.create(
-#         amount= 50,
-#         currency='usd',
-#         destination="acct_1P5t9bQSnkzLsREY"
-#         # source_transaction = 'acct_1Oe5AZKlgwtgt0eB' # Use the transfer ID from the previous transfer
-#         # source_transaction = charge.id
-#     )
-
-#     trans.id
-
-#     return {'message': 'Funds transferred successfully', 'details': result}
-
-# if __name__ == '__main__':
-#     app.run(debug=True)
