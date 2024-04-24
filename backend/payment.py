@@ -471,7 +471,7 @@ def project_transfer_funds():
   result = stripe.Charge.create(
     amount= amount,
     currency="usd",
-    source= source,
+    source= "acct_1P5t9bQSnkzLsREY",
   )
   print(result)
   #result.receipt_url
@@ -479,7 +479,7 @@ def project_transfer_funds():
   trans = stripe.Transfer.create(
     amount= amount,
     currency='usd',
-    destination= destination
+    destination= "acct_1P5t9bQSnkzLsREY"
     # source_transaction = 'acct_1Oe5AZKlgwtgt0eB' # Use the transfer ID from the previous transfer
     # source_transaction = charge.id
     )
