@@ -53,14 +53,28 @@ export default function UpdatePasswordForm({ setReturnMessage, setShowForm }) {
           {message} <br />
         </>
       )}
-      <label htmlFor="old_password">Current Password</label>
-      <input type="password" name="old_password" required />
-      <label htmlFor="new_password">New Password</label>
-      <input type="password" name="new_password" required />
-      <label htmlFor="verify_password">Confirm New Password</label>
-      <input type="password" name="verify_password" required />
-
-      <button type="submit">Change Password</button>
+      <div>
+        <label htmlFor="old_password">Current Password</label>
+      </div>
+      <div className="mb-2">
+        <input type="password" name="old_password" required className="mt-2 block text-md w-full rounded-md border-0 px-3 py-1 shadow-sm ring-1 ring-inset ring-customGreen-300 focus:ring-5 focus:ring-inset focus:ring-customGreen-600 focus:outline-1 focus:outline-customGreen-400 focus:shadow-md sm:text-sm sm:leading-6"/>
+      </div>
+      <div className="mb-2">
+        <label htmlFor="new_password">New Password</label>
+      </div>
+      <div className="mb-2">
+        <input type="password" name="new_password" required className="mt-2 block text-md w-full rounded-md border-0 px-3 py-1 shadow-sm ring-1 ring-inset ring-customGreen-300 focus:ring-5 focus:ring-inset focus:ring-customGreen-600 focus:outline-1 focus:outline-customGreen-400 focus:shadow-md sm:text-sm sm:leading-6"/>
+      </div>
+      <div className="mb-2">
+        <label htmlFor="verify_password">Confirm New Password</label>
+      </div>
+      <div className="mb-2">
+        <input type="password" name="verify_password" required className="mt-2 block text-md w-full rounded-md border-0 px-3 py-1 shadow-sm ring-1 ring-inset ring-customGreen-300 focus:ring-5 focus:ring-inset focus:ring-customGreen-600 focus:outline-1 focus:outline-customGreen-400 focus:shadow-md sm:text-sm sm:leading-6"/>
+      </div>
+      <div className="text-center">
+        <button type="submit" className="flex mt-10 w-full justify-center rounded-md bg-customGreen-500 opacity-80 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-customGreen-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Change Password</button>
+      </div>
+      
     </form>
   );
 }

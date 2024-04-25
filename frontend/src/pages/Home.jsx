@@ -9,7 +9,8 @@ export default function HomePage() {
 
   return (
     <>
-      <header className="flex items-center justify-between bg-customGreen-600 px-3 py-3 lg:px-12" aria-label="Main">
+      <Header />
+      {/* <header className="flex items-center justify-between bg-customGreen-600 px-3 py-3 lg:px-12" aria-label="Main">
       <a href="/" className="text-3xl font-bold text-white pt-5 pb-5 ">Verdant Future</a>
         <nav>
           <ul className="hidden gap-8 md:flex text-white font-abeezee">
@@ -79,10 +80,9 @@ export default function HomePage() {
         </nav>
       </header>
       
-      <Header />
       {loginForm && (
                 <LoginForm loginActive={loginForm} setLoginActive={setLoginForm} />
-      )}
+      )} */}
     </>
   );
 }

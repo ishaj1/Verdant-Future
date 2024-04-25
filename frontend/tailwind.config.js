@@ -22,6 +22,7 @@ export default {
       },
     fontFamily: {
       abeezee: ['ABeeZee', "sans-serif"],
+      montserrat: ["Montserrat", "sans-serif"]
     }
     },
   },

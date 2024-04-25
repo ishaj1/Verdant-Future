@@ -10,7 +10,6 @@ function LoginForm({ setLoginActive }) {
   const loginRef = useRef(null);
   const navigate = useNavigate();
 
-  // handles getting rid of the login popup box when clicking outside of it
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (loginRef.current && !loginRef.current.contains(event.target)) {
@@ -86,7 +85,6 @@ function LoginForm({ setLoginActive }) {
 
         
         {errors && <p>{errors}</p>}
-        {/* <h2>{isProject ? "Project" : "Company"} Login</h2> */}
         <form
           id="loginform"
           className="LoginForm"

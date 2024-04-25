@@ -5,6 +5,11 @@ import axios from "../api/axios";
 import useAuth from "../hooks/useAuth";
 import { Link } from "react-router-dom";
 import UpdatePasswordForm from "../components/UpdatePasswordForm";
+import fav1 from "../icons/leaves.png";
+import fav2 from "../icons/green_credits.png";
+import fav3 from "../icons/search.png";
+import fav4 from "../icons/gear.png";
+import fav5 from "../icons/password.png";
 
 export default function ProfilePage() {
   const path = useLocation().pathname;
@@ -51,66 +56,157 @@ export default function ProfilePage() {
   return (
     <>
       <Header />
+
       {errors}
       {profileData && (
-        <>
-          <h1>
-            {profileData.isProject
-              ? profileData.project_name
-              : profileData.company_name}
-          </h1>
-          {auth?.username === uid && <Link to="/profile/update">Update Profile</Link>}
-          {!profileData.isProject && auth?.username === uid && (
-            <Link to="/evaluation">Request Evaluation</Link>
-          )}
-          <p>Funds Received: {profileData.funds_received}</p>
-          <p>Funding Goal: {profileData.funds_required}</p>
-          {auth?.username === uid && <p>Payment ID: {profileData.payment_id}</p>}
-          {profileData.isProject ? (
-            <>
-              <p>Project Association: {profileData.project_association}</p>
-              <p>Username: {profileData.project_username}</p>
-              <p>Description: {profileData.project_details}</p>
-            </>
-          ) : (
-            <>
-              <p>Green Credits: {profileData.total_credits}</p>
-              <p>Username: {profileData.company_username}</p>
-              <p>Description: {profileData.company_details}</p>
-            </>
-          )}
-          <p>Contact Name: {profileData.contact_name}</p>
-          <p>Contact Details: {profileData.contact_detail}</p>
-          {auth?.username === uid && (
-            <>
-              <p style={{ display: "inline" }}>Password: ********</p>
-              <button
-                onClick={() => {
-                  setShowPasswordForm(true);
-                  setErrors();
-                }}
-              >
-                Update Password
-              </button>
-              {showPasswordForm && (
-                <>
-                  <UpdatePasswordForm
-                    setReturnMessage={setErrors}
-                    setShowForm={setShowPasswordForm}
-                  />
-                  <button
-                    onClick={() => {
-                      setShowPasswordForm(false);
-                    }}
-                  >
-                    Cancel
-                  </button>
-                </>
-              )}
-            </>
-          )}
-        </>
-      )}
+      <>
+        <header class="bg-white shadow">
+          <div class="mx-12 max-w-7xl px-4 py-6 sm:px-6 lg:px-6">
+            <h1 class="text-3xl font-bold tracking-tight text-gray-900">Welcome, {profileData.isProject ? profileData.project_association : profileData.company_name}</h1>
+          </div>
+        </header>
+                
+        <main>
+          <div className="font-lato grid grid-cols-1 md:grid-cols-3 gap-12 bg-white p-4 px-20 h-full">
+            {/* Green credits */}
+            {!profileData.isProject && auth?.username === uid && (
+              <div className="bg-customGreen-100 bg-opacity-30 p-4 my-10 rounded-lg shadow-md  transition-colors duration-300 ease-in-out h-full">
+                <div className="flex flex-col justify-between h-full">
+                  <div>
+                    <img src={fav2} alt="Favicon" className="w-20 h-20 m-2" />
+                  </div>
+                  <div className="bottom-0 right-0"> 
+                    <h3 className="text-right text-lg font-montserrat font-semibold">Green credits: <span className="font-normal">{profileData.total_credits}</span></h3>
+                  </div>
+                </div>
+              </div>  
+            )}
+
+            {/* Evaluation */}
+            {!profileData.isProject && auth?.username === uid && (
+              <Link to="/evaluation">
+                <div className="bg-customGreen-100 bg-opacity-30 p-4 my-10 rounded-lg shadow-md hover:bg-customGreen-300 transition-colors duration-300 ease-in-out h-full">
+                  <div className="flex flex-col justify-between h-full">
+                    <div>
+                      <img src={fav1} alt="Favicon" className="w-20 h-20 m-2" />
+                    </div>
+                    <div className="bottom-0 right-0"> 
+                      <h3 className="text-right text-lg font-montserrat font-semibold">Get Evaluated</h3>
+                    </div>
+                  </div>
+                </div>         
+              </Link>
+            )}
+
+
+
+            {/* Funding Progress */}
+            {(profileData.funds_required > 0) && 
+              <div className="bg-customGreen-100 bg-opacity-30 p-4 my-10 rounded-lg shadow-md  transition-colors duration-300 ease-in-out  h-full">
+                <div className="flex flex-col justify-between h-full">
+                  <h2 className="text-lg font-semibold mb-4">Fundraising</h2>
+                  <div className="flex flex-col justify-between h-full">
+                    <div>
+                      <div class="flex justify-between mb-1">
+                        <span class="text-base font-medium text-customGreen-700 ">Progress</span>
+                        <span class="text-sm font-medium text-customGreen-700 dark:text-white">{(profileData.funds_received / profileData.funds_required) * 100}%</span>
+                      </div>
+                      <div class="w-full bg-gray-200 rounded-full h-2.5">
+                        <div class="bg-customGreen-600 h-2.5 rounded-full" style={{ width: `${(profileData.funds_received / profileData.funds_required) * 100}%` }}></div>
+                      </div>
+                    </div>
+
+                    <div className="mb-8 text-right text-gray-600">
+                      <p className="text-md ">Funds Received: {profileData.funds_received}</p>
+                      <p className="text-md">Funding Goal: {profileData.funds_required}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            }
+
+
+            {/* Browse Organizations */}
+            <div className="bg-customGreen-100 bg-opacity-30 p-4 my-10 rounded-lg shadow-md hover:bg-customGreen-300 transition-colors duration-300 ease-in-out h-full">
+              <div className="flex flex-col justify-between h-full">
+                <div>
+                  <img src={fav3} alt="Favicon" className="w-20 h-20 m-2 p-2" />
+                </div>
+                <div className="bottom-0 right-0"> 
+                  <h3 className="text-right text-lg font-montserrat font-semibold">Browse Organizations</h3>
+                </div>
+              </div>
+            </div>
+            
+            {/* Update */}
+            {auth?.username === uid &&           
+              <div className="bg-customGreen-100 bg-opacity-30 p-4 my-10 rounded-lg shadow-md hover:bg-customGreen-300 transition-colors duration-300 ease-in-out h-full">
+                <Link to="/profile/update">
+                  <div className="flex flex-col justify-between h-full">
+                    <div>
+                      <img src={fav4} alt="Favicon" className="w-20 h-20 m-2 p-1" />
+                    </div>
+                    <div className="bottom-0 right-0"> 
+                      <h3 className="text-right text-lg font-montserrat font-semibold">Update Your Profile</h3>
+                    </div>
+                  </div>
+                </Link>
+              </div>  
+            }
+
+            {/* Change password */}
+            {auth?.username === uid && (
+              <>
+                <div className="font-montserrat bg-customGreen-100 bg-opacity-30 p-4 my-10 rounded-lg shadow-md transition-colors duration-300 ease-in-out h-full">
+                  <div className="flex flex-col justify-between h-full">
+                    <div>
+                      <img src={fav5} alt="Favicon" className="w-20 h-20 m-2" />
+                    </div>
+                    <div className="bottom-0 right-0"> 
+                      <h3 className="text-right text-lg font-montserrat font-semibold">
+                        <button
+                          onClick={() => {
+                            setShowPasswordForm(true);
+                            setErrors();
+                          }}
+                        >
+                        Update Password
+                        </button>
+                      </h3>
+                    </div>
+
+                    {showPasswordForm && (
+                      <>
+                        <UpdatePasswordForm
+                          setReturnMessage={setErrors}
+                          setShowForm={setShowPasswordForm}
+                        />
+                        <button
+                          onClick={() => {
+                            setShowPasswordForm(false);
+                          }}
+                          className="flex mb-4 w-full justify-center rounded-md bg-customGreen-400 opacity-50 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-customGreen-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                        >
+                          Cancel
+                        </button>
+                      </>
+                    )}
+                  </div>
+                </div>  
+              </>
+            )} 
+
+          </div>    
+        </main> 
+      </>
+      )};
     </>
   );
 }
+
+
+
+
+
+      
+ 
