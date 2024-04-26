@@ -1,4 +1,6 @@
 import pymysql.cursors
+import string
+import random
 import stripe
 from flask import (
     Flask,
@@ -477,11 +479,10 @@ def project_transfer_funds():
     currency="usd",
     source= "acct_1P5t9bQSnkzLsREY",
   )
-  print(result)
   #result.receipt_url
-  # amount *=0.95
+  trans_amount = int(amount)*0.95
   trans = stripe.Transfer.create(
-    amount= amount,
+    amount= trans_amount,
     currency='usd',
     destination= "acct_1P5t9bQSnkzLsREY"
     # source_transaction = 'acct_1Oe5AZKlgwtgt0eB' # Use the transfer ID from the previous transfer
@@ -491,7 +492,7 @@ def project_transfer_funds():
   payee_id = dest
   amount_transferred = amount
   transaction_name = trans.id
-  credits_transferred = amount
+  credits_transferred = int(amount)/1000
   query = "INSERT INTO Project_Transaction VALUES(%s, %s, %s, %s, %s, %s, %s)"
   cursor.execute(
     query,
@@ -529,97 +530,118 @@ def project_transfer_funds():
   conn.commit()
   cursor.close()
 
-  return {'message': 'Funds transferred successfully', 'details': result}
+  return {'message': 'Funds transferred successfully', 'details': result, "success": True}
 
-# @app.route('/company_transfer', methods=['POST'])
-# def company_transfer_funds():
-
-#   cursor = conn.cursor()
-#   payer_id = source
-#   payee_id = destination
-#   amount_transferred = amount
-#   transaction_name = "Not available"
-#   cursor.execute('SELECT * FROM Company WHERE payment_id =  %s', (destination))
-#   receiver_username = cursor.fetchone()
-#   cursor.execute('SELECT * FROM Company WHERE payment_id =  %s', (source))
-#   sender_username = cursor.fetchone()
-#   credits_transferred = amount/1000
-#   transfer_status = "pending"
-#   query = "INSERT INTO Company_Transaction VALUES(%s, %s, %s, %s, %s, %s, %s, %s)"
-#   cursor.execute(
-#     query,
-#       (
-#         payer_id, 
-#         payee_id,
-#         transaction_name,
-#         sender_username,
-#         receiver_username,
-#         amount_transferred,
-#         credits_transferred,
-#         transfer_status
-#     ),
-#   )
-
-#   # Get data from the request
-#   amount = request.form["amount"]
-#   source = request.form["source"]
-#   destination = request.form["destination"]
+@app.route('/company_transfer', methods=['POST'])
+def company_transfer_funds():
+  cursor = conn.cursor()
+  amount = request.form["amount"]
+  sender_username = request.form["source"]
+  receiver_username = request.form["destination"]
+  cursor.execute('SELECT payment_id FROM Project WHERE project_username =  %s', (receiver_username))
+  dest= cursor.fetchone()
+  cursor.execute('SELECT payment_id FROM Company WHERE company_username =  %s', (sender_username))
+  src = cursor.fetchone()
+  payer_id = src
+  payee_id = dest
+  amount_transferred = amount
+  res = ''.join(random.choices(string.ascii_uppercase +
+                             string.digits, k=10))
+  transaction_name = res
+  credits_transferred = amount
+  transfer_status = "pending"
+  query = "INSERT INTO Company_Transaction VALUES(%s, %s, %s, %s, %s, %s, %s, %s)"
+  cursor.execute(
+    query,
+      (
+        payer_id, 
+        payee_id,
+        transaction_name,
+        sender_username,
+        receiver_username,
+        amount_transferred,
+        credits_transferred,
+        transfer_status
+    ),
+  )
+  conn.commit()
+  cursor.close()
+  return {"create": True}
+@app.route('/company_response', methods=['POST'])
+def company_transfer_response(): 
+  cursor = conn.cursor()
+  transaction_name = request.form["transaction_name"]
+  action  = request.form["action"]
+  if(action == "accepted"):
+    cursor.execute("SELECT amount_transferred FROM Company_Transaction WHERE transaction_name = %s", (transaction_name))
+    amount = cursor.fetchall()
+    cursor.execute("SELECT payer_id FROM Company_Transaction WHERE transaction_name = %s", (transaction_name))
+    source = cursor.fetchall()
+    cursor.execute("SELECT payee_id FROM Company_Transaction WHERE transaction_name = %s", (transaction_name))
+    destination = cursor.fetchall()
+    cursor.execute("SELECT sender_username FROM Company_Transaction WHERE transaction_name = %s", (transaction_name))
+    sender_username = cursor.fetchall()
+    cursor.execute("SELECT receiver_username FROM Company_Transaction WHERE transaction_name = %s", (transaction_name))
+    receiver_username = cursor.fetchall()
+    result = stripe.Charge.create(
+      amount= amount,
+      currency="usd",
+      source= "acct_1P5t9bQSnkzLsREY"
+    )
+    #result.receipt_url
+    # amount *=0.95
+    trans = stripe.Transfer.create(
+      amount= amount,
+      currency='usd',
+      destination= "acct_1P5t9bQSnkzLsREY"
+      # source_transaction = 'acct_1Oe5AZKlgwtgt0eB' # Use the transfer ID from the previous transfer
+      # source_transaction = charge.id
+      )
     
-#   result = stripe.Charge.create(
-#     amount= amount,
-#     currency="usd",
-#     source= source,
-#   )
-#   print(result)
-#   #result.receipt_url
-#   # amount *=0.95
-#   trans = stripe.Transfer.create(
-#     amount= amount,
-#     currency='usd',
-#     destination= destination
-#     # source_transaction = 'acct_1Oe5AZKlgwtgt0eB' # Use the transfer ID from the previous transfer
-#     # source_transaction = charge.id
-#     )
+    # Update the total credit in the Company table
+    transaction_status = "accepted"
+    credits_transferred = int(amount)/1000
+    query2 = "UPDATE Company_Transaction SET transaction_name = %s, transaction_status = %s WHERE transaction_name = %s"
+    cursor.execute(
+        query2,
+        (
+        transaction_name,
+        transaction_status,
+        trans.id
+        )
+    )
+    query3 = "UPDATE Company SET total_credits = total_credits + %s WHERE company_username = %s"
+    cursor.execute(
+      query3,
+        (
+          credits_transferred,
+          sender_username         
+        ),
+    )
+
+    query4 = "UPDATE Company SET funds_received = %s, funds_required = funds_required - %s, total_credits = total_credits - %s WHERE company_username = %s"
+    cursor.execute(
+      query4,
+        (
+          amount,
+          amount,
+          receiver_username         
+        ),
+      )
+
+    conn.commit()
+    cursor.close()
+
+    return {'message': 'Funds transferred successfully', "success": True}
+  elif(action == "declined"):
+      cursor.execute("DELETE FROM Company_Transaction WHERE transaction_name = %s", transaction_name)
+      return {'message': 'Transaction has been declined by the company', "success": False}
+  elif(action == "cancelled"):
+      cursor.execute("DELETE FROM Company_Transaction WHERE transaction_name = %s", transaction_name)
+      return {'message': 'Transaction has been cancelled by the company', "success": False}
   
-#   # Update the total credit in the Company table
-#   if(transaction is not approved):
-#       query2 = ""
-#       Remove the transaction with not available
-#   else:
-#     transaction_name = trans.id
-#     transaction_status = "approved"
-#     query2 = "UPDATE Company_Transaction SET transaction_name = %s, transaction_status = %s WHERE receiver_username = %s"
-#     cursor.execute(
-#         query2,
-#         (
-#         transaction_name,
-#         transaction_status,
-#         receiver_username
-#         )
-#     )
-#     query3 = "UPDATE Company SET total_credits = total_credits + %s WHERE company_username = %s"
-#     cursor.execute(
-#       query3,
-#         (
-#           credits_transferred,
-#           sender_username         
-#         ),
-#     )
 
-#     query4 = "UPDATE Project SET funds_recieved = %s, funds_required = funds_required - %s WHERE project_username = %s"
-#     cursor.execute(
-#       query4,
-#         (
-#           amount_transferred,
-#           amount_transferred,
-#           receiver_username         
-#         ),
-#     )
-
-#     conn.commit()
-#     cursor.close()
-
-#   return {'message': 'Funds transferred successfully', 'details': result}
+      
 
 
 
