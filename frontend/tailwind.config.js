@@ -22,7 +22,9 @@ export default {
       },
     fontFamily: {
       abeezee: ['ABeeZee', "sans-serif"],
-      montserrat: ["Montserrat", "sans-serif"]
+      montserrat: ["Montserrat", "sans-serif"],
+      playfair: ["Playfair Display", "sans-serif"],
+      opensans: ["Open Sans", "sans-serif"]
     }
     },
   },

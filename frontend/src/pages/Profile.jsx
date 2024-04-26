@@ -10,6 +10,7 @@ import fav2 from "../icons/green_credits.png";
 import fav3 from "../icons/search.png";
 import fav4 from "../icons/gear.png";
 import fav5 from "../icons/password.png";
+import fav6 from "../icons/trade.png";
 
 export default function ProfilePage() {
   const path = useLocation().pathname;
@@ -125,6 +126,22 @@ export default function ProfilePage() {
               </div>
             }
 
+            {/* Pending Trading Request */}
+            {(profileData.funds_required > 0) && (
+              <Link to="/">
+                <div className="bg-customGreen-100 bg-opacity-30 p-4 my-10 rounded-lg shadow-md hover:bg-customGreen-300 transition-colors duration-300 ease-in-out h-full">
+                  <div className="flex flex-col justify-between h-full">
+                    <div>
+                      <img src={fav6} alt="Favicon" className="w-20 h-20 m-2 p-2" />
+                    </div>
+                    <div className="bottom-0 right-0"> 
+                      <h3 className="text-right text-lg font-montserrat font-semibold">Pending Trading Requests</h3>
+                    </div>
+                  </div>
+                </div>         
+              </Link>
+            )}
+
 
             {/* Browse Organizations */}
             <div className="bg-customGreen-100 bg-opacity-30 p-4 my-10 rounded-lg shadow-md hover:bg-customGreen-300 transition-colors duration-300 ease-in-out h-full">
@@ -185,7 +202,7 @@ export default function ProfilePage() {
                           onClick={() => {
                             setShowPasswordForm(false);
                           }}
-                          className="flex mb-4 w-full justify-center rounded-md bg-customGreen-400 opacity-50 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-customGreen-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                          className="flex mb-4 w-full justify-center rounded-md bg-customGreen-300 opacity-70 px-3 py-1.5 text-sm text-customGreen-800 font-semibold leading-6 text-white shadow-sm hover:bg-customGreen-500 hover:opacity-90 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                         >
                           Cancel
                         </button>

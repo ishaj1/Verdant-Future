@@ -16,8 +16,8 @@ export default function Header() {
     navigate("/");
   };
   return (
-    <header className="flex items-center justify-between bg-customGreen-600 px-3 py-2 lg:px-12" aria-label="Main">
-      <a href="/" className="text-3xl font-bold text-white px-3 py-5">Verdant Future</a>
+    <header className="flex items-center justify-between bg-customGreen-700 px-3 py-2 lg:px-12" aria-label="Main">
+      <a href="/" className="text-3xl font-semibold text-white px-3 py-5 font-playfair">Verdant Future</a>
       <nav>
         <ul className="hidden gap-8 md:flex text-white font-roboto">
           <li>
@@ -96,7 +96,7 @@ export default function Header() {
 
       </nav>
       {loginForm && (
-                <LoginForm loginActive={loginForm} setLoginActive={setLoginForm} />
+        <LoginForm loginActive={loginForm} setLoginActive={setLoginForm} />
       )}
     </header>
     

@@ -72,7 +72,7 @@ export default function UpdatePasswordForm({ setReturnMessage, setShowForm }) {
         <input type="password" name="verify_password" required className="mt-2 block text-md w-full rounded-md border-0 px-3 py-1 shadow-sm ring-1 ring-inset ring-customGreen-300 focus:ring-5 focus:ring-inset focus:ring-customGreen-600 focus:outline-1 focus:outline-customGreen-400 focus:shadow-md sm:text-sm sm:leading-6"/>
       </div>
       <div className="text-center">
-        <button type="submit" className="flex mt-10 w-full justify-center rounded-md bg-customGreen-500 opacity-80 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-customGreen-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Change Password</button>
+        <button type="submit" className="flex w-full justify-center rounded-md mt-10 bg-gradient-to-br from-customGreen-200 via-customGreen-400 to-customGreen-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-gradient-to-bl focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Change Password</button>
       </div>
       
     </form>

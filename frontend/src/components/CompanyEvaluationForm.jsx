@@ -56,63 +56,79 @@ function CompanyEvaluationForm() {
   };
 
   return (
-    <div className="EvaluationPage">
-      <h2>Company Evaluation Form</h2>
-      <p>{errors}</p>
-      <form className="EvaluationForm" onSubmit={(e) => evaluateCompany(e)}>
-        <div>
-          <label htmlFor="companySize">Number of Employees:</label>
-          <input type="number" name="companySize" min="1" required />
-        </div>
+    
+    <div className="relative h-screen">
+      <div className="flex justify-center items-start py-10">
+        <div className="w-full max-w-md p-10 bg-white shadow-md rounded-md">
+          <h1 className="text-center text-2xl font-semibold leading-9 tracking-tight text-gray-900 mb-10 font-montserrat">Company Evaluation Form</h1>
+          { errors  && 
+            <div class="flex items-center p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
+              <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+              </svg>
+              <span class="sr-only">Info</span>
+              <div>
+                <span class="font-medium">{errors}</span>
+              </div>
+            </div>
+          }
+          <form className="font-montserrat" onSubmit={(e) => evaluateCompany(e)}>
+            <div className="my-4">
+              <label htmlFor="companySize">Number of Employees</label>
+              <input type="number" name="companySize" min="1" required className="mt-2 block text-md w-full rounded-md border-0 px-3 py-2 shadow-sm ring-1 ring-inset ring-customGreen-300 focus:ring-5 focus:ring-inset focus:ring-customGreen-600 focus:outline-1 focus:outline-customGreen-400 focus:shadow-md sm:text-sm sm:leading-6"/>
+            </div>
 
-        <div>
-          <label htmlFor="revenue">Revenue (USD):</label>
-          <input type="number" name="revenue" min="0" required />
-        </div>
+            <div className="my-4">
+              <label htmlFor="revenue">Revenue (USD)</label>
+              <input type="number" name="revenue" min="0" required className="mt-2 block text-md w-full rounded-md border-0 px-3 py-2 shadow-sm ring-1 ring-inset ring-customGreen-300 focus:ring-5 focus:ring-inset focus:ring-customGreen-600 focus:outline-1 focus:outline-customGreen-400 focus:shadow-md sm:text-sm sm:leading-6"/>
+            </div>
 
-        <div>
-          <label htmlFor="date">Evaluation Date:</label>
-          <input
-            type="date"
-            name="date"
-            value={currentDateLocal.split("T")[0]}
-            required
-            disabled
-          />
-        </div>
+            <div className="my-4">
+              <label htmlFor="date">Evaluation Date</label>
+              <input
+                type="date"
+                name="date"
+                value={currentDateLocal.split("T")[0]}
+                required
+                disabled
+                className="mt-2 block text-md w-full rounded-md border-0 px-3 py-2 shadow-sm ring-1 ring-inset ring-customGreen-300 focus:ring-5 focus:ring-inset focus:ring-customGreen-600 focus:outline-1 focus:outline-customGreen-400 focus:shadow-md sm:text-sm sm:leading-6"
+              />
+            </div>
 
-        <div>
-          <label htmlFor="emission">Emission (metric ton):</label>
-          <input type="number" name="emission" min="0" required />
-        </div>
+            <div className="my-4">
+              <label htmlFor="emission">Emission (metric ton)</label>
+              <input type="number" name="emission" min="0" required className="mt-2 block text-md w-full rounded-md border-0 px-3 py-2 shadow-sm ring-1 ring-inset ring-customGreen-300 focus:ring-5 focus:ring-inset focus:ring-customGreen-600 focus:outline-1 focus:outline-customGreen-400 focus:shadow-md sm:text-sm sm:leading-6"/>
+            </div>
 
-        <div>
-          <label htmlFor="electricity">Electricity (kWh):</label>
-          <input type="number" name="electricity" min="0" required />
-        </div>
+            <div className="my-4">
+              <label htmlFor="electricity">Electricity (kWh)</label>
+              <input type="number" name="electricity" min="0" required className="mt-2 block text-md w-full rounded-md border-0 px-3 py-2 shadow-sm ring-1 ring-inset ring-customGreen-300 focus:ring-5 focus:ring-inset focus:ring-customGreen-600 focus:outline-1 focus:outline-customGreen-400 focus:shadow-md sm:text-sm sm:leading-6"/>
+            </div>
 
-        <div>
-          <label htmlFor="naturalGas">Natural Gas (cf):</label>
-          <input type="number" name="naturalGas" min="0" required />
-        </div>
+            <div className="my-4">
+              <label htmlFor="naturalGas">Natural Gas (cf)</label>
+              <input type="number" name="naturalGas" min="0" required className="mt-2 block text-md w-full rounded-md border-0 px-3 py-2 shadow-sm ring-1 ring-inset ring-customGreen-300 focus:ring-5 focus:ring-inset focus:ring-customGreen-600 focus:outline-1 focus:outline-customGreen-400 focus:shadow-md sm:text-sm sm:leading-6"/>
+            </div>
 
-        <div>
-          <label htmlFor="water">Water (cubic meter):</label>
-          <input type="number" name="water" min="0" required />
-        </div>
+            <div className="my-4">
+              <label htmlFor="water">Water (cubic meter)</label>
+              <input type="number" name="water" min="0" required className="mt-2 block text-md w-full rounded-md border-0 px-3 py-2 shadow-sm ring-1 ring-inset ring-customGreen-300 focus:ring-5 focus:ring-inset focus:ring-customGreen-600 focus:outline-1 focus:outline-customGreen-400 focus:shadow-md sm:text-sm sm:leading-6"/>
+            </div>
 
-        <div>
-          <label htmlFor="waste">Total waste (kg):</label>
-          <input type="number" name="waste" min="0" required />
-        </div>
+            <div className="my-4">
+              <label htmlFor="waste" >Total waste (kg)</label>
+              <input type="number" name="waste" min="0" required className="mt-2 block text-md w-full rounded-md border-0 px-3 py-2 shadow-sm ring-1 ring-inset ring-customGreen-300 focus:ring-5 focus:ring-inset focus:ring-customGreen-600 focus:outline-1 focus:outline-customGreen-400 focus:shadow-md sm:text-sm sm:leading-6"/>
+            </div>
 
-        <div>
-          <label htmlFor="recycled">Recycled waste (kg):</label>
-          <input type="number" name="recycled" min="0" required />
-        </div>
+            <div className="my-4">
+              <label htmlFor="recycled" >Recycled waste (kg)</label>
+              <input type="number" name="recycled" min="0" required className="mt-2 block text-md w-full rounded-md border-0 px-3 py-2 shadow-sm ring-1 ring-inset ring-customGreen-300 focus:ring-5 focus:ring-inset focus:ring-customGreen-600 focus:outline-1 focus:outline-customGreen-400 focus:shadow-md sm:text-sm sm:leading-6"/>
+            </div>
 
-        <button type="submit">Submit</button>
-      </form>
+            <button type="submit" className="flex w-full justify-center rounded-md mt-10 bg-gradient-to-br from-customGreen-200 via-customGreen-400 to-customGreen-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-gradient-to-bl focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Submit</button>
+          </form>
+        </div>
+      </div>
     </div>
   );
 }
