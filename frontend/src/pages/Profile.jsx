@@ -57,7 +57,7 @@ export default function ProfilePage() {
   return (
     <>
       <Header />
-      {errors}
+      {errors && <div>{errors}</div>}
       {profileData && (
       <>
         <header class="bg-white shadow">

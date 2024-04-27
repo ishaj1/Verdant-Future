@@ -27,7 +27,6 @@ function UpdateProfileForm() {
     const form = e.currentTarget;
     const orgName = form.orgName.value;
     const projectAssociation = form.projectAssociation?.value;
-    const password = form.password.value;
     const contactName = form.contactName.value;
     const contactEmail = form.contactEmail.value;
     const orgDescription = form.orgDescription.value;
@@ -40,9 +39,8 @@ function UpdateProfileForm() {
       isProject: auth.isProject,
       ...(auth.isProject ? { association: projectAssociation } : {}),
       username: auth.username,
-      password,
       contact_name: contactName,
-      contact_detail: contactEmail,
+      contact_email: contactEmail,
       details: orgDescription,
       funds_required: fundsRequired,
       funds_received: fundsReceived,
@@ -120,10 +118,6 @@ function UpdateProfileForm() {
                 </>
               )}
 
-              <div className="my-4">
-                <label htmlFor="password" >Password</label>
-                <input type="password" name="password" required className="mt-2 block text-md w-full rounded-md border-0 px-3 py-2 shadow-sm ring-1 ring-inset ring-customGreen-300 focus:ring-5 focus:ring-inset focus:ring-customGreen-600 focus:outline-1 focus:outline-customGreen-400 focus:shadow-md sm:text-sm sm:leading-6"/>
-              </div>
               <div className="my-4">
                 <label htmlFor="contactName" >Contact Name</label>
                 <input
