@@ -57,7 +57,6 @@ export default function ProfilePage() {
   return (
     <>
       <Header />
-
       {errors}
       {profileData && (
       <>
@@ -67,7 +66,7 @@ export default function ProfilePage() {
           </div>
         </header>
                 
-        <main>
+        <main className="mb-10">
           <div className="font-lato grid grid-cols-1 md:grid-cols-3 gap-12 bg-white p-4 px-20 h-full">
             {/* Green credits */}
             {!profileData.isProject && auth?.username === uid && (
@@ -113,7 +112,7 @@ export default function ProfilePage() {
                         <span class="text-sm font-medium text-customGreen-700 dark:text-white">{(profileData.funds_received / profileData.funds_required) * 100}%</span>
                       </div>
                       <div class="w-full bg-gray-200 rounded-full h-2.5">
-                        <div class="bg-customGreen-600 h-2.5 rounded-full" style={{ width: `${(profileData.funds_received / profileData.funds_required) * 100}%` }}></div>
+                        <div class="bg-customGreen-600 h-2.5 rounded-full" style={{ width: `${Math.min(100, (profileData.funds_received / profileData.funds_required) * 100)}%` }}></div>
                       </div>
                     </div>
 
@@ -144,16 +143,20 @@ export default function ProfilePage() {
 
 
             {/* Browse Organizations */}
-            <div className="bg-customGreen-100 bg-opacity-30 p-4 my-10 rounded-lg shadow-md hover:bg-customGreen-300 transition-colors duration-300 ease-in-out h-full">
-              <div className="flex flex-col justify-between h-full">
-                <div>
-                  <img src={fav3} alt="Favicon" className="w-20 h-20 m-2 p-2" />
-                </div>
-                <div className="bottom-0 right-0"> 
-                  <h3 className="text-right text-lg font-montserrat font-semibold">Browse Organizations</h3>
+            {profileData && auth?.username === uid &&
+            <Link to="/organizations">
+              <div className="bg-customGreen-100 bg-opacity-30 p-4 my-10 rounded-lg shadow-md hover:bg-customGreen-300 transition-colors duration-300 ease-in-out h-full">
+                <div className="flex flex-col justify-between h-full">
+                  <div>
+                    <img src={fav3} alt="Favicon" className="w-20 h-20 m-2 p-2" />
+                  </div>
+                  <div className="bottom-0 right-0"> 
+                    <h3 className="text-right text-lg font-montserrat font-semibold">Browse Organizations</h3>
+                  </div>
                 </div>
               </div>
-            </div>
+            </Link>
+            }
             
             {/* Update */}
             {auth?.username === uid &&           
