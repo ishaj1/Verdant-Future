@@ -548,7 +548,7 @@ def company_transfer_funds():
   res = ''.join(random.choices(string.ascii_uppercase +
                              string.digits, k=10))
   transaction_name = res
-  credits_transferred = amount
+  credits_transferred = int(amount)/1000
   transfer_status = "pending"
   query = "INSERT INTO Company_Transaction VALUES(%s, %s, %s, %s, %s, %s, %s, %s)"
   cursor.execute(
@@ -574,15 +574,15 @@ def company_transfer_response():
   action  = request.form["action"]
   if(action == "accepted"):
     cursor.execute("SELECT amount_transferred FROM Company_Transaction WHERE transaction_name = %s", (transaction_name))
-    amount = cursor.fetchall()
+    amount = cursor.fetchone()
     cursor.execute("SELECT payer_id FROM Company_Transaction WHERE transaction_name = %s", (transaction_name))
-    source = cursor.fetchall()
+    source = cursor.fetchone()
     cursor.execute("SELECT payee_id FROM Company_Transaction WHERE transaction_name = %s", (transaction_name))
-    destination = cursor.fetchall()
+    destination = cursor.fetchone()
     cursor.execute("SELECT sender_username FROM Company_Transaction WHERE transaction_name = %s", (transaction_name))
-    sender_username = cursor.fetchall()
+    sender_username = cursor.fetchone()
     cursor.execute("SELECT receiver_username FROM Company_Transaction WHERE transaction_name = %s", (transaction_name))
-    receiver_username = cursor.fetchall()
+    receiver_username = cursor.fetchone()
     result = stripe.Charge.create(
       amount= amount,
       currency="usd",
