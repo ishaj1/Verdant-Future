@@ -538,10 +538,10 @@ def company_transfer_funds():
   amount = request.form["amount"]
   sender_username = request.form["source"]
   receiver_username = request.form["destination"]
-  cursor.execute('SELECT payment_id FROM Project WHERE project_username =  %s', (receiver_username))
-  dest= cursor.fetchone()
+  cursor.execute('SELECT payment_id FROM Company WHERE company_username =  %s', (receiver_username))
+  dest= cursor.fetchone()['payment_id']
   cursor.execute('SELECT payment_id FROM Company WHERE company_username =  %s', (sender_username))
-  src = cursor.fetchone()
+  src = cursor.fetchone()['payment_id']
   payer_id = src
   payee_id = dest
   amount_transferred = amount
@@ -635,10 +635,10 @@ def company_transfer_response():
     return {'message': 'Funds transferred successfully', "success": True}
   elif(action == "declined"):
       cursor.execute("DELETE FROM Company_Transaction WHERE transaction_name = %s", transaction_name)
-      return {'message': 'Transaction has been declined by the company', "success": False}
+      return {'message': 'Transaction has been declined by the company', "success": True}
   elif(action == "cancelled"):
       cursor.execute("DELETE FROM Company_Transaction WHERE transaction_name = %s", transaction_name)
-      return {'message': 'Transaction has been cancelled by the company', "success": False}
+      return {'message': 'Transaction has been cancelled by the company', "success": True}
   
 
       
