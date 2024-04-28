@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-export default function InitiateTransactionForm({ uid }) {
+export default function InitiateTransactionForm({ isTrade, uid }) {
   const navigate = useNavigate();
   const [numCredits, setNumCredits] = useState(1);
   const [totalCost, setTotalCost] = useState(1000 * 100);
@@ -15,7 +15,13 @@ export default function InitiateTransactionForm({ uid }) {
   const initiateTransaction = (e) => {
     e.preventDefault();
     navigate("/transaction", {
-      state: { sendToUser: uid, price, total_cost: totalCost, credits: numCredits },
+      state: {
+        sendToUser: uid,
+        price,
+        total_cost: totalCost,
+        credits: numCredits,
+        isTrade,
+      },
     });
   };
 

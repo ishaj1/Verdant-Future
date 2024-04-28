@@ -20,7 +20,7 @@ export default function Transaction() {
     appearance,
   };
 
-  const submitPayment = (e) => {
+  const submitTransaction = (e) => {
     e.currentTarget.disabled = true;
 
     const formData = {
@@ -29,12 +29,20 @@ export default function Transaction() {
       destination: state.sendToUser,
     };
     axios
-      .post("http://localhost:4242/project_transfer", formData, {
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      })
+      .post(
+        state?.isTrade
+          ? "http://localhost:4242/company_transfer"
+          : "http://localhost:4242/project_transfer",
+        formData,
+        {
+          headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        }
+      )
       .then((res) => {
-        if (res.data.message == "Funds transferred successfully") {
+        if (res?.data?.success == true) {
           navigate("/transaction-success", { state: { details: res.data.details } });
+        } else if (res?.data?.create == true) {
+          navigate(`/profile/${auth.username}`);
         }
       })
       .catch((err) => {
@@ -50,7 +58,7 @@ export default function Transaction() {
         <div>Credits: {state.credits}</div>
         <div>Total Cost: ${state.total_cost / 100}</div>
       </div>
-      <button onClick={submitPayment}>Confirm</button>
+      <button onClick={submitTransaction}>Confirm</button>
       <button
         onClick={() => {
           navigate(-1);

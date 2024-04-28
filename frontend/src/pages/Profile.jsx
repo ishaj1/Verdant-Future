@@ -6,6 +6,8 @@ import useAuth from "../hooks/useAuth";
 import { Link } from "react-router-dom";
 import UpdatePasswordForm from "../components/UpdatePasswordForm";
 import InitiateTransactionForm from "../components/InitiateTransactionForm";
+import TransactionHistory from "../components/TransactionHistory";
+import PendingTransactions from "../components/PendingTransactions";
 
 export default function ProfilePage() {
   const path = useLocation().pathname;
@@ -61,21 +63,18 @@ export default function ProfilePage() {
               ? profileData.project_name
               : profileData.company_name}
           </h1>
-          {auth?.isProject === false && profileData.isProject && (
+          {auth?.isProject === false && auth?.username != uid && (
             <>
               <button
                 onClick={() => {
                   setShowTransactionForm(true);
                 }}
               >
-                Invest
+                {profileData.isProject ? "Invest" : "Trade"}
               </button>
               {showTransactionForm && (
                 <>
-                  <InitiateTransactionForm
-                    setShowForm={setShowTransactionForm}
-                    uid={uid}
-                  />
+                  <InitiateTransactionForm uid={uid} isTrade={!profileData.isProject} />
                   <button onClick={() => setShowTransactionForm(false)}>Cancel</button>
                 </>
               )}
@@ -131,6 +130,10 @@ export default function ProfilePage() {
               )}
             </>
           )}
+          <div>
+            <PendingTransactions />
+            <TransactionHistory />
+          </div>
         </>
       )}
     </>
