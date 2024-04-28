@@ -640,7 +640,41 @@ def company_transfer_response():
       cursor.execute("DELETE FROM Company_Transaction WHERE transaction_name = %s", transaction_name)
       return {'message': 'Transaction has been cancelled by the company', "success": True}
   
+@app.route('/get_past_transactions', methods=['GET'])
+def get_past_transactions():
+    username = request.args['username']
 
+    query_companies = "SELECT transaction_name, sender_username, receiver_username, amount_transferred, credits_transferred from Company_Transaction WHERE (sender_username = %s OR receiver_username = %s) AND transfer_status = 'accepted'"
+    query_projects = "SELECT transaction_name, sender_username, receiver_username, amount_transferred, credits_transferred from Project_Transaction WHERE (sender_username = %s OR receiver_username = %s)"
+
+    cursor = conn.cursor()
+
+    cursor.execute(query_companies, (username, username))
+    company_transactions = cursor.fetchall()
+
+    cursor.execute(query_projects, (username, username))
+    project_transactions = cursor.fetchall()
+
+    cursor.close()
+
+    transactions = list(company_transactions) + list(project_transactions)
+
+    return transactions if transactions else []
+
+@app.route('/get_pending_transactions', methods=['GET'])
+def get_pending_transactions():
+    username = request.args['username']
+
+    query_pending = "SELECT transaction_name, sender_username, receiver_username, amount_transferred, credits_transferred from Company_Transaction WHERE (sender_username = %s OR receiver_username = %s) AND transfer_status = 'pending'"
+
+    cursor = conn.cursor()
+
+    cursor.execute(query_pending, (username, username))
+    pending_transactions = cursor.fetchall()
+
+    cursor.close()
+
+    return pending_transactions if pending_transactions else []
       
 
 
