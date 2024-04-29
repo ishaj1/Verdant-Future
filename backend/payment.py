@@ -635,9 +635,13 @@ def company_transfer_response():
     return {'message': 'Funds transferred successfully', "success": True}
   elif(action == "declined"):
       cursor.execute("DELETE FROM Company_Transaction WHERE transaction_name = %s", transaction_name)
+      conn.commit()
+      cursor.close()
       return {'message': 'Transaction has been declined by the company', "success": True}
   elif(action == "cancelled"):
       cursor.execute("DELETE FROM Company_Transaction WHERE transaction_name = %s", transaction_name)
+      conn.commit()
+      cursor.close()
       return {'message': 'Transaction has been cancelled by the company', "success": True}
   
 @app.route('/get_past_transactions', methods=['GET'])
