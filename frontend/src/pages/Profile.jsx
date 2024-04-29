@@ -52,7 +52,7 @@ export default function ProfilePage() {
         break;
     }
     queryProfileData(uid, isProject);
-  }, []);
+  }, [uid]);
 
   return (
     <>

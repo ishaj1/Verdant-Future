@@ -4,12 +4,12 @@ import OrganizationCard from "../components/OrganizationCard";
 import { useState } from "react";
 import axios from "../api/axios";
 
-export default function OrganizationsDirectory() {
+export default function OrganizationsDirectory({ show }) {
   const [companiesData, setCompaniesData] = useState([]);
   const [projectsData, setProjectsData] = useState([]);
   const [errors, setErrors] = useState("");
 
-  const queryOrganizations = () => {
+  const queryCompanies = () => {
     axios
       .get("/view_companies")
       .then((response) => {
@@ -19,9 +19,11 @@ export default function OrganizationsDirectory() {
         }
       })
       .catch((error) => {
-        setErrors("Error retrieving company data.");
+        setErrors(errors + "Error retrieving company data.");
       });
+  };
 
+  const queryProjects = () => {
     axios
       .get("/view_projects")
       .then((response) => {
@@ -35,9 +37,27 @@ export default function OrganizationsDirectory() {
       });
   };
 
+  const queryOrganizations = () => {
+    queryProjects();
+    queryCompanies();
+  };
+
   useEffect(() => {
-    queryOrganizations();
-  }, []);
+    setCompaniesData([]);
+    setProjectsData([]);
+
+    switch (show) {
+      case "projects":
+        queryProjects();
+        break;
+      case "companies":
+        queryCompanies();
+        break;
+      case "organizations":
+        queryOrganizations();
+        break;
+    }
+  }, [show]);
 
   return (
     <>

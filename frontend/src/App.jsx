@@ -48,7 +48,17 @@ function App() {
     },
     {
       path: "/organizations",
-      element: <RequireAuth children={<OrganizationsDirectory />} />,
+      element: (
+        <RequireAuth children={<OrganizationsDirectory show="organizations" />} />
+      ),
+    },
+    {
+      path: "/projects",
+      element: <RequireAuth children={<OrganizationsDirectory show="projects" />} />,
+    },
+    {
+      path: "/companies",
+      element: <RequireAuth children={<OrganizationsDirectory show="companies" />} />,
     },
     {
       path: "/transaction",
