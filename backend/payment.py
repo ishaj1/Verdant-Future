@@ -601,7 +601,7 @@ def company_transfer_response():
     # Update the total credit in the Company table
     transaction_status = "accepted"
     credits_transferred = int(amount)/1000
-    query2 = "UPDATE Company_Transaction SET transaction_name = %s, transaction_status = %s WHERE transaction_name = %s"
+    query2 = "UPDATE Company_Transaction SET transaction_name = %s, transfer_status = %s WHERE transaction_name = %s"
     cursor.execute(
         query2,
         (
