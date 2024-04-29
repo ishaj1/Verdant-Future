@@ -626,6 +626,7 @@ def company_transfer_response():
             (
             amount,
             amount,
+            credits_transferred,
             receiver_username
             ),
         )
