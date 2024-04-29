@@ -574,15 +574,15 @@ def company_transfer_response():
   action  = request.form["action"]
   if(action == "accepted"):
     cursor.execute("SELECT amount_transferred FROM Company_Transaction WHERE transaction_name = %s", (transaction_name))
-    amount = cursor.fetchone()
+    amount = cursor.fetchone()['amount_transferred']
     cursor.execute("SELECT payer_id FROM Company_Transaction WHERE transaction_name = %s", (transaction_name))
-    source = cursor.fetchone()
+    source = cursor.fetchone()['payer_id']
     cursor.execute("SELECT payee_id FROM Company_Transaction WHERE transaction_name = %s", (transaction_name))
-    destination = cursor.fetchone()
+    destination = cursor.fetchone()['payee_id']
     cursor.execute("SELECT sender_username FROM Company_Transaction WHERE transaction_name = %s", (transaction_name))
-    sender_username = cursor.fetchone()
+    sender_username = cursor.fetchone()['sender_username']
     cursor.execute("SELECT receiver_username FROM Company_Transaction WHERE transaction_name = %s", (transaction_name))
-    receiver_username = cursor.fetchone()
+    receiver_username = cursor.fetchone()['receiver_username']
     result = stripe.Charge.create(
       amount= amount,
       currency="usd",
