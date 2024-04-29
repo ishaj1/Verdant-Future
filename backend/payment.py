@@ -572,77 +572,81 @@ def company_transfer_response():
   cursor = conn.cursor()
   transaction_name = request.form["transaction_name"]
   action  = request.form["action"]
-  if(action == "accepted"):
-    cursor.execute("SELECT amount_transferred FROM Company_Transaction WHERE transaction_name = %s", (transaction_name))
-    amount = cursor.fetchone()['amount_transferred']
-    cursor.execute("SELECT payer_id FROM Company_Transaction WHERE transaction_name = %s", (transaction_name))
-    source = cursor.fetchone()['payer_id']
-    cursor.execute("SELECT payee_id FROM Company_Transaction WHERE transaction_name = %s", (transaction_name))
-    destination = cursor.fetchone()['payee_id']
-    cursor.execute("SELECT sender_username FROM Company_Transaction WHERE transaction_name = %s", (transaction_name))
-    sender_username = cursor.fetchone()['sender_username']
-    cursor.execute("SELECT receiver_username FROM Company_Transaction WHERE transaction_name = %s", (transaction_name))
-    receiver_username = cursor.fetchone()['receiver_username']
-    result = stripe.Charge.create(
-      amount= amount,
-      currency="usd",
-      source= "acct_1P5t9bQSnkzLsREY"
-    )
-    #result.receipt_url
-    # amount *=0.95
-    trans = stripe.Transfer.create(
-      amount= amount,
-      currency='usd',
-      destination= "acct_1P5t9bQSnkzLsREY"
-      # source_transaction = 'acct_1Oe5AZKlgwtgt0eB' # Use the transfer ID from the previous transfer
-      # source_transaction = charge.id
-      )
-    
-    # Update the total credit in the Company table
-    transaction_status = "accepted"
-    credits_transferred = int(amount)/1000
-    query2 = "UPDATE Company_Transaction SET transaction_name = %s, transfer_status = %s WHERE transaction_name = %s"
-    cursor.execute(
-        query2,
-        (
-        transaction_name,
-        transaction_status,
-        trans.id
+  try:
+    if(action == "accepted"):
+        cursor.execute("SELECT amount_transferred FROM Company_Transaction WHERE transaction_name = %s", (transaction_name))
+        amount = cursor.fetchone()['amount_transferred']
+        cursor.execute("SELECT payer_id FROM Company_Transaction WHERE transaction_name = %s", (transaction_name))
+        source = cursor.fetchone()['payer_id']
+        cursor.execute("SELECT payee_id FROM Company_Transaction WHERE transaction_name = %s", (transaction_name))
+        destination = cursor.fetchone()['payee_id']
+        cursor.execute("SELECT sender_username FROM Company_Transaction WHERE transaction_name = %s", (transaction_name))
+        sender_username = cursor.fetchone()['sender_username']
+        cursor.execute("SELECT receiver_username FROM Company_Transaction WHERE transaction_name = %s", (transaction_name))
+        receiver_username = cursor.fetchone()['receiver_username']
+        result = stripe.Charge.create(
+        amount= amount,
+        currency="usd",
+        source= "acct_1P5t9bQSnkzLsREY"
         )
-    )
-    query3 = "UPDATE Company SET total_credits = total_credits + %s WHERE company_username = %s"
-    cursor.execute(
-      query3,
-        (
-          credits_transferred,
-          sender_username         
-        ),
-    )
+        #result.receipt_url
+        # amount *=0.95
+        trans = stripe.Transfer.create(
+        amount= amount,
+        currency='usd',
+        destination= "acct_1P5t9bQSnkzLsREY"
+        # source_transaction = 'acct_1Oe5AZKlgwtgt0eB' # Use the transfer ID from the previous transfer
+        # source_transaction = charge.id
+        )
 
-    query4 = "UPDATE Company SET funds_received = %s, funds_required = funds_required - %s, total_credits = total_credits - %s WHERE company_username = %s"
-    cursor.execute(
-      query4,
-        (
-          amount,
-          amount,
-          receiver_username         
-        ),
-      )
+        # Update the total credit in the Company table
+        transaction_status = "accepted"
+        credits_transferred = int(amount)/1000
+        query2 = "UPDATE Company_Transaction SET transaction_name = %s, transfer_status = %s WHERE transaction_name = %s"
+        cursor.execute(
+            query2,
+            (
+            transaction_name,
+            transaction_status,
+            trans.id
+            )
+        )
+        query3 = "UPDATE Company SET total_credits = total_credits + %s WHERE company_username = %s"
+        cursor.execute(
+        query3,
+            (
+            credits_transferred,
+            sender_username
+            ),
+        )
 
-    conn.commit()
+        query4 = "UPDATE Company SET funds_received = %s, funds_required = funds_required - %s, total_credits = total_credits - %s WHERE company_username = %s"
+        cursor.execute(
+        query4,
+            (
+            amount,
+            amount,
+            receiver_username
+            ),
+        )
+
+        conn.commit()
+        cursor.close()
+
+        return {'message': 'Funds transferred successfully', "success": True}
+    elif(action == "declined"):
+        cursor.execute("DELETE FROM Company_Transaction WHERE transaction_name = %s AND transfer_status = 'pending'", transaction_name)
+        conn.commit()
+        cursor.close()
+        return {'message': 'Transaction has been declined by the company', "success": True}
+    elif(action == "cancelled"):
+        cursor.execute("DELETE FROM Company_Transaction WHERE transaction_name = %s AND transfer_status = 'pending", transaction_name)
+        conn.commit()
+        cursor.close()
+        return {'message': 'Transaction has been cancelled by the company', "success": True}
+  except:
     cursor.close()
-
-    return {'message': 'Funds transferred successfully', "success": True}
-  elif(action == "declined"):
-      cursor.execute("DELETE FROM Company_Transaction WHERE transaction_name = %s AND transfer_status = 'pending'", transaction_name)
-      conn.commit()
-      cursor.close()
-      return {'message': 'Transaction has been declined by the company', "success": True}
-  elif(action == "cancelled"):
-      cursor.execute("DELETE FROM Company_Transaction WHERE transaction_name = %s AND transfer_status = 'pending", transaction_name)
-      conn.commit()
-      cursor.close()
-      return {'message': 'Transaction has been cancelled by the company', "success": True}
+    return {'message': 'Request could not be fulfilled', "success": False}
   
 @app.route('/get_past_transactions', methods=['GET'])
 def get_past_transactions():
