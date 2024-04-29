@@ -2,9 +2,10 @@ import { useEffect, useState } from "react";
 import axios from "../api/axios";
 import useAuth from "../hooks/useAuth";
 
-export default function PendingTransactions() {
-  // /company_response
-  // "approve", "decline", "cancel"
+export default function PendingTransactions({
+  numTransactionResponses,
+  setNumTransactionResponses,
+}) {
   const { auth } = useAuth();
   const [transactions, setTransactions] = useState([]);
   const [message, setMessage] = useState();
@@ -27,20 +28,27 @@ export default function PendingTransactions() {
         }
       )
       .then((response) => {
-        setMessage();
-        getTransactions();
+        if (response.data.success == false) {
+          if (action == "cancelled") {
+            setMessage(
+              "Sorry, your offer could not be cancelled. The offer may have already been accepted or declined. Please try again later."
+            );
+          } else if (action == "accepted" || action == "declined") {
+            setMessage(
+              "Sorry, your request could not be processed. The offer may have already been canceled. Please try again later."
+            );
+          }
+        } else {
+          setMessage();
+        }
       })
       .catch((error) => {
-        if (action == "cancelled") {
-          setMessage(
-            "Sorry, your offer could not be cancelled. The offer may have already been accepted or declined. Please try again later."
-          );
-        } else if (action == "accepted" || action == "declined") {
-          setMessage(
-            "Sorry, your request could not be processed. The offer may have already been canceled. Please try again later."
-          );
-        }
+        setMessage(
+          "Sorry, your request could not be processed. Please try again later."
+        );
       });
+    setNumTransactionResponses(numTransactionResponses + 1);
+    getTransactions();
   };
 
   useEffect(() => {

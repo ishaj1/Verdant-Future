@@ -17,6 +17,7 @@ export default function ProfilePage() {
   const [errors, setErrors] = useState();
   const [showPasswordForm, setShowPasswordForm] = useState(false);
   const [showTransactionForm, setShowTransactionForm] = useState(false);
+  const [numTransactionResponses, setNumTransactionResponses] = useState(0);
 
   const queryProfileData = (username, isProject) => {
     axios
@@ -131,8 +132,11 @@ export default function ProfilePage() {
             </>
           )}
           <div>
-            <PendingTransactions />
-            <TransactionHistory />
+            <PendingTransactions
+              numTransactionResponses={numTransactionResponses}
+              setNumTransactionResponses={setNumTransactionResponses}
+            />
+            <TransactionHistory key={numTransactionResponses} />
           </div>
         </>
       )}
