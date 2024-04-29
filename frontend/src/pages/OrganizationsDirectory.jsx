@@ -4,11 +4,12 @@ import OrganizationCard from "../components/OrganizationCard";
 import { useState } from "react";
 import axios from "../api/axios";
 
-export default function CompaniesDirectory() {
+export default function OrganizationsDirectory() {
   const [companiesData, setCompaniesData] = useState([]);
+  const [projectsData, setProjectsData] = useState([]);
   const [errors, setErrors] = useState("");
 
-  const queryCompanies = () => {
+  const queryOrganizations = () => {
     axios
       .get("/view_companies")
       .then((response) => {
@@ -20,16 +21,36 @@ export default function CompaniesDirectory() {
       .catch((error) => {
         setErrors("Error retrieving company data.");
       });
+
+    axios
+      .get("/view_projects")
+      .then((response) => {
+        if (response?.data) {
+          setErrors();
+          setProjectsData(response.data);
+        }
+      })
+      .catch((error) => {
+        setErrors(errors + "Error retreiving project data.");
+      });
   };
 
   useEffect(() => {
-    queryCompanies();
+    queryOrganizations();
   }, []);
 
   return (
     <>
       <Header />
       {errors}
+      {projectsData.map((org, index) => (
+        <OrganizationCard
+          description={org.project_details}
+          key={index}
+          name={org.project_name}
+          profile_link={`/project/${org.project_username}`}
+        />
+      ))}
       {companiesData.map((org, index) => (
         <OrganizationCard
           description={org.company_details}

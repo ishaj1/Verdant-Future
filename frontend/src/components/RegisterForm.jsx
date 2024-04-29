@@ -48,7 +48,7 @@ function RegisterForm() {
       .then((response) => {
         if (response.data.register === true) {
           setAuth({ username, isProject });
-          navigate(`/profile/${username}`);
+          navigate("/organizations");
         } else {
           setErrors("Error registering. Check information submitted.");
         }
