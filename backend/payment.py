@@ -606,9 +606,9 @@ def company_transfer_response():
         cursor.execute(
             query2,
             (
-            transaction_name,
+            trans.id,
             transaction_status,
-            trans.id
+            transaction_name
             )
         )
         query3 = "UPDATE Company SET total_credits = total_credits + %s WHERE company_username = %s"
@@ -641,7 +641,7 @@ def company_transfer_response():
         cursor.close()
         return {'message': 'Transaction has been declined by the company', "success": True}
     elif(action == "cancelled"):
-        cursor.execute("DELETE FROM Company_Transaction WHERE transaction_name = %s AND transfer_status = 'pending", transaction_name)
+        cursor.execute("DELETE FROM Company_Transaction WHERE transaction_name = %s AND transfer_status = 'pending'", transaction_name)
         conn.commit()
         cursor.close()
         return {'message': 'Transaction has been cancelled by the company', "success": True}
