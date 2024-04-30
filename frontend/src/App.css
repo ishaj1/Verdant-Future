@@ -1,10 +1,89 @@
-.LoginWindow > button.selected,
-.RegistrationWindow > button.selected {
-  background-color: yellow;
+.abeezee-regular {
+  font-family: "ABeeZee", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.abeezee-regular-italic {
+  font-family: "ABeeZee", sans-serif;
+  font-weight: 400;
+  font-style: italic;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.LoginWindow {
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #0000003f;
+}
+.LoginWindow > .LoginContent {
+  border-radius: 10px;
+  background-color: #ffffff;
+  min-height: 40%;
+  max-width: 40%;
+  margin: 15% auto;
+  box-shadow: 4px -4px 5px rgba(0, 0, 0, 0.07);
+}
+.LoginContent > .TypeSelector > button {
+  border: none;
+  background-color: #7eaf65e1;
+  width: 50%;
+  padding: 15px;
+  transition: background-color 0.2s;
+  font-size: 18px;
+}
+.LoginContent > .TypeSelector > button:first-of-type {
+  border-top-left-radius: 5px;
+}
+.LoginContent > .TypeSelector > button:last-of-type {
+  border-top-right-radius: 5px;
+}
+
+.LoginContent > .TypeSelector > button.selected {
+  background-color: white;
+}
+
+.LoginContent > .TypeSelector > button:hover {
+  background-color: #bde0b1;
+  cursor: pointer;
+}
+.LoginContent > .TypeSelector > button.selected:hover {
+  background-color: white;
+  cursor: default;
+}
+.LoginContent > h2,
+.LoginContent > p {
+  text-align: center;
+}
+
+.LoginForm {
+  padding-top: 10%;
+  padding-bottom: 10%;
+}
+
+.LoginForm > label {
+  font-size: 15px;
+  margin: 0px 20%;
+}
+
+.LoginForm > input,
+.LoginForm > textarea {
+  display: block;
+  margin: 0px 20% 20px 20%;
+  height: 35px;
+  width: 60%;
+  font-size: 15px;
 }
 
 .RegisterForm > input,
-textarea {
+.RegisterForm > textarea {
   display: block;
 }
 
