@@ -92,7 +92,7 @@ def registerAuth():
 
     cursor = conn.cursor()
 
-    if isCompany:
+    if isCompany == "true":
         query = (
             "SELECT company_username FROM Company WHERE company_username = %s"
         )
