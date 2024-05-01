@@ -1,7 +1,7 @@
 import RegisterForm from "../components/RegisterForm";
 
 export default function RegisterPage() {
-  const signUpUser = () => {};
+  //const signUpUser = () => {}; //empty function
   return (
     <>
       <RegisterForm />

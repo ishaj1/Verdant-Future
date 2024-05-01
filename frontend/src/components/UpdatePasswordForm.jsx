@@ -54,11 +54,11 @@ export default function UpdatePasswordForm({ setReturnMessage, setShowForm }) {
         </>
       )}
       <label htmlFor="old_password">Current Password</label>
-      <input type="password" name="old_password" required />
+      <input type="password" id="old_password" name="old_password" required />
       <label htmlFor="new_password">New Password</label>
-      <input type="password" name="new_password" required />
+      <input type="password" id="new_password" name="new_password" required />
       <label htmlFor="verify_password">Confirm New Password</label>
-      <input type="password" name="verify_password" required />
+      <input type="password" id="verify_password" name="verify_password" required />
 
       <button type="submit">Change Password</button>
     </form>

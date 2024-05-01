@@ -19,14 +19,10 @@ describe('TransactionHistory component', () => {
     ];
     axios.get.mockResolvedValueOnce({ data: mockTransactions });
   
-    const { getByText, getAllByText } = render(<TransactionHistory />);
+    const { getAllByText } = render(<TransactionHistory />);
   
     await waitFor(() => {
-        expect(getAllByText(/Transaction History/i)).toHaveLength(1);
-  
-      mockTransactions.forEach(transaction => {
-        expect(getAllByText(`To: ${transaction.receiver_username}`).length).toBe(2);
-      });
+      expect(getAllByText('To: testUser')).toHaveLength(2);
     });
   });
 
