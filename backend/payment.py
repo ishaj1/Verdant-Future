@@ -620,11 +620,10 @@ def company_transfer_response():
             ),
         )
 
-        query4 = "UPDATE Company SET funds_received = %s, funds_required = funds_required - %s, total_credits = total_credits - %s WHERE company_username = %s"
+        query4 = "UPDATE Company SET funds_received = funds_received + %s, total_credits = total_credits - %s WHERE company_username = %s"
         cursor.execute(
         query4,
             (
-            amount,
             amount,
             credits_transferred,
             receiver_username
