@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "../api/axios";
 import useAuth from "../hooks/useAuth";
-import Header from "./Header";
+import Header from "../components/Header";
 
 function EvaluationSuccess() {
   const [greenCredit, setGreenCredit] = useState(null);
@@ -43,7 +43,7 @@ function EvaluationSuccess() {
             <p>
               Your Company's Total Green Credit is updated to: {greenCredit.total_credit}
             </p>
-            
+
             <Link to={`/profile/${auth?.username}`}>Back to Profile</Link>
           </div>
         )}
