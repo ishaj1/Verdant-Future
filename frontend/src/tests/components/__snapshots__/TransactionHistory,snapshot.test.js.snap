@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders TransactionHistory correctly 1`] = `
+<div>
+  <h2>
+    Transaction History
+  </h2>
+</div>
+`;

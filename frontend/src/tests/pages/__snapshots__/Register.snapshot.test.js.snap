@@ -1,0 +1,312 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`RegisterPage matches snapshot 1`] = `
+[
+  <header
+    aria-label="Main"
+    className="flex items-center justify-between bg-customGreen-600 px-3 py-3 lg:px-12"
+  >
+    <a
+      className="text-3xl font-bold text-white pt-5 pb-5 "
+      href="/"
+    >
+      Verdant Future
+    </a>
+    <nav>
+      <ul
+        className="hidden gap-8 md:flex text-white font-abeezee"
+      >
+        <li>
+          <a
+            href="#"
+          >
+            About us
+          </a>
+        </li>
+        <li>
+          <a
+            href="#"
+          >
+            Projects
+          </a>
+        </li>
+        <li>
+          <a
+            href="#"
+          >
+            Companies
+          </a>
+        </li>
+        <li>
+          <button
+            onClick={[Function]}
+          >
+            Login
+          </button>
+        </li>
+        <li>
+          <a
+            className="bg-customGreen-800 px-4 py-2 rounded-xl"
+            href="/register"
+          >
+            Sign up
+          </a>
+        </li>
+      </ul>
+      <details
+        className="flex md:hidden"
+      >
+        <summary
+          className="bg-costomGreen-600 hover:bg-customGreen-200 [[open]>&]:bg-customGreen-200 _no-triangle grid h-10 w-10 place-items-center rounded-full cursor-pointer"
+        >
+          <svg
+            className="h-6 w-6"
+            fill="none"
+            stroke="white"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M4 6h16M4 12h16m-7 6h7"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+            />
+          </svg>
+        </summary>
+        <div
+          className="absolute right-0 z-20 md:left-0"
+        >
+          <div
+            className="relative top-9 w-30 rounded-md border border-gray-100 bg-white p-1 shadow-sm "
+          >
+            <nav>
+              <ul
+                className="flex flex-col gap-5 px-2 py-2.5 font-abeezee text-right"
+              >
+                <li>
+                  <a
+                    href="#"
+                  >
+                    About us
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                  >
+                    Projects
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                  >
+                    Companies
+                  </a>
+                </li>
+                <li>
+                  <button
+                    onClick={[Function]}
+                  >
+                    Login
+                  </button>
+                </li>
+                <li>
+                  <a
+                    className="bg-customGreen-800 px-4 py-2 rounded-xl text-white"
+                    href="/register"
+                  >
+                    Sign up
+                  </a>
+                </li>
+              </ul>
+            </nav>
+          </div>
+        </div>
+      </details>
+    </nav>
+  </header>,
+  <div
+    className="relative h-screen"
+  >
+    <div
+      className="flex justify-center items-start py-10"
+    >
+      <div
+        className="w-full max-w-md p-10 bg-white shadow-md rounded-md"
+      >
+        <h1
+          className="text-center text-2xl leading-9 tracking-tight text-gray-900 mb-3"
+        >
+          Get Verdant today
+        </h1>
+        <div
+          className="py-5 flex justify-end"
+        >
+          <label
+            className="inline-flex items-center cursor-pointer"
+          >
+            <input
+              checked={true}
+              className="sr-only peer"
+              id="project"
+              onChange={[Function]}
+              type="checkbox"
+            />
+            <div
+              className="ms-3 mr-3 text-sm font-medium text-gray-500 dark:text-gray-300"
+            >
+              Project
+            </div>
+            <div
+              className="relative w-11 h-6 rounded-full bg-customGreen-600 peer dark:bg-gray-700 peer-focus:ring-4 peer-focus:ring-green-300 dark:peer-focus:ring-green-800 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600"
+            />
+          </label>
+        </div>
+        <p />
+        <form
+          className="RegisterForm"
+          onSubmit={[Function]}
+        >
+          <div
+            className=""
+          >
+            <label
+              htmlFor="orgName"
+            >
+              Project
+               Name
+            </label>
+            <input
+              className="mt-2 block text-md w-full rounded-md border-0 px-3 py-2 shadow-sm ring-1 ring-inset ring-customGreen-300 focus:ring-5 focus:ring-inset focus:ring-customGreen-600 focus:outline-1 focus:outline-customGreen-400 focus:shadow-md sm:text-sm sm:leading-6"
+              name="orgName"
+              required={true}
+              type="text"
+            />
+            <div
+              className="my-4"
+            >
+              <label
+                htmlFor="projectAssociation"
+              >
+                Project Association
+              </label>
+              <input
+                className="mt-2 block text-md w-full rounded-md border-0 px-3 py-2 shadow-sm ring-1 ring-inset ring-customGreen-300 focus:ring-5 focus:ring-inset focus:ring-customGreen-600 focus:outline-1 focus:outline-customGreen-400 focus:shadow-md sm:text-sm sm:leading-6"
+                name="projectAssociation"
+                required={true}
+                type="text"
+              />
+            </div>
+          </div>
+          <div
+            className="my-4"
+          >
+            <label
+              htmlFor="username"
+            >
+              Username
+            </label>
+            <input
+              className="mt-2 block text-md w-full rounded-md border-0 px-3 py-2 shadow-sm ring-1 ring-inset ring-customGreen-300 focus:ring-5 focus:ring-inset focus:ring-customGreen-600 focus:outline-1 focus:outline-customGreen-400 focus:shadow-md sm:text-sm sm:leading-6"
+              name="username"
+              required={true}
+              type="text"
+            />
+          </div>
+          <div
+            className="my-4"
+          >
+            <label
+              htmlFor="password"
+            >
+              Password
+            </label>
+            <input
+              className="mt-2 block text-md w-full rounded-md border-0 px-3 py-2 shadow-sm ring-1 ring-inset ring-customGreen-300 focus:ring-5 focus:ring-inset focus:ring-customGreen-600 focus:outline-1 focus:outline-customGreen-400 focus:shadow-md sm:text-sm sm:leading-6"
+              name="password"
+              required={true}
+              type="password"
+            />
+          </div>
+          <div
+            className="my-4"
+          >
+            <label
+              htmlFor="contactName"
+            >
+              Contact Name
+            </label>
+            <input
+              className="mt-2 block text-md w-full rounded-md border-0 px-3 py-2 shadow-sm ring-1 ring-inset ring-customGreen-300 focus:ring-5 focus:ring-inset focus:ring-customGreen-600 focus:outline-1 focus:outline-customGreen-400 focus:shadow-md sm:text-sm sm:leading-6"
+              name="contactName"
+              required={true}
+              type="text"
+            />
+          </div>
+          <div
+            className="my-4"
+          >
+            <label
+              htmlFor="contactEmail"
+            >
+              Contact Email
+            </label>
+            <input
+              className="mt-2 block text-md w-full rounded-md border-0 px-3 py-2 shadow-sm ring-1 ring-inset ring-customGreen-300 focus:ring-5 focus:ring-inset focus:ring-customGreen-600 focus:outline-1 focus:outline-customGreen-400 focus:shadow-md sm:text-sm sm:leading-6"
+              name="contactEmail"
+              required={true}
+              type="email"
+            />
+          </div>
+          <div
+            className="my-4"
+          >
+            <label
+              htmlFor="orgDescription"
+            >
+              Tell us a bit more about your organization
+            </label>
+            <textarea
+              className="mt-2 block text-md w-full rounded-md border-0 px-3 py-2 shadow-sm ring-1 ring-inset ring-customGreen-300 focus:ring-5 focus:ring-inset focus:ring-customGreen-600 focus:outline-1 focus:outline-customGreen-400 focus:shadow-md sm:text-sm sm:leading-6"
+              maxLength={500}
+              name="orgDescription"
+              required={true}
+            />
+          </div>
+          <div
+            className="my-4"
+          >
+            <label
+              htmlFor="funds"
+            >
+              Amount of Funds You Are Aiming to Reach (0 if you are not looking for funds)
+            </label>
+          </div>
+          <div
+            className="my-4"
+          >
+            <input
+              className="mt-2 block text-md w-full rounded-md border-0 px-3 py-2 shadow-sm ring-1 ring-inset ring-customGreen-300 focus:ring-5 focus:ring-inset focus:ring-customGreen-600 focus:outline-1 focus:outline-customGreen-400 focus:shadow-md sm:text-sm sm:leading-6"
+              defaultValue="0"
+              max="99999999999999999.99"
+              min="0"
+              name="funds"
+              required={true}
+              step=".01"
+              type="number"
+            />
+          </div>
+          <button
+            className="flex mt-10 mb-6 w-full justify-center rounded-md bg-customGreen-500 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-customGreen-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+            type="submit"
+          >
+            Register
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>,
+]
+`;

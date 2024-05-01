@@ -1,0 +1,149 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`CompanyEvaluationForm snapshot renders correctly 1`] = `
+<div
+  className="EvaluationPage"
+>
+  <h2>
+    Company Evaluation Form
+  </h2>
+  <p />
+  <form
+    className="EvaluationForm"
+    onSubmit={[Function]}
+  >
+    <div>
+      <label
+        htmlFor="companySize"
+      >
+        Number of Employees:
+      </label>
+      <input
+        id="companySize"
+        min="1"
+        name="companySize"
+        required={true}
+        type="number"
+      />
+    </div>
+    <div>
+      <label
+        htmlFor="revenue"
+      >
+        Revenue (USD):
+      </label>
+      <input
+        id="revenue"
+        min="0"
+        name="revenue"
+        required={true}
+        type="number"
+      />
+    </div>
+    <div>
+      <label
+        htmlFor="date"
+      >
+        Evaluation Date:
+      </label>
+      <input
+        disabled={true}
+        id="date"
+        name="date"
+        required={true}
+        type="date"
+        value="2024-04-30"
+      />
+    </div>
+    <div>
+      <label
+        htmlFor="emission"
+      >
+        Emission (metric ton):
+      </label>
+      <input
+        id="emission"
+        min="0"
+        name="emission"
+        required={true}
+        type="number"
+      />
+    </div>
+    <div>
+      <label
+        htmlFor="electricity"
+      >
+        Electricity (kWh):
+      </label>
+      <input
+        id="electricity"
+        min="0"
+        name="electricity"
+        required={true}
+        type="number"
+      />
+    </div>
+    <div>
+      <label
+        htmlFor="naturalGas"
+      >
+        Natural Gas (cf):
+      </label>
+      <input
+        id="naturalGas"
+        min="0"
+        name="naturalGas"
+        required={true}
+        type="number"
+      />
+    </div>
+    <div>
+      <label
+        htmlFor="water"
+      >
+        Water (cubic meter):
+      </label>
+      <input
+        id="water"
+        min="0"
+        name="water"
+        required={true}
+        type="number"
+      />
+    </div>
+    <div>
+      <label
+        htmlFor="waste"
+      >
+        Total waste (kg):
+      </label>
+      <input
+        id="waste"
+        min="0"
+        name="waste"
+        required={true}
+        type="number"
+      />
+    </div>
+    <div>
+      <label
+        htmlFor="recycled"
+      >
+        Recycled waste (kg):
+      </label>
+      <input
+        id="recycled"
+        min="0"
+        name="recycled"
+        required={true}
+        type="number"
+      />
+    </div>
+    <button
+      type="submit"
+    >
+      Submit
+    </button>
+  </form>
+</div>
+`;

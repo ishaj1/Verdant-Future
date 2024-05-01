@@ -1,3 +1,4 @@
+"""Tests helper function for evaluation""" 
 def calculate_rating(company_input, benchmark, negative=False):
     initial = 50
     performance = company_input - benchmark

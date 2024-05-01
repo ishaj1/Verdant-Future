@@ -1,0 +1,34 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Transaction Page matches snapshot 1`] = `
+<div
+  className="App"
+>
+  <div
+    className="CreditInformation"
+  >
+    <div>
+      Price per credit: $
+      0.1
+    </div>
+    <div>
+      Credits: 
+      10
+    </div>
+    <div>
+      Total Cost: $
+      1
+    </div>
+  </div>
+  <button
+    onClick={[Function]}
+  >
+    Confirm
+  </button>
+  <button
+    onClick={[Function]}
+  >
+    Cancel
+  </button>
+</div>
+`;

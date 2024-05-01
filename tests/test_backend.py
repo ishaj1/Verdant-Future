@@ -1,3 +1,5 @@
+"""A test database have been set up and populated with test data prior to running these test cases""" 
+
 import sys
 import os
 # Get the absolute path of the project root directory
@@ -27,8 +29,7 @@ def test_register_new_company_user(client):
         'contact_email': 'john@example.com',
         'details': 'Company details',
         'funds_required': 10000,
-        'funds_received': 0,
-        'payment_id': 'payment123'
+        'funds_received': 0
     })
     data = json.loads(response.data)
     assert data['register'] == True
@@ -45,8 +46,7 @@ def test_register_new_project_user(client):
         'contact_email': 'alice@example.com',
         'details': 'Company details',
         'funds_required': 10000,
-        'funds_received': 0,
-        'payment_id': 'payment123'
+        'funds_received': 0
     })
     data = json.loads(response.data)
     assert data['register'] == True
@@ -92,7 +92,7 @@ def test_invalid_login(client):
 
 def test_display_project_profile(client):
     # Test displaying a project profile
-    response = client.get('/display_profile', query_string={
+    response = client.get('/display_profile', data={
         'username': 'projectA',
         'isProject': 'true'
     })
@@ -103,7 +103,7 @@ def test_display_project_profile(client):
 
 def test_display_company_profile(client):
     # Test displaying a company profile
-    response = client.get('/display_profile', query_string={
+    response = client.get('/display_profile', data={
         'username': 'companyA',
         'isProject': 'false'
     })
@@ -114,7 +114,7 @@ def test_display_company_profile(client):
 
 def test_nonexistent_profile(client):
     # Test displaying a profile that doesn't exist
-    response = client.get('/display_profile', query_string={
+    response = client.get('/display_profile', data={
         'username': 'nonexistent_user',
         'isProject': 'true'
     })
@@ -155,7 +155,7 @@ def test_view_projects(client):
 
 def test_get_evaluated_first_time(client):
     # Simulate form data
-    form_data = {
+    data = {
         "username": "companyA",
         "company_size": 100,
         "revenue": 100000,
@@ -169,12 +169,12 @@ def test_get_evaluated_first_time(client):
     }
 
     # Send POST request with form data
-    response = client.post('/get_evaluated', data=form_data)
+    response = client.post('/get_evaluated', data=data)
 
     # Verify response
-    data = json.loads(response.data)
+    response_data = json.loads(response.data)
     assert response.status_code == 200
-    assert data['evaluate'] == True
+    assert response_data['evaluate'] == True
 
     # Check if green_credits are updated correctly
     cursor = conn.cursor()
@@ -195,7 +195,7 @@ def test_get_evaluated_after_first_time(client):
     cursor.close()
 
     # Simulate form data
-    form_data = {
+    data = {
         "username": "companyA",
         "company_size": 100,
         "revenue": 90000,
@@ -209,12 +209,12 @@ def test_get_evaluated_after_first_time(client):
     }
 
     # Send POST request with form data
-    response = client.post('/get_evaluated', data=form_data)
+    response = client.post('/get_evaluated', data=data)
 
     # Verify response
-    data = json.loads(response.data)
+    response_data = json.loads(response.data)
     assert response.status_code == 200
-    assert data['evaluate'] == True
+    assert response_data['evaluate'] == True
 
     # Check if green_credits are updated correctly
     cursor = conn.cursor()
