@@ -18,7 +18,7 @@ function RegisterForm() {
 
   const registerUser = (e) => {
     e.preventDefault();
-    const form = e.currentTarget;
+    const form = e.currentTarget.elements;
     const orgName = form.orgName.value;
     const projectAssociation = form.projectAssociation?.value;
     const username = form.username.value;

@@ -16,8 +16,7 @@ function CompanyEvaluationForm() {
 
   const evaluateCompany = (e) => {
     e.preventDefault();
-    const form = e.currentTarget;
-    console.log("form data: ", form.companySize)
+    const form = e.currentTarget.elements;
     const companySize = form.companySize.value;
     const revenue = form.revenue.value;
     const emission = form.emission.value;

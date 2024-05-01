@@ -24,7 +24,7 @@ function UpdateProfileForm() {
 
   const updateProfile = (e) => {
     e.preventDefault();
-    const form = e.currentTarget;
+    const form = e.currentTarget.elements;
     const orgName = form.orgName.value;
     const projectAssociation = form.projectAssociation?.value;
     const password = form.password.value;
