@@ -30,7 +30,7 @@ function LoginForm({ setLoginActive }) {
   const loginUser = (e) => {
     e.preventDefault();
 
-    const form = e.currentTarget;
+    const form = e.currentTarget.elements;
     const username = form.username.value;
     const password = form.password.value;
     const loginData = {
