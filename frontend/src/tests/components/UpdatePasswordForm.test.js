@@ -16,6 +16,10 @@ jest.mock('../../hooks/useAuth', () => ({
 }));
 
 describe('UpdatePasswordForm', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
   it('submits update password form with valid data', async () => {
     axios.post.mockResolvedValueOnce({ data: { changePassword: true } });
 
@@ -58,4 +62,30 @@ describe('UpdatePasswordForm', () => {
 
     expect(getByText('New passwords do not match.')).toBeInTheDocument();
   });
+
+  it('informs user if the request to change their password was unsuccessful', async () => {
+    axios.post.mockResolvedValueOnce({ data: { changePassword: false } });
+    const { getByLabelText, getByText } = render(<UpdatePasswordForm setReturnMessage={() => {}} setShowForm={() => {}} />);
+
+    fireEvent.change(getByLabelText("Current Password"), { target: { value: "incorrectpasswd"} });
+    fireEvent.change(getByLabelText("New Password"), { target: { value: "newpasswd"} });
+    fireEvent.change(getByLabelText("Confirm New Password"), { target: { value: "newpasswd" }});
+
+    fireEvent.submit(getByText("Change Password"));
+
+    await waitFor( () => {
+      expect(axios.post).toHaveBeenCalledTimes(1);
+    })
+    expect(axios.post).toHaveBeenCalledWith('/update_password', {
+      isProject: false,
+      username: "testUser",
+      old_password: "incorrectpasswd",
+      new_password: "newpasswd",
+    },
+    {
+      headers: {"Content-Type": "application/x-www-form-urlencoded" },
+    });
+
+    expect(getByText("Could not update password. Please check if the current password is correctly entered.")).toBeInTheDocument();
+  })
 });
