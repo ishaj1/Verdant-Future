@@ -40,20 +40,22 @@ describe('UpdatePasswordForm', () => {
         username: "testUser", 
         old_password: 'oldpassword',
         new_password: 'newpassword',
+      },
+      {
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
       });
-      expect(getByText('Password Updated')).toBeInTheDocument();
     });
   });
 
-//   it('displays error message if new passwords do not match', async () => {
-//     const { getByLabelText, getByText } = render(<UpdatePasswordForm setReturnMessage={() => {}} setShowForm={() => {}} />);
+  it('displays error message if new passwords do not match', () => {
+    const { getByLabelText, getByText } = render(<UpdatePasswordForm setReturnMessage={() => {}} setShowForm={() => {}} />);
 
-//     fireEvent.change(getByLabelText('Current Password'), { target: { value: 'oldpassword' } });
-//     fireEvent.change(getByLabelText('New Password'), { target: { value: 'newpassword' } });
-//     fireEvent.change(getByLabelText('Confirm New Password'), { target: { value: 'differentpassword' } });
+    fireEvent.change(getByLabelText('Current Password'), { target: { value: 'oldpassword' } });
+    fireEvent.change(getByLabelText('New Password'), { target: { value: 'newpassword' } });
+    fireEvent.change(getByLabelText('Confirm New Password'), { target: { value: 'differentpassword' } });
 
-//     fireEvent.submit(getByLabelText('Change Password'));
+    fireEvent.submit(getByText('Change Password'));
 
-//     expect(getByText('New passwords do not match.')).toBeInTheDocument();
-//   });
+    expect(getByText('New passwords do not match.')).toBeInTheDocument();
+  });
 });
