@@ -24,6 +24,6 @@ dist-ssr
 *.sw?
 
 # Testing generated snapshots
-frontend/src/tests/pages/__snapshots__/
-frontend/src/tests/components/__snapshots__/
+src/tests/pages/__snapshots__/
+src/tests/components/__snapshots__/
 
