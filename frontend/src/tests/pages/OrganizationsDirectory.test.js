@@ -52,8 +52,8 @@ it("handles errors during data retrieval", async () => {
     render(<Router> <OrganizationsDirectory /> </Router>);
   
     await waitFor(() => {
-      expect(screen.getByText("Error retreiving project data.")).toBeInTheDocument();
-      expect(screen.getByText("Error retrieving company data.")).toBeInTheDocument();
+      expect(screen.getByText(/Error retrieving project data./)).toBeInTheDocument();
+      expect(screen.getByText(/Error retrieving company data./)).toBeInTheDocument();
     });
   });
 });
