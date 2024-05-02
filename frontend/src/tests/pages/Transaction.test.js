@@ -1,13 +1,13 @@
 import React from "react";
 import { render, fireEvent, waitFor, screen } from "@testing-library/react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, MemoryRouter } from "react-router-dom";
 import axios from "../../api/axios";
 import Transaction from "../../pages/Transaction";
 
 jest.mock("react-router-dom", () => ({
   ...jest.requireActual("react-router-dom"),
-  useLocation: jest.fn(),
   useNavigate: jest.fn(),
+  useLocation: jest.fn(),
 }));
 
 jest.mock("../../api/axios", () => ({
@@ -20,11 +20,7 @@ jest.mock("../../hooks/useAuth", () => ({
   }));
 
 describe("Transaction Page", () => {
-//   afterEach(() => {
-//     jest.clearAllMocks();
-//   });
-
-  beforeEach(() => {
+  afterEach(() => {
     jest.clearAllMocks();
   });
 
@@ -35,20 +31,34 @@ describe("Transaction Page", () => {
 //   });
 
   it("submits transaction successfully", async () => {
-    useLocation.mockReturnValue({ state: { total_cost: 100, price: 10, credits: 10, sendToUser: "testuser", isTrade: true } });
     axios.post.mockResolvedValueOnce({
       data: {
         success: true,
         details: "Transaction successful",
       },
     });
+    const locationState = {
+      price: 1000,
+      credits: 10,
+      total_cost: 10000,
+      sendToUser: "testuser", 
+      isTrade: true
+    };
+    useLocation.mockReturnValue({ state: locationState });
 
-    render(<Transaction />);
-    fireEvent.click(screen.getByText("Confirm"));
+    render(
+      <MemoryRouter>
+        <Transaction />
+      </MemoryRouter>
+    );
+    fireEvent.submit(screen.getByRole('button', { name: 'Confirm' }));
 
-    // Wait for navigation to "/transaction-success"
+    await waitFor(() => {
+      expect(axios.post).toHaveBeenCalledTimes(1);
+    });
+
     expect(useNavigate).toHaveBeenCalledTimes(1);
-    expect(useNavigate).toHaveBeenCalledWith("/transaction-success", {
+    expect(useNavigate).toHaveBeenCalledWith("/company_transfer", {
       state: { details: "Transaction successful" },
     });
   });

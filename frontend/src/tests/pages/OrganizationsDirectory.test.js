@@ -49,16 +49,11 @@ it("handles errors during data retrieval", async () => {
     axios.get.mockRejectedValueOnce(new Error("Error retrieving projects"));
     axios.get.mockRejectedValueOnce(new Error("Error retrieving companies"));
   
-    const { getByText } = render(
-      <Router>
-        <OrganizationsDirectory />
-      </Router>
-    );
+    render(<Router> <OrganizationsDirectory /> </Router>);
   
-    // Wait for error messages to be rendered
     await waitFor(() => {
-      expect(screen.getByText("Error retrieving projects")).toBeInTheDocument();
-      expect(screen.getByText("Error retrieving companies")).toBeInTheDocument();
+      expect(screen.getByText("Error retreiving project data.")).toBeInTheDocument();
+      expect(screen.getByText("Error retrieving company data.")).toBeInTheDocument();
     });
   });
 });

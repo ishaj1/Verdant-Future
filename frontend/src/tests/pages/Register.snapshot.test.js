@@ -3,7 +3,7 @@ import renderer from "react-test-renderer";
 import { BrowserRouter as Router } from "react-router-dom";
 import Register from "../../pages/Register";
 
-test("RegisterPage matches snapshot", () => {
+test("RegisterPage snapshot", () => {
   const tree = renderer.create(<Router>
     <Register />
     </Router>).toJSON();

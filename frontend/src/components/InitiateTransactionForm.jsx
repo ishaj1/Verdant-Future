@@ -34,6 +34,7 @@ export default function InitiateTransactionForm({ isTrade, uid }) {
         step={1}
         defaultValue={numCredits}
         name="numCredits"
+        id="numCredits"
         onChange={updateCredits}
         required
       />

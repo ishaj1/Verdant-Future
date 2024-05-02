@@ -13,7 +13,7 @@ jest.mock('../../hooks/useAuth', () => ({
     }),
 }));
 
-describe('PendingTransactions Component', () => {
+describe('PendingTransactions', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });

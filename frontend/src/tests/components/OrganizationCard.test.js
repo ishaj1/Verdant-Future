@@ -4,7 +4,7 @@ import { BrowserRouter as Router } from 'react-router-dom';
 
 import OrganizationCard from '../../components/OrganizationCard';
 
-describe('OrganizationCard component', () => {
+describe('OrganizationCard', () => {
   const organization = {
     description: 'Test description',
     id: 1,

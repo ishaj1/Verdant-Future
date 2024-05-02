@@ -7,7 +7,7 @@ import useAuth from '../../hooks/useAuth';
 jest.mock('../../api/axios');
 jest.mock('../../hooks/useAuth');
 
-describe('TransactionHistory component', () => {
+describe('TransactionHistory', () => {
   beforeEach(() => {
     useAuth.mockReturnValue({ auth: { username: 'testUser' } });
   });
@@ -19,20 +19,20 @@ describe('TransactionHistory component', () => {
     ];
     axios.get.mockResolvedValueOnce({ data: mockTransactions });
   
-    const { getAllByText } = render(<TransactionHistory />);
+    render(<TransactionHistory />);
   
     await waitFor(() => {
-      expect(getAllByText('To: testUser')).toHaveLength(2);
+      expect(screen.getAllByText('To: testUser')).toHaveLength(2);
     });
   });
 
   it('renders "Transaction History" when no transactions are fetched', async () => {
     axios.get.mockResolvedValueOnce({ data: [] });
 
-    const { getByText } = render(<TransactionHistory />);
+    render(<TransactionHistory />);
 
     await waitFor(() => {
-      expect(getByText('Transaction History')).toBeInTheDocument();
+      expect(screen.getByText('Transaction History')).toBeInTheDocument();
     });
   });
 });

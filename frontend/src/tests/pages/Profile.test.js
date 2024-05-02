@@ -1,20 +1,25 @@
 import React from "react";
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, waitFor, screen, fireEvent } from "@testing-library/react";
 import { BrowserRouter as Router } from "react-router-dom";
 import Profile from "../../pages/Profile";
 import axios from "../../api/axios";
 
-// Mock axios to prevent actual HTTP requests during testing
 jest.mock("../../api/axios", () => ({
   get: jest.fn(),
 }));
 
-describe("Profile Page", () => {
-  afterEach(() => {
-    jest.clearAllMocks();
-  });
+jest.mock('../../hooks/useAuth', () => ({
+  __esModule: true,
+  default: () => ({
+    auth: {
+      username: 'testUser',
+      isProject: true, 
+    },
+  }),
+}));
 
-  it("renders profile data correctly", async () => {
+describe("Profile Page", () => {
+  beforeEach(() => {
     const mockProfileData = {
       isProject: true,
       project_name: "Project Name",
@@ -27,92 +32,47 @@ describe("Profile Page", () => {
     };
 
     axios.get.mockResolvedValueOnce({ data: { records: mockProfileData } });
-
-    render(<Router>
-        <Profile />
-        </Router>);
-
-    expect(await screen.findByText("Project Name")).toBeVisible()
-    expect(screen.getByText(/Project Details/i)).toBeInTheDocument();
-    expect(screen.getByText(/Funds Received: 1000/i)).toBeInTheDocument();
-    expect(screen.getByText(/Funding Goal: 5000/i)).toBeInTheDocument();
-    expect(screen.getByText(/Contact Name: John Doe/i)).toBeInTheDocument();
-    expect(screen.getByText(/Contact Details: john@example.com/i)).toBeInTheDocument();
   });
 
-//   it("displays 'Update Profile' link when user is authenticated and viewing own profile", async () => {
-//     const mockAuth = {
-//       isProject: true,
-//       username: "project_username",
-//     };
+  it("renders profile data correctly", async () => {
+    render(<Router> <Profile /> </Router>);
 
-//     const mockProfileData = {
-//       isProject: true,
-//       project_name: "Project Name",
-//       project_username: "project_username",
-//     };
+    await waitFor(() => {
+      expect(screen.getByText("Project Name")).toBeInTheDocument();
+      expect(screen.getByText("Project Details")).toBeInTheDocument();
+      expect(screen.getByText("Funds Received: 1000")).toBeInTheDocument();
+      expect(screen.getByText("Funding Goal: 5000")).toBeInTheDocument();
+      expect(screen.getByText("Contact Name: John Doe")).toBeInTheDocument();
+      expect(screen.getByText("Contact Details: john@example.com")).toBeInTheDocument();
+    });
+  });
 
-//     axios.get.mockResolvedValueOnce({ data: { records: mockProfileData } });
+  it("displays 'Update Profile' link when user is authenticated and viewing own profile", async () => {
+    render(<Router> <Profile /> </Router>);
 
-//     render(<Router>
-//         <Profile />
-//         </Router>);
+    await waitFor(() => {
+      expect(screen.findByText("Update Profile")).toBeInTheDocument();
+    });
 
-//     expect(await screen.findByText(/Update Profile/i)).toBeInTheDocument();
-//   });
+  });
 
-//   it("displays 'Invest' button when user is authenticated and viewing company profile", async () => {
-//     const mockAuth = {
-//       isProject: false,
-//       username: "company_username",
-//     };
+  it("displays 'Invest' button when user is authenticated and viewing company profile", async () => {
+    render(<Router> <Profile /> </Router>);
 
-//     // Mock profile data for company
-//     const mockProfileData = {
-//       isProject: false,
-//       company_name: "Company Name",
-//       company_username: "company_username",
-//     };
+    expect(await screen.findByText("Invest")).toBeInTheDocument();
+  });
 
-//     axios.get.mockResolvedValueOnce({ data: { records: mockProfileData } });
+  it("shows 'Update Password' form when user clicks 'Update Password' button", async () => {
+    render(<Router> <Profile /> </Router>);
 
-//     render(<Router>
-//         <Profile />
-//         </Router>);
+    password_button = screen.getByRole('button', { name: 'Update Password' })
+    fireEvent.click(password_button);
 
-//     // Assert that 'Invest' button is displayed
-//     expect(await screen.findByText(/Invest/i)).toBeInTheDocument();
-//   });
-
-//   it("shows 'Update Password' form when user clicks 'Update Password' button", async () => {
-//     // Mock authenticated user
-//     const mockAuth = {
-//       isProject: true,
-//       username: "project_username",
-//     };
-
-//     // Mock profile data for authenticated user
-//     const mockProfileData = {
-//       isProject: true,
-//       project_name: "Project Name",
-//       project_username: "project_username",
-//     };
-
-//     axios.get.mockResolvedValueOnce({ data: { records: mockProfileData } });
-
-//     render(<Router>
-//         <Profile />
-//         </Router>);
-
-//     // Click 'Update Password' button
-//     fireEvent.click(await screen.findByText(/Update Password/i));
-
-//     // Assert that 'Update Password' form is displayed
-//     expect(await screen.findByText(/Current Password:/i)).toBeInTheDocument();
-//     expect(screen.getByText(/New Password:/i)).toBeInTheDocument();
-//     expect(screen.getByText(/Confirm New Password:/i)).toBeInTheDocument();
-//     expect(screen.getByText(/Update Password/i)).toBeInTheDocument();
-//   });
+    expect(screen.findByText("Current Password")).toBeInTheDocument();
+    expect(screen.getByText("New Password")).toBeInTheDocument();
+    expect(screen.getByText("Confirm New Password")).toBeInTheDocument();
+    expect(screen.getByText("Update Password")).toBeInTheDocument();
+  });
 
   // Add more test cases for other user authentication scenarios and interactions
 });

@@ -13,7 +13,7 @@ jest.mock('../../hooks/useLogout', () => ({
   default: jest.fn(),
 }));
 
-describe('Header component', () => {
+describe('Header snapshots', () => {
   it('matches the snapshot when user is authenticated', () => {
     const tree = renderer
       .create(
