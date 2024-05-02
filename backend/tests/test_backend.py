@@ -2,12 +2,12 @@
 
 import sys
 import os
-# Get the absolute path of the project root directory
+# Get the absolute path of the backend directory and add to the Python path
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-# Add the project root directory to the Python path
+# print("Project_root: ", project_root)
 sys.path.insert(0, project_root)
 # print(sys.path)
-from backend.registration import app, conn
+from payment import app, conn
 
 import pytest
 import json
@@ -29,7 +29,9 @@ def test_register_new_company_user(client):
         'contact_email': 'john@example.com',
         'details': 'Company details',
         'funds_required': 10000,
-        'funds_received': 0
+        'funds_received': 0,
+        'payment_id': 'payment1234'
+        
     })
     data = json.loads(response.data)
     assert data['register'] == True
@@ -46,7 +48,8 @@ def test_register_new_project_user(client):
         'contact_email': 'alice@example.com',
         'details': 'Company details',
         'funds_required': 10000,
-        'funds_received': 0
+        'funds_received': 0,
+        'payment_id': 'payment1234'
     })
     data = json.loads(response.data)
     assert data['register'] == True
@@ -92,21 +95,17 @@ def test_invalid_login(client):
 
 def test_display_project_profile(client):
     # Test displaying a project profile
-    response = client.get('/display_profile', data={
-        'username': 'projectA',
-        'isProject': 'true'
-    })
-    data = json.loads(response.data)
+    response = client.get('/display_profile?username=projectA&isProject=true')
+
+    data = response.json
     assert response.status_code == 200
     assert 'records' in data
     assert 'project_password' not in data['records']  # Ensure password is not included
 
 def test_display_company_profile(client):
     # Test displaying a company profile
-    response = client.get('/display_profile', data={
-        'username': 'companyA',
-        'isProject': 'false'
-    })
+    response = client.get('/display_profile?username=companyA&isProject=false')
+
     data = json.loads(response.data)
     assert response.status_code == 200
     assert 'records' in data
@@ -114,12 +113,10 @@ def test_display_company_profile(client):
 
 def test_nonexistent_profile(client):
     # Test displaying a profile that doesn't exist
-    response = client.get('/display_profile', data={
-        'username': 'nonexistent_user',
-        'isProject': 'true'
-    })
-    data = json.loads(response.data)
+    response = client.get('/display_profile?username=nonexistent_user&isProject=false')
+
     assert response.status_code == 200
+    data = json.loads(response.data)
     assert 'message' in data
     assert data['message'] == 'No company found!'
 
