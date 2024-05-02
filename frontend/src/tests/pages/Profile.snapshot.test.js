@@ -3,11 +3,36 @@ import renderer from "react-test-renderer";
 import Profile from "../../pages/Profile";
 import { BrowserRouter as Router } from "react-router-dom";
 
-// Mock BrowserRouter to prevent errors related to routing
-jest.mock("react-router-dom", () => ({
-  ...jest.requireActual("react-router-dom"),
-  useLocation: jest.fn().mockReturnValue({ pathname: "/profile" }),
-  useParams: jest.fn().mockReturnValue({ id: "123" }),
+jest.mock('react-router', () => ({
+  ...jest.requireActual('react-router'),
+  useLocation: jest.fn().mockReturnValue({ pathname: '/profile/' }),
+  useParams: jest.fn().mockReturnValue({ id: '123' }),
+}));
+
+jest.mock('../../api/axios', () => {
+  const mockProfileData = {
+    project_name: "Project Name",
+    project_username: "project_username",
+    project_details: "Project Details",
+    funds_received: 1000,
+    funds_required: 5000,
+    contact_name: "John Doe",
+    contact_detail: "john@example.com",
+  };
+
+  return {
+    get: jest.fn(() => Promise.resolve({ data: { records: mockProfileData } })),
+  };
+});
+
+jest.mock('../../hooks/useAuth', () => ({
+  __esModule: true,
+  default: () => ({
+    auth: {
+      username: 'testUser',
+      isProject: false,
+    },
+  }),
 }));
 
 describe("Profile Page", () => {
