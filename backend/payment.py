@@ -102,7 +102,7 @@ def registerAuth():
 
     cursor = conn.cursor()
 
-    if isCompany:
+    if isCompany == "true":
         query = (
             "SELECT company_username FROM Company WHERE company_username = %s"
         )
@@ -492,6 +492,7 @@ def project_transfer_funds():
   payee_id = dest
   amount_transferred = amount
   transaction_name = trans.id
+  #transaction_name = trans["id"] # for testing purpose
   credits_transferred = int(amount)/1000
   query = "INSERT INTO Project_Transaction VALUES(%s, %s, %s, %s, %s, %s, %s)"
   cursor.execute(
@@ -593,6 +594,7 @@ def company_transfer_response():
         # amount *=0.95
         trans = stripe.Transfer.create(
         amount= amount,
+        
         currency='usd',
         destination= "acct_1P5t9bQSnkzLsREY"
         # source_transaction = 'acct_1Oe5AZKlgwtgt0eB' # Use the transfer ID from the previous transfer
@@ -607,6 +609,7 @@ def company_transfer_response():
             query2,
             (
             trans.id,
+            #trans["id"], # for testing purpose
             transaction_status,
             transaction_name
             )
@@ -632,7 +635,7 @@ def company_transfer_response():
 
         conn.commit()
         cursor.close()
-
+        #print("Request is accepted")
         return {'message': 'Funds transferred successfully', "success": True}
     elif(action == "declined"):
         cursor.execute("DELETE FROM Company_Transaction WHERE transaction_name = %s AND transfer_status = 'pending'", transaction_name)
@@ -640,12 +643,15 @@ def company_transfer_response():
         cursor.close()
         return {'message': 'Transaction has been declined by the company', "success": True}
     elif(action == "cancelled"):
+        #print("cancelled request is called")
         cursor.execute("DELETE FROM Company_Transaction WHERE transaction_name = %s AND transfer_status = 'pending'", transaction_name)
         conn.commit()
         cursor.close()
         return {'message': 'Transaction has been cancelled by the company', "success": True}
   except:
     cursor.close()
+    #print("transaction_name", transaction_name)
+    #print("Request could not be fulfilled")
     return {'message': 'Request could not be fulfilled', "success": False}
   
 @app.route('/get_past_transactions', methods=['GET'])

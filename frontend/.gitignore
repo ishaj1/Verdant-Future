@@ -22,3 +22,8 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Testing generated snapshots
+src/tests/pages/__snapshots__/
+src/tests/components/__snapshots__/
+

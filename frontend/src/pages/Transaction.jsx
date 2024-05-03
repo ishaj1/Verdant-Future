@@ -54,9 +54,9 @@ export default function Transaction() {
     <div className="App">
       {message && <p>{message}</p>}
       <div className="CreditInformation">
-        <div>Price per credit: ${state.price / 100}</div>
+        <div>Price per credit: ${(state.price / 100).toFixed(2)}</div>
         <div>Credits: {state.credits}</div>
-        <div>Total Cost: ${state.total_cost / 100}</div>
+        <div>Total Cost: ${(state.total_cost / 100).toFixed(2)}</div>
       </div>
       <button onClick={submitTransaction}>Confirm</button>
       <button

@@ -16,7 +16,7 @@ function CompanyEvaluationForm() {
 
   const evaluateCompany = (e) => {
     e.preventDefault();
-    const form = e.currentTarget;
+    const form = e.currentTarget.elements;
     const companySize = form.companySize.value;
     const revenue = form.revenue.value;
     const emission = form.emission.value;
@@ -44,6 +44,7 @@ function CompanyEvaluationForm() {
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
       })
       .then((response) => {
+        console.log("response: ", response)
         if (response.data.evaluate == true) {
           navigate("/evaluation-success");
         } else {
@@ -62,12 +63,12 @@ function CompanyEvaluationForm() {
       <form className="EvaluationForm" onSubmit={(e) => evaluateCompany(e)}>
         <div>
           <label htmlFor="companySize">Number of Employees:</label>
-          <input type="number" name="companySize" min="1" required />
+          <input type="number" id="companySize" name="companySize" min="1" required />
         </div>
 
         <div>
           <label htmlFor="revenue">Revenue (USD):</label>
-          <input type="number" name="revenue" min="0" required />
+          <input type="number" id="revenue" name="revenue" min="0" required />
         </div>
 
         <div>
@@ -75,6 +76,7 @@ function CompanyEvaluationForm() {
           <input
             type="date"
             name="date"
+            id="date"
             value={currentDateLocal.split("T")[0]}
             required
             disabled
@@ -83,32 +85,32 @@ function CompanyEvaluationForm() {
 
         <div>
           <label htmlFor="emission">Emission (metric ton):</label>
-          <input type="number" name="emission" min="0" required />
+          <input type="number" id="emission" name="emission" min="0" required />
         </div>
 
         <div>
           <label htmlFor="electricity">Electricity (kWh):</label>
-          <input type="number" name="electricity" min="0" required />
+          <input type="number" id="electricity" name="electricity" min="0" required />
         </div>
 
         <div>
           <label htmlFor="naturalGas">Natural Gas (cf):</label>
-          <input type="number" name="naturalGas" min="0" required />
+          <input type="number" id="naturalGas" name="naturalGas" min="0" required />
         </div>
 
         <div>
           <label htmlFor="water">Water (cubic meter):</label>
-          <input type="number" name="water" min="0" required />
+          <input type="number" id="water" name="water" min="0" required />
         </div>
 
         <div>
           <label htmlFor="waste">Total waste (kg):</label>
-          <input type="number" name="waste" min="0" required />
+          <input type="number" id="waste" name="waste" min="0" required />
         </div>
 
         <div>
           <label htmlFor="recycled">Recycled waste (kg):</label>
-          <input type="number" name="recycled" min="0" required />
+          <input type="number" id="recycled" name="recycled" min="0" required />
         </div>
 
         <button type="submit">Submit</button>

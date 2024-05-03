@@ -10,6 +10,7 @@ export default function OrganizationsDirectory() {
   const [errors, setErrors] = useState("");
 
   const queryOrganizations = () => {
+    let gotError = false;
     axios
       .get("/view_companies")
       .then((response) => {
@@ -19,7 +20,8 @@ export default function OrganizationsDirectory() {
         }
       })
       .catch((error) => {
-        setErrors("Error retrieving company data.");
+        setErrors((err) => err + "Error retrieving company data.");
+        gotError = true;
       });
 
     axios
@@ -31,7 +33,9 @@ export default function OrganizationsDirectory() {
         }
       })
       .catch((error) => {
-        setErrors(errors + "Error retreiving project data.");
+        setErrors(
+          (err) => err + (gotError ? " " : "") + "Error retrieving project data."
+        );
       });
   };
 

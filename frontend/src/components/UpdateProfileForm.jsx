@@ -24,7 +24,7 @@ function UpdateProfileForm() {
 
   const updateProfile = (e) => {
     e.preventDefault();
-    const form = e.currentTarget;
+    const form = e.currentTarget.elements;
     const orgName = form.orgName.value;
     const projectAssociation = form.projectAssociation?.value;
     const password = form.password.value;
@@ -79,6 +79,7 @@ function UpdateProfileForm() {
         <input
           type="text"
           name="orgName"
+          id="orgName"
           defaultValue={
             auth.isProject ? curProfileData?.project_name : curProfileData?.company_name
           }
@@ -90,6 +91,7 @@ function UpdateProfileForm() {
             <input
               type="text"
               name="projectAssociation"
+              id="projectAssociation"
               defaultValue={curProfileData?.project_association}
               required
             />
@@ -102,6 +104,7 @@ function UpdateProfileForm() {
         <input
           type="text"
           name="contactName"
+          id="contactName"
           defaultValue={curProfileData?.contact_name}
           required
         />
@@ -109,6 +112,7 @@ function UpdateProfileForm() {
         <input
           type="email"
           name="contactEmail"
+          id="contactEmail"
           defaultValue={curProfileData?.contact_detail}
           required
         />
@@ -116,6 +120,7 @@ function UpdateProfileForm() {
         <textarea
           maxLength={500}
           name="orgDescription"
+          id="orgDescription"
           defaultValue={
             auth.isProject
               ? curProfileData?.project_details
@@ -133,6 +138,7 @@ function UpdateProfileForm() {
           step=".01"
           defaultValue={curProfileData?.funds_required}
           name="fundsRequired"
+          id="fundsRequired"
           required
         />
         <label htmlFor="fundsReceived">Amount of Funds You Have Received</label>
@@ -143,12 +149,14 @@ function UpdateProfileForm() {
           step=".01"
           defaultValue={curProfileData?.funds_received}
           name="fundsReceived"
+          id="fundsReceived"
           required
         />
         <label htmlFor="paymentID">Payment ID</label>
         <input
           type="text"
           name="paymentID"
+          id="paymentID"
           defaultValue={curProfileData?.payment_id}
           required
         />

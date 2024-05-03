@@ -11,7 +11,12 @@ import PendingTransactions from "../components/PendingTransactions";
 
 export default function ProfilePage() {
   const path = useLocation().pathname;
-  const uid = useParams().id;
+  console.log(path);
+  const uidmatch = /(?<=^\/profile\/|^\/company\/|^\/project\/)[^\/]*/
+  console.log(uidmatch);
+  const uid = path.match(uidmatch)[0];
+  
+
   const { auth } = useAuth();
   const [profileData, setProfileData] = useState();
   const [errors, setErrors] = useState();

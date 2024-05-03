@@ -30,7 +30,7 @@ function LoginForm({ setLoginActive }) {
   const loginUser = (e) => {
     e.preventDefault();
 
-    const form = e.currentTarget;
+    const form = e.currentTarget.elements;
     const username = form.username.value;
     const password = form.password.value;
     const loginData = {
@@ -93,9 +93,9 @@ function LoginForm({ setLoginActive }) {
           onSubmit={(e) => loginUser(e)}
         >
           <label htmlFor="username">Username</label>
-          <input type="text" name="username" className="block text-md w-full rounded-md border-0 px-3 py-2 shadow-sm ring-1 ring-inset ring-customGreen-300 focus:ring-5 focus:ring-inset focus:ring-customGreen-600 focus:outline-1 focus:outline-customGreen-400 focus:shadow-md sm:text-sm sm:leading-6"  required />
+          <input type="text" id="username" name="username" className="block text-md w-full rounded-md border-0 px-3 py-2 shadow-sm ring-1 ring-inset ring-customGreen-300 focus:ring-5 focus:ring-inset focus:ring-customGreen-600 focus:outline-1 focus:outline-customGreen-400 focus:shadow-md sm:text-sm sm:leading-6"  required />
           <label htmlFor="password">Password</label>
-          <input type="password" name="password" className="block text-md w-full rounded-md border-0 px-3 py-2 shadow-sm ring-1 ring-inset ring-customGreen-300 focus:ring-5 focus:ring-inset focus:ring-customGreen-600 focus:outline-1 focus:outline-customGreen-400 focus:shadow-md sm:text-sm sm:leading-6"  required />
+          <input type="password" id="password" name="password" className="block text-md w-full rounded-md border-0 px-3 py-2 shadow-sm ring-1 ring-inset ring-customGreen-300 focus:ring-5 focus:ring-inset focus:ring-customGreen-600 focus:outline-1 focus:outline-customGreen-400 focus:shadow-md sm:text-sm sm:leading-6"  required />
           <input type="submit" value="Login" className="flex w-full justify-center rounded-md bg-customGreen-500 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-customGreen-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" />
         </form>
       </div>

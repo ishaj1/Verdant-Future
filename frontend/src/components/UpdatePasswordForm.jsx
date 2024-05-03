@@ -10,7 +10,7 @@ export default function UpdatePasswordForm({ setReturnMessage, setShowForm }) {
   const updatePassword = (e) => {
     e.preventDefault();
 
-    const form = e.currentTarget;
+    const form = e.currentTarget.elements;
     const old_password = form.old_password.value;
     const new_password = form.new_password.value;
     const verify_password = form.verify_password.value;
@@ -33,7 +33,6 @@ export default function UpdatePasswordForm({ setReturnMessage, setShowForm }) {
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
       })
       .then((response) => {
-        console.log(response);
         if (response.data.changePassword == false) {
           setMessage(
             "Could not update password. Please check if the current password is correctly entered."
@@ -54,11 +53,11 @@ export default function UpdatePasswordForm({ setReturnMessage, setShowForm }) {
         </>
       )}
       <label htmlFor="old_password">Current Password</label>
-      <input type="password" name="old_password" required />
+      <input type="password" id="old_password" name="old_password" required />
       <label htmlFor="new_password">New Password</label>
-      <input type="password" name="new_password" required />
+      <input type="password" id="new_password" name="new_password" required />
       <label htmlFor="verify_password">Confirm New Password</label>
-      <input type="password" name="verify_password" required />
+      <input type="password" id="verify_password" name="verify_password" required />
 
       <button type="submit">Change Password</button>
     </form>

@@ -18,7 +18,7 @@ function RegisterForm() {
 
   const registerUser = (e) => {
     e.preventDefault();
-    const form = e.currentTarget;
+    const form = e.currentTarget.elements;
     const orgName = form.orgName.value;
     const projectAssociation = form.projectAssociation?.value;
     const username = form.username.value;
@@ -190,6 +190,7 @@ function RegisterForm() {
                 <input
                   type="text"
                   name="orgName"
+                  id="orgName"
                   className="mt-2 block text-md w-full rounded-md border-0 px-3 py-2 shadow-sm ring-1 ring-inset ring-customGreen-300 focus:ring-5 focus:ring-inset focus:ring-customGreen-600 focus:outline-1 focus:outline-customGreen-400 focus:shadow-md sm:text-sm sm:leading-6"
                   required
                 />
@@ -199,6 +200,7 @@ function RegisterForm() {
                     <input
                       type="text"
                       name="projectAssociation"
+                      id="projectAssociation"
                       required
                       className="mt-2 block text-md w-full rounded-md border-0 px-3 py-2 shadow-sm ring-1 ring-inset ring-customGreen-300 focus:ring-5 focus:ring-inset focus:ring-customGreen-600 focus:outline-1 focus:outline-customGreen-400 focus:shadow-md sm:text-sm sm:leading-6"
                     />
@@ -210,6 +212,7 @@ function RegisterForm() {
                 <input
                   type="text"
                   name="username"
+                  id="username"
                   required
                   className="mt-2 block text-md w-full rounded-md border-0 px-3 py-2 shadow-sm ring-1 ring-inset ring-customGreen-300 focus:ring-5 focus:ring-inset focus:ring-customGreen-600 focus:outline-1 focus:outline-customGreen-400 focus:shadow-md sm:text-sm sm:leading-6"
                 />
@@ -219,6 +222,7 @@ function RegisterForm() {
                 <input
                   type="password"
                   name="password"
+                  id="password"
                   required
                   className="mt-2 block text-md w-full rounded-md border-0 px-3 py-2 shadow-sm ring-1 ring-inset ring-customGreen-300 focus:ring-5 focus:ring-inset focus:ring-customGreen-600 focus:outline-1 focus:outline-customGreen-400 focus:shadow-md sm:text-sm sm:leading-6"
                 />
@@ -228,6 +232,7 @@ function RegisterForm() {
                 <input
                   type="text"
                   name="contactName"
+                  id="contactName"
                   required
                   className="mt-2 block text-md w-full rounded-md border-0 px-3 py-2 shadow-sm ring-1 ring-inset ring-customGreen-300 focus:ring-5 focus:ring-inset focus:ring-customGreen-600 focus:outline-1 focus:outline-customGreen-400 focus:shadow-md sm:text-sm sm:leading-6"
                 />
@@ -237,6 +242,7 @@ function RegisterForm() {
                 <input
                   type="email"
                   name="contactEmail"
+                  id="contactEmail"
                   required
                   className="mt-2 block text-md w-full rounded-md border-0 px-3 py-2 shadow-sm ring-1 ring-inset ring-customGreen-300 focus:ring-5 focus:ring-inset focus:ring-customGreen-600 focus:outline-1 focus:outline-customGreen-400 focus:shadow-md sm:text-sm sm:leading-6"
                 />
@@ -248,6 +254,7 @@ function RegisterForm() {
                 <textarea
                   maxLength={500}
                   name="orgDescription"
+                  id="orgDescription"
                   required
                   className="mt-2 block text-md w-full rounded-md border-0 px-3 py-2 shadow-sm ring-1 ring-inset ring-customGreen-300 focus:ring-5 focus:ring-inset focus:ring-customGreen-600 focus:outline-1 focus:outline-customGreen-400 focus:shadow-md sm:text-sm sm:leading-6"
                 ></textarea>
@@ -266,6 +273,7 @@ function RegisterForm() {
                   step=".01"
                   defaultValue="0"
                   name="funds"
+                  id="funds"
                   required
                   className="mt-2 block text-md w-full rounded-md border-0 px-3 py-2 shadow-sm ring-1 ring-inset ring-customGreen-300 focus:ring-5 focus:ring-inset focus:ring-customGreen-600 focus:outline-1 focus:outline-customGreen-400 focus:shadow-md sm:text-sm sm:leading-6"
                 />

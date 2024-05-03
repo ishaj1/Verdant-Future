@@ -59,11 +59,11 @@ CREATE TABLE Company_Transaction(
 );
 
 CREATE TABLE Project_Transaction(
-    payer_id varchar(200),
-    payee_id varchar(200),
+    payer_id varchar(200) not null,
+    payee_id varchar(200) not null,
     transaction_name varchar(50) not null,
-    sender_username varchar(50),
-    receiver_username varchar(50),
+    sender_username varchar(50) not null,
+    receiver_username varchar(50) not null,
     amount_transferred varchar(50) not null,
     credits_transferred varchar(50) not null,
     primary key (transaction_name, payer_id, payee_id),
