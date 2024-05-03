@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import UpdatePasswordForm from "../components/UpdatePasswordForm";
 import PendingTransactions from "../components/PendingTransactions";
 import TransactionHistory from "../components/TransactionHistory";
+import InitiateTransactionForm from "../components/InitiateTransactionForm";
 import fav1 from "../icons/leaves.png";
 import fav2 from "../icons/green_credits.png";
 import fav3 from "../icons/search.png";
