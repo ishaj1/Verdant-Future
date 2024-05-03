@@ -12,6 +12,8 @@ import RequireAuth from "./components/RequireAuth";
 import EvaluationSuccess from "./pages/EvaluationSuccess";
 import UpdateProfileForm from "./components/UpdateProfileForm";
 import TransactionResult from "./pages/TransactionResult";
+import PendingTransactions from "./pages/PendingTransactions";
+import TransactionHistory from "./pages/TransactionHistory";
 
 function App() {
   const router = createBrowserRouter([
@@ -68,6 +70,14 @@ function App() {
     {
       path: "/transaction-success",
       element: <RequireAuth children={<TransactionResult />} />,
+    },
+    {
+      path: "/pending-trades",
+      element: <RequireAuth children={<PendingTransactions />} />,
+    },
+    {
+      path: "/transaction-history",
+      element: <RequireAuth children={<TransactionHistory />} />,
     },
     { path: "/evaluation", element: <RequireAuth children={<Evaluation />} /> },
     {
