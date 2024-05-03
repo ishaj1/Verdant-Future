@@ -76,6 +76,7 @@ export default function OrganizationsDirectory({ show }) {
                 description={org.project_details}
                 key={index}
                 name={org.project_name}
+                username={org.project_username}
                 profile_link={`/project/${org.project_username}`}
                 project_association={org.project_association}
                 contact_name={org.contact_name}
@@ -91,6 +92,7 @@ export default function OrganizationsDirectory({ show }) {
               description={org.company_details}
               key={index}
               name={org.company_name}
+              username={org.company_username}
               profile_link={`/company/${org.company_username}`}
               contact_name={org.contact_name}
               contact_detail={org.contact_detail}

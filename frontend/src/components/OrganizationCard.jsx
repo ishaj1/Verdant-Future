@@ -6,6 +6,7 @@ export default function OrganizationCard({
   id,
   profile_link,
   name,
+  username,
   project_association,
   contact_name,
   contact_detail,
@@ -20,7 +21,7 @@ export default function OrganizationCard({
     e.preventDefault();
     navigate("/transaction", {
       state: {
-        sendToUser: name,
+        sendToUser: username,
         isTrade: !isProject,
       },
     });
