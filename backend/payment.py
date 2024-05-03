@@ -538,14 +538,14 @@ def company_transfer_funds():
   amount = request.form["amount"]
   sender_username = request.form["source"]
   receiver_username = request.form["destination"]
-  cursor.execute('SELECT payment_id FROM Company WHERE company_username =  %s', (receiver_username))
+  cursor.execute('SELECT total_credits, payment_id FROM Company WHERE company_username =  %s', (receiver_username))
   dest= cursor.fetchone()['payment_id']
-  cursor.execute('SELECT total_credits, payment_id FROM Company WHERE company_username =  %s', (sender_username))
-  src = cursor.fetchone()['payment_id']
-  sender_credit = float(cursor.fetchone()['total_credits'])
-  # prevent transaction if sender has less than 50 credits
-  if(sender_credit < 50):
+  receiver_credit = float(cursor.fetchone()['total_credits'])
+  # prevent transaction if receiver has less than 50 credits
+  if(receiver_credit < 50):
       return {"create": False, 'message': "Cannot request trade with company with less than 50 green credits."}
+  cursor.execute('SELECT payment_id FROM Company WHERE company_username =  %s', (sender_username))
+  src = cursor.fetchone()['payment_id']
   payer_id = src
   payee_id = dest
   amount_transferred = amount
@@ -588,11 +588,11 @@ def company_transfer_response():
         sender_username = cursor.fetchone()['sender_username']
         cursor.execute("SELECT receiver_username FROM Company_Transaction WHERE transaction_name = %s", (transaction_name))
         receiver_username = cursor.fetchone()['receiver_username']
-
-        cursor.execute('SELECT total_credits FROM Company WHERE company_username =  %s', (sender_username))
-        sender_credit = float(cursor.fetchone()['total_credits'])
-        # prevent transaction if sender has less than 50 credits
-        if(sender_credit < 50):
+        
+        cursor.execute('SELECT total_credits FROM Company WHERE company_username =  %s', (receiver_username))
+        receiver_credit = float(cursor.fetchone()['total_credits'])
+        # prevent transaction if receiver has less than 50 credits
+        if(receiver_credit < 50):
             return {"success": False, 'message': "You don't meet the minimum requirement for credit transaction (50)."}
   
         result = stripe.Charge.create(
