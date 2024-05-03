@@ -82,6 +82,7 @@ export default function OrganizationsDirectory({ show }) {
                 contact_detail={org.contact_detail}
                 funds_received={org.funds_received}
                 funds_required={org.funds_required}
+                isProject={true}
               />
             ))}
             {companiesData && companiesData.map((org, index) => (
@@ -95,6 +96,7 @@ export default function OrganizationsDirectory({ show }) {
               contact_detail={org.contact_detail}
               funds_received={org.funds_received}
               funds_required={org.funds_required}
+              isProject={false}
             />            
             
             ))}
