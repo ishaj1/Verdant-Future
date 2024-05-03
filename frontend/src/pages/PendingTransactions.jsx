@@ -56,43 +56,47 @@ export default function PendingTransactions({}) {
   return (
     <>
       <Header />
-      <div>
-        <h2>Pending Offers</h2>
-        {message && <div>{message}</div>}
-        {transactions.map((transaction, index) => (
-          <div key={index}>
-            <p>From: {transaction.sender_username}</p>
-            <p>To: {transaction.receiver_username}</p>
-            <p>Credits: {transaction.credits_transferred}</p>
-            <p>Amount: ${(transaction.amount_transferred / 100).toFixed(2)}</p>
-            {transaction.sender_username == auth.username ? (
-              <button
-                onClick={() => {
-                  respondToTransaction(transaction.transaction_name, "cancelled");
-                }}
-              >
-                Cancel
-              </button>
-            ) : (
-              <>
-                <button
-                  onClick={() => {
-                    respondToTransaction(transaction.transaction_name, "accepted");
-                  }}
-                >
-                  Accept
-                </button>
-                <button
-                  onClick={() => {
-                    respondToTransaction(transaction.transaction_name, "declined");
-                  }}
-                >
-                  Decline
-                </button>
-              </>
-            )}
+      <div className="relative h-screen bg-customGreen-50">
+        <div className="flex justify-center items-start py-10">
+          <div className="font-montserrat w-full max-w-lg p-10 bg-white shadow-md rounded-md">
+            <h2 className="text-center p-2 font-semibold text-lg">Pending Offers</h2>
+            {message && <div>{message}</div>}
+            {transactions.map((transaction, index) => (
+              <div key={index}>
+                <p>From: {transaction.sender_username}</p>
+                <p>To: {transaction.receiver_username}</p>
+                <p>Credits: {transaction.credits_transferred}</p>
+                <p>Amount: ${(transaction.amount_transferred / 100).toFixed(2)}</p>
+                {transaction.sender_username == auth.username ? (
+                  <button
+                    onClick={() => {
+                      respondToTransaction(transaction.transaction_name, "cancelled");
+                    }}
+                  >
+                    Cancel
+                  </button>
+                ) : (
+                  <>
+                    <button
+                      onClick={() => {
+                        respondToTransaction(transaction.transaction_name, "accepted");
+                      }}
+                    >
+                      Accept
+                    </button>
+                    <button
+                      onClick={() => {
+                        respondToTransaction(transaction.transaction_name, "declined");
+                      }}
+                    >
+                      Decline
+                    </button>
+                  </>
+                )}
+              </div>
+            ))}
           </div>
-        ))}
+        </div>
       </div>
     </>
   );

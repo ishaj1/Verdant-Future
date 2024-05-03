@@ -11,6 +11,7 @@ import fav3 from "../icons/search.png";
 import fav4 from "../icons/gear.png";
 import fav5 from "../icons/password.png";
 import fav6 from "../icons/trade.png";
+import fav7 from "../icons/history.png";
 
 export default function ProfilePage() {
   const path = useLocation().pathname;
@@ -137,7 +138,7 @@ export default function ProfilePage() {
                       <img src={fav6} alt="Favicon" className="w-20 h-20 m-2 p-2" />
                     </div>
                     <div className="bottom-0 right-0"> 
-                      <h3 className="text-right text-lg font-montserrat font-semibold">Pending Trading Requests</h3>
+                      <h3 className="text-right text-lg font-montserrat font-semibold">Pending Trade Requests</h3>
                     </div>
                   </div>
                 </div>         
@@ -150,7 +151,7 @@ export default function ProfilePage() {
                 <div className="bg-customGreen-100 bg-opacity-30 p-4 my-10 rounded-lg shadow-md hover:bg-customGreen-200 transition-colors duration-300 ease-in-out h-full">
                   <div className="flex flex-col justify-between h-full">
                     <div>
-                      <img src={""} alt="Favicon" className="w-20 h-20 m-2 p-2" />
+                      <img src={fav7} alt="Favicon" className="w-20 h-20 m-2 p-2" />
                     </div>
                     <div className="bottom-0 right-0"> 
                       <h3 className="text-right text-lg font-montserrat font-semibold">Transaction History</h3>

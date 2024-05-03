@@ -56,25 +56,50 @@ export default function Transaction() {
   return (
     <>
       <Header />
-      <div className="App">
-        {message && <p>{message}</p>}
-        <form className="InitiateTransactionForm" onSubmit={(e) => submitTransaction(e)}>
-          <label htmlFor="numCredits">Credits</label>
-          <input
-            type="number"
-            min={1}
-            step={1}
-            defaultValue={numCredits}
-            name="numCredits"
-            id="numCredits"
-            onChange={updateCredits}
-            required
-          />
-          <p>Total Cost: ${totalCost/100}</p>
+      <div className="relative h-screen bg-customGreen-50">
+        <div className="flex justify-center items-start py-10">
+          <div className="font-montserrat w-full max-w-lg p-10 bg-white shadow-md rounded-md">
+            <div className="App">
+              <h2 className="text-center p-2 font-semibold text-lg">Transaction Detail</h2>
+              { message  && 
+              <div class="flex items-center p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
+                <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+                </svg>
+                <span class="sr-only">Info</span>
+                <div>
+                  <span class="font-medium">{message}</span>
+                </div>
+              </div>
+              }
+              
+              <form className="InitiateTransactionForm" onSubmit={(e) => submitTransaction(e)}>
+                <div className="my-4">
+                  <label htmlFor="numCredits" className="mr-4">Credits</label>
+                  <input
+                    type="number"
+                    min={1}
+                    step={1}
+                    defaultValue={numCredits}
+                    name="numCredits"
+                    id="numCredits"
+                    onChange={updateCredits}
+                    required
+                    className="mt-2 text-md w-1/4 rounded-md border-0 px-3 py-2 shadow-sm ring-1 ring-inset ring-customGreen-300 focus:ring-5 focus:ring-inset focus:ring-customGreen-600 focus:outline-1 focus:outline-customGreen-400 focus:shadow-md sm:text-sm sm:leading-6"
+                  />
+                </div>
+                <p><strong>Total Cost</strong>: ${totalCost/100}</p>
 
-          <button type="submit" name="submit">Submit</button>
-        </form>
-        <button onClick={() => navigate(-1)}>Cancel</button>
+                <button type="submit" name="submit" className="flex w-full justify-center rounded-md my-5 bg-gradient-to-br from-customGreen-200 via-customGreen-400 to-customGreen-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-gradient-to-bl focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+                  Submit
+                  </button>
+              </form>
+              <button onClick={() => navigate(-1)} className="flex w-full justify-center rounded-md mt-4 bg-gradient-to-br bg-customGreen-200 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-customGreen-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+                Cancel
+                </button>
+            </div>
+          </div>
+        </div>
       </div>
     </>
   );
