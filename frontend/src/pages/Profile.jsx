@@ -5,9 +5,6 @@ import axios from "../api/axios";
 import useAuth from "../hooks/useAuth";
 import { Link } from "react-router-dom";
 import UpdatePasswordForm from "../components/UpdatePasswordForm";
-import PendingTransactions from "../components/PendingTransactions";
-import TransactionHistory from "../components/TransactionHistory";
-import InitiateTransactionForm from "../components/InitiateTransactionForm";
 import fav1 from "../icons/leaves.png";
 import fav2 from "../icons/green_credits.png";
 import fav3 from "../icons/search.png";
@@ -17,9 +14,7 @@ import fav6 from "../icons/trade.png";
 
 export default function ProfilePage() {
   const path = useLocation().pathname;
-  console.log(path);
-  const uidmatch = /(?<=^\/profile\/|^\/company\/|^\/project\/)[^\/]*/
-  console.log(uidmatch);
+  const uidmatch = /(?<=^\/profile\/|^\/company\/|^\/project\/)[^\/]*/;
   const uid = path.match(uidmatch)[0];
   
 
@@ -27,8 +22,6 @@ export default function ProfilePage() {
   const [profileData, setProfileData] = useState();
   const [errors, setErrors] = useState();
   const [showPasswordForm, setShowPasswordForm] = useState(false);
-  const [showTransactionForm, setShowTransactionForm] = useState(false);
-  const [numTransactionResponses, setNumTransactionResponses] = useState(0);
 
   const queryProfileData = (username, isProject) => {
     axios
@@ -136,8 +129,8 @@ export default function ProfilePage() {
             }
 
             {/* Pending Trading Request */}
-            {(profileData.funds_required > 0) && (
-              <Link to="/">
+            {!auth.isProject && (
+              <Link to="/pending-trades">
                 <div className="bg-customGreen-100 bg-opacity-30 p-4 my-10 rounded-lg shadow-md hover:bg-customGreen-200 transition-colors duration-300 ease-in-out h-full">
                   <div className="flex flex-col justify-between h-full">
                     <div>
@@ -145,6 +138,22 @@ export default function ProfilePage() {
                     </div>
                     <div className="bottom-0 right-0"> 
                       <h3 className="text-right text-lg font-montserrat font-semibold">Pending Trading Requests</h3>
+                    </div>
+                  </div>
+                </div>         
+              </Link>
+            )}
+
+            {/* Transaction History */}
+            {(auth.username == uid &&
+              <Link to="/transaction-history">
+                <div className="bg-customGreen-100 bg-opacity-30 p-4 my-10 rounded-lg shadow-md hover:bg-customGreen-200 transition-colors duration-300 ease-in-out h-full">
+                  <div className="flex flex-col justify-between h-full">
+                    <div>
+                      <img src={""} alt="Favicon" className="w-20 h-20 m-2 p-2" />
+                    </div>
+                    <div className="bottom-0 right-0"> 
+                      <h3 className="text-right text-lg font-montserrat font-semibold">Transaction History</h3>
                     </div>
                   </div>
                 </div>         
@@ -243,30 +252,6 @@ export default function ProfilePage() {
 
           </div>
           
-          {auth?.isProject === false && auth?.username != uid && (
-            <>
-              <button
-                onClick={() => {
-                  setShowTransactionForm(true);
-                }}
-              >
-                {profileData.isProject ? "Invest" : "Trade"}
-              </button>
-              {showTransactionForm && (
-                <>
-                  <InitiateTransactionForm uid={uid} isTrade={!profileData.isProject} />
-                  <button onClick={() => setShowTransactionForm(false)}>Cancel</button>
-                </>
-              )}
-            </>
-          )}
-          <div>
-            <PendingTransactions
-              numTransactionResponses={numTransactionResponses}
-              setNumTransactionResponses={setNumTransactionResponses}
-            />
-            <TransactionHistory key={numTransactionResponses} />
-          </div>    
         </main> 
       </>
       )}
