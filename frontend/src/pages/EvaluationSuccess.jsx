@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "../api/axios";
 import useAuth from "../hooks/useAuth";
-import Header from "./Header";
+import Header from "../components/Header";
 import fav from "../icons/green_credits.png"
 function EvaluationSuccess() {
   const [greenCredit, setGreenCredit] = useState(null);

@@ -5,6 +5,14 @@ import axios from "../api/axios";
 import useAuth from "../hooks/useAuth";
 import { Link } from "react-router-dom";
 import UpdatePasswordForm from "../components/UpdatePasswordForm";
+import PendingTransactions from "../components/PendingTransactions";
+import TransactionHistory from "../components/TransactionHistory";
+import fav1 from "../icons/leaves.png";
+import fav2 from "../icons/green_credits.png";
+import fav3 from "../icons/search.png";
+import fav4 from "../icons/gear.png";
+import fav5 from "../icons/password.png";
+import fav6 from "../icons/trade.png";
 
 export default function ProfilePage() {
   const path = useLocation().pathname;
@@ -260,7 +268,7 @@ export default function ProfilePage() {
           </div>    
         </main> 
       </>
-      )};
+      )}
     </>
   );
 }
