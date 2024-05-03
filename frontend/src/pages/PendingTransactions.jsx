@@ -1,11 +1,9 @@
 import { useEffect, useState } from "react";
 import axios from "../api/axios";
 import useAuth from "../hooks/useAuth";
+import Header from "../components/Header";
 
-export default function PendingTransactions({
-  numTransactionResponses,
-  setNumTransactionResponses,
-}) {
+export default function PendingTransactions({}) {
   const { auth } = useAuth();
   const [transactions, setTransactions] = useState([]);
   const [message, setMessage] = useState();
@@ -19,6 +17,7 @@ export default function PendingTransactions({
   };
 
   const respondToTransaction = (transaction_name, action) => {
+    setMessage();
     axios
       .post(
         "/company_response",
@@ -47,7 +46,6 @@ export default function PendingTransactions({
           "Sorry, your request could not be processed. Please try again later."
         );
       });
-    setNumTransactionResponses(numTransactionResponses + 1);
     getTransactions();
   };
 
@@ -56,43 +54,46 @@ export default function PendingTransactions({
   }, []);
 
   return (
-    <div>
-      <h2>Pending Offers</h2>
-      {message && <div>{message}</div>}
-      {transactions.map((transaction, index) => (
-        <div key={index}>
-          <p>From: {transaction.sender_username}</p>
-          <p>To: {transaction.receiver_username}</p>
-          <p>Credits: {transaction.credits_transferred}</p>
-          <p>Amount: ${transaction.amount_transferred}</p>
-          {transaction.sender_username == auth.username ? (
-            <button
-              onClick={() => {
-                respondToTransaction(transaction.transaction_name, "cancelled");
-              }}
-            >
-              Cancel
-            </button>
-          ) : (
-            <>
+    <>
+      <Header />
+      <div>
+        <h2>Pending Offers</h2>
+        {message && <div>{message}</div>}
+        {transactions.map((transaction, index) => (
+          <div key={index}>
+            <p>From: {transaction.sender_username}</p>
+            <p>To: {transaction.receiver_username}</p>
+            <p>Credits: {transaction.credits_transferred}</p>
+            <p>Amount: ${(transaction.amount_transferred / 100).toFixed(2)}</p>
+            {transaction.sender_username == auth.username ? (
               <button
                 onClick={() => {
-                  respondToTransaction(transaction.transaction_name, "accepted");
+                  respondToTransaction(transaction.transaction_name, "cancelled");
                 }}
               >
-                Accept
+                Cancel
               </button>
-              <button
-                onClick={() => {
-                  respondToTransaction(transaction.transaction_name, "declined");
-                }}
-              >
-                Decline
-              </button>
-            </>
-          )}
-        </div>
-      ))}
-    </div>
+            ) : (
+              <>
+                <button
+                  onClick={() => {
+                    respondToTransaction(transaction.transaction_name, "accepted");
+                  }}
+                >
+                  Accept
+                </button>
+                <button
+                  onClick={() => {
+                    respondToTransaction(transaction.transaction_name, "declined");
+                  }}
+                >
+                  Decline
+                </button>
+              </>
+            )}
+          </div>
+        ))}
+      </div>
+    </>
   );
 }
