@@ -43,6 +43,8 @@ export default function Transaction() {
           navigate("/transaction-success", { state: { details: res.data.details } });
         } else if (res?.data?.create == true) {
           navigate(`/profile/${auth.username}`);
+        } else {
+          setMessage(res.data.message)
         }
       })
       .catch((err) => {

@@ -108,7 +108,7 @@ def registerAuth():
         )
     else:
         query = (
-            "SELECT project_username FROM project WHERE project_username = %s"
+            "SELECT project_username FROM Project WHERE project_username = %s"
         )
 
     cursor.execute(query, (username))
