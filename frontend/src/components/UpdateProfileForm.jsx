@@ -73,7 +73,7 @@ function UpdateProfileForm() {
     <>
       <Header />
       
-      <div className="relative h-screen">
+      <div className="relative h-full bg-customGreen-50">
         <div className="flex justify-center items-start py-10">
           <div className="w-full max-w-md p-10 bg-white shadow-md rounded-md font-montserrat">
             <h1 className="text-center text-2xl font-bold leading-9 tracking-tight text-gray-900 mb-10">Update your profile</h1>

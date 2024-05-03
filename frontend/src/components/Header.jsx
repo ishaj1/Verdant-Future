@@ -23,12 +23,20 @@ export default function Header() {
           <li>
             <a href="#">About us</a>
           </li>
-          <li>
-            <a href="#">Projects</a>
-          </li>
-          <li>
-            <a href="#">Companies</a>
-          </li>
+
+          {auth?.username && ( 
+              <li>
+                <Link to="/projects">Projects</Link>
+              </li>
+            )
+          }
+
+          {auth?.username && ( 
+              <li>
+                <Link to="/companies">Companies</Link>
+              </li>
+            )
+          }
 
           {auth?.username ? 
             <li>
@@ -70,12 +78,19 @@ export default function Header() {
                   <li>
                     <a href="#">About us</a>
                   </li>
-                  <li>
-                    <a href="#">Projects</a>
-                  </li>
-                  <li>
-                    <a href="#">Companies</a>
-                  </li>
+                  {auth?.username && ( 
+                      <li>
+                        <Link to="/projects">Projects</Link>
+                      </li>
+                    )
+                  }
+
+                  {auth?.username && ( 
+                      <li>
+                        <Link to="/companies">Companies</Link>
+                      </li>
+                    )
+                  }
 
                   {auth?.username ?
                   <li>
