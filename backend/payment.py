@@ -480,7 +480,7 @@ def project_transfer_funds():
     source= "acct_1P5t9bQSnkzLsREY",
   )
   #result.receipt_url
-  trans_amount = int(amount)*0.95
+  trans_amount = int(int(amount)*0.95)
   trans = stripe.Transfer.create(
     amount= trans_amount,
     currency='usd',
@@ -490,10 +490,10 @@ def project_transfer_funds():
     )
   payer_id = src
   payee_id = dest
-  amount_transferred = amount
+  amount_transferred = int(amount)
   transaction_name = trans.id
   #transaction_name = trans["id"] # for testing purpose
-  credits_transferred = int(amount)/1000
+  credits_transferred = int(amount)/100/1000
   query = "INSERT INTO Project_Transaction VALUES(%s, %s, %s, %s, %s, %s, %s)"
   cursor.execute(
     query,
@@ -518,13 +518,12 @@ def project_transfer_funds():
       ),
   )
 
-  query3 = "UPDATE Project SET funds_received = %s, funds_required = funds_required - %s WHERE project_username = %s"
+  query3 = "UPDATE Project SET funds_received = funds_received + %s WHERE project_username = %s"
   cursor.execute(
     query3,
       (
-        amount_transferred,
-        amount_transferred,
-        receiver_username         
+        amount_transferred/100,
+        receiver_username
       ),
   )
 
@@ -549,7 +548,7 @@ def company_transfer_funds():
   res = ''.join(random.choices(string.ascii_uppercase +
                              string.digits, k=10))
   transaction_name = res
-  credits_transferred = int(amount)/1000
+  credits_transferred = (int(amount)/100)/1000
   transfer_status = "pending"
   query = "INSERT INTO Company_Transaction VALUES(%s, %s, %s, %s, %s, %s, %s, %s)"
   cursor.execute(
@@ -603,7 +602,7 @@ def company_transfer_response():
 
         # Update the total credit in the Company table
         transaction_status = "accepted"
-        credits_transferred = int(amount)/1000
+        credits_transferred = int(amount)/100/1000
         query2 = "UPDATE Company_Transaction SET transaction_name = %s, transfer_status = %s WHERE transaction_name = %s"
         cursor.execute(
             query2,
@@ -627,7 +626,7 @@ def company_transfer_response():
         cursor.execute(
         query4,
             (
-            amount,
+            int(amount)/100,
             credits_transferred,
             receiver_username
             ),
