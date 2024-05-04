@@ -696,6 +696,21 @@ def get_past_transactions():
     """
     query_projects = "SELECT transaction_name, sender_username, receiver_username, amount_transferred, credits_transferred from Project_Transaction WHERE (sender_username = %s OR receiver_username = %s)"
 
+    query_projects = """
+    SELECT
+        sender.company_name AS sender_company_name,
+        receiver.project_name AS receiver_project_name,
+        ct.amount_transferred,
+        ct.credits_transferred
+    FROM 
+        Project_Transaction ct
+    JOIN 
+        Company sender ON (ct.sender_username = sender.company_username)
+    JOIN
+        Project receiver ON (ct.receiver_username = receiver.project_username)
+    WHERE 
+        (ct.sender_username = %s OR ct.receiver_username = %s) 
+    """
     cursor = conn.cursor()
 
     cursor.execute(query_companies, (username, username))

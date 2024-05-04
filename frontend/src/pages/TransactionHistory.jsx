@@ -28,7 +28,7 @@ export default function TransactionHistory() {
             {transactions.map((transaction, index) => (
               <div key={index} className="border-b-2 border-gray-200 py-2">
                 <p className="mb-1"><span className="font-semibold">From:</span> {transaction.sender_company_name}</p>
-                <p className="mb-1"><span className="font-semibold">To:</span> {transaction.receiver_company_name}</p>
+                <p className="mb-1"><span className="font-semibold">To:</span> {transaction.receiver_company_name || transaction.receiver_project_name}</p>
                 <p className="mb-1"><span className="font-semibold">Credits:</span> {transaction.credits_transferred}</p>
                 <p className="mb-1"><span className="font-semibold">Amount:</span> ${transaction.amount_transferred}</p>
               </div>
