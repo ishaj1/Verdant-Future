@@ -14,12 +14,17 @@ import UpdateProfileForm from "./components/UpdateProfileForm";
 import TransactionResult from "./pages/TransactionResult";
 import PendingTransactions from "./pages/PendingTransactions";
 import TransactionHistory from "./pages/TransactionHistory";
+import AboutUs from "./pages/AboutUs";
 
 function App() {
   const router = createBrowserRouter([
     {
       path: "/",
       element: <Home />,
+    },
+    {
+      path: "/about-us",
+      element: <AboutUs />,
     },
     {
       path: "/register",
@@ -52,16 +57,22 @@ function App() {
     {
       path: "/organizations",
       element: (
-        <RequireAuth children={<OrganizationsDirectory show="organizations" />} />
+        <RequireAuth
+          children={<OrganizationsDirectory show="organizations" />}
+        />
       ),
     },
     {
       path: "/projects",
-      element: <RequireAuth children={<OrganizationsDirectory show="projects" />} />,
+      element: (
+        <RequireAuth children={<OrganizationsDirectory show="projects" />} />
+      ),
     },
     {
       path: "/companies",
-      element: <RequireAuth children={<OrganizationsDirectory show="companies" />} />,
+      element: (
+        <RequireAuth children={<OrganizationsDirectory show="companies" />} />
+      ),
     },
     {
       path: "/transaction",
