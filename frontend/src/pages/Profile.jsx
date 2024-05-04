@@ -263,7 +263,7 @@ export default function ProfilePage() {
                 <div className="bg-customGreen-100 bg-opacity-30 p-4 my-10 rounded-lg shadow-md hover:bg-customGreen-200 transition-colors duration-300 ease-in-out h-full">
                   <div className="flex flex-col justify-between h-full">
                     <div>
-                      <img src={""} alt="Favicon" className="w-20 h-20 m-2 p-2" />
+                      <img src={fav4} alt="Favicon" className="w-20 h-20 m-2 p-1" />
                     </div>
                     <div className="bottom-0 right-0">
                       <h3 className="text-right text-lg font-montserrat font-semibold">Update Payment Information</h3>
