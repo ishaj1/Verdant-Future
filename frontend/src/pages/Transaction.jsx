@@ -46,7 +46,7 @@ export default function Transaction() {
         }
       })
       .catch((err) => {
-        setMessage("Issue processing request. Please try again later.");
+        setMessage("Issue processing request. Please try again later. You may need to update your payment information (you can do so by going to your dashboard and clicking \"Update Payment Information\").");
       });
   };
 
