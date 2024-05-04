@@ -44,7 +44,7 @@ export default function OrganizationCard({
                   <div className="flex flex-col  h-full">
                       <div class="flex justify-between mb-1">
                         <span class="text-base font-medium text-customGreen-700 ">Progress</span>
-                        <span class="text-sm font-medium text-customGreen-700 dark:text-white">{(funds_received / funds_required) * 100}%</span>
+                        <span class="text-sm font-medium text-customGreen-700 dark:text-white">{Math.round((funds_received / funds_required) * 100)}%</span>
                       </div>
                       <div class="w-full bg-gray-200 rounded-full h-2.5">
                         <div class="bg-customGreen-600 h-2.5 rounded-full" style={{ width: `${Math.min(Math.max((funds_received / funds_required) * 100, 0), 100)}%` }}></div>
