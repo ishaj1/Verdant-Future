@@ -3,11 +3,13 @@ import Header from "../components/Header";
 import OrganizationCard from "../components/OrganizationCard";
 import { useState } from "react";
 import axios from "../api/axios";
+import useAuth from "../hooks/useAuth";
 
 export default function OrganizationsDirectory({ show }) {
   const [companiesData, setCompaniesData] = useState([]);
   const [projectsData, setProjectsData] = useState([]);
   const [errors, setErrors] = useState("");
+  const { auth } = useAuth();
 
   const queryCompanies = () => {
     let gotError = false;
@@ -87,7 +89,7 @@ export default function OrganizationsDirectory({ show }) {
               />
             ))}
             {companiesData && companiesData.map((org, index) => (
-              org.funds_required > 0 &&
+              org.funds_required > 0 && org.company_username != auth.username &&
               <OrganizationCard
               description={org.company_details}
               key={index}

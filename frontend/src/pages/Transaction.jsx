@@ -44,7 +44,7 @@ export default function Transaction() {
         if (res?.data?.success == true) {
           navigate("/transaction-success", { state: { details: res.data.details } });
         } else if (res?.data?.create == true) {
-          navigate(`/profile/${auth.username}`);
+          navigate(`/profile/${auth.username}`, { state: { message: "Trade Request Submitted!" }});
         }
       })
       .catch((err) => {

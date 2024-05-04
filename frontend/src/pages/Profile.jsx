@@ -13,6 +13,7 @@ import fav5 from "../icons/password.png";
 import fav6 from "../icons/trade.png";
 import fav7 from "../icons/history.png";
 
+
 export default function ProfilePage() {
   const path = useLocation().pathname;
   const uidmatch = /(?<=^\/profile\/|^\/company\/|^\/project\/)[^\/]*/;
@@ -23,6 +24,9 @@ export default function ProfilePage() {
   const [profileData, setProfileData] = useState();
   const [errors, setErrors] = useState();
   const [showPasswordForm, setShowPasswordForm] = useState(false);
+  const location = useLocation();
+  const message = location.state && location.state.message;
+
 
   const queryProfileData = (username, isProject) => {
     axios
@@ -61,7 +65,58 @@ export default function ProfilePage() {
   return (
     <>
       <Header />
-      {errors && <div>{errors}</div>}
+      { errors  && 
+              <div class="flex items-center p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
+                <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+                </svg>
+                <span class="sr-only">Info</span>
+                <div>
+                  <span class="font-medium">{errors}</span>
+                </div>
+              </div>
+      }
+
+      {message && 
+      <div className="relative isolate flex items-center gap-x-6 overflow-hidden bg-gray-50 px-6 py-2.5 sm:px-3.5 sm:before:flex-1">
+      <div
+        className="absolute left-[max(-7rem,calc(50%-52rem))] top-1/2 -z-10 -translate-y-1/2 transform-gpu blur-2xl"
+        aria-hidden="true"
+      >
+        <div
+          className="aspect-[577/310] w-[36.0625rem] bg-gradient-to-r from-[#ff80b5] to-[#9089fc] opacity-30"
+          style={{
+            clipPath:
+              'polygon(74.8% 41.9%, 97.2% 73.2%, 100% 34.9%, 92.5% 0.4%, 87.5% 0%, 75% 28.6%, 58.5% 54.6%, 50.1% 56.8%, 46.9% 44%, 48.3% 17.4%, 24.7% 53.9%, 0% 27.9%, 11.9% 74.2%, 24.9% 54.1%, 68.6% 100%, 74.8% 41.9%)',
+          }}
+        />
+      </div>
+      <div
+        className="absolute left-[max(45rem,calc(50%+8rem))] top-1/2 -z-10 -translate-y-1/2 transform-gpu blur-2xl"
+        aria-hidden="true"
+      >
+        <div
+          className="aspect-[577/310] w-[36.0625rem] bg-gradient-to-r from-[#ff80b5] to-[#9089fc] opacity-30"
+          style={{
+            clipPath:
+              'polygon(74.8% 41.9%, 97.2% 73.2%, 100% 34.9%, 92.5% 0.4%, 87.5% 0%, 75% 28.6%, 58.5% 54.6%, 50.1% 56.8%, 46.9% 44%, 48.3% 17.4%, 24.7% 53.9%, 0% 27.9%, 11.9% 74.2%, 24.9% 54.1%, 68.6% 100%, 74.8% 41.9%)',
+          }}
+        />
+      </div>
+      <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+        <p className="text-sm leading-6 text-gray-900">
+          <strong className="font-semibold">Trade Request Submitted! </strong>
+          Please wait for a response from the organization.
+        </p>
+      </div>
+      <div className="flex flex-1 justify-end">
+        <button type="button" className="-m-3 p-3 focus-visible:outline-offset-[-4px]">
+          <span className="sr-only">Dismiss</span>
+        </button>
+      </div>
+    </div>
+    }
+
       {profileData && (
       <>
         <header class="bg-white shadow">
@@ -113,10 +168,10 @@ export default function ProfilePage() {
                     <div>
                       <div class="flex justify-between mb-1">
                         <span class="text-base font-medium text-customGreen-700 ">Progress</span>
-                        <span class="text-sm font-medium text-customGreen-700 dark:text-white">{(profileData.funds_received / profileData.funds_required) * 100}%</span>
+                        <span class="text-sm font-medium text-customGreen-700 dark:text-white">{Math.round((profileData.funds_received / profileData.funds_required) * 100)}%</span>
                       </div>
                       <div class="w-full bg-gray-200 rounded-full h-2.5">
-                        <div class="bg-customGreen-600 h-2.5 rounded-full" style={{ width: `${Math.min(100, (profileData.funds_received / profileData.funds_required) * 100)}%` }}></div>
+                        <div class="bg-customGreen-600 h-2.5 rounded-full" style={{ width: `${Math.min(Math.max((profileData.funds_received / profileData.funds_required) * 100, 0), 100)}%` }}></div>
                       </div>
                     </div>
 
@@ -130,7 +185,7 @@ export default function ProfilePage() {
             }
 
             {/* Pending Trading Request */}
-            {!auth.isProject && (
+            {!auth.isProject && (profileData.funds_required > 0) && (
               <Link to="/pending-trades">
                 <div className="bg-customGreen-100 bg-opacity-30 p-4 my-10 rounded-lg shadow-md hover:bg-customGreen-200 transition-colors duration-300 ease-in-out h-full">
                   <div className="flex flex-col justify-between h-full">
@@ -212,10 +267,17 @@ export default function ProfilePage() {
             {/* Change password */}
             {auth?.username === uid && (
               <>
-                <div className="font-montserrat bg-customGreen-100 bg-opacity-30 p-4 my-10 hover:bg-customGreen-200 rounded-lg shadow-md transition-colors duration-300 ease-in-out h-full">
+                <div className="font-montserrat bg-customGreen-100 bg-opacity-30 p-4 my-10 hover:bg-customGreen-100 rounded-lg shadow-md transition-colors duration-300 ease-in-out h-full">
                   <div className="flex flex-col justify-between h-full">
                     <div>
-                      <img src={fav5} alt="Favicon" className="w-20 h-20 m-2" />
+                      <button
+                          onClick={() => {
+                            setShowPasswordForm(true);
+                            setErrors();
+                          }}
+                        >
+                        <img src={fav5} alt="Favicon" className="w-20 h-20 m-2" />
+                      </button>
                     </div>
                     <div className="bottom-0 right-0"> 
                       <h3 className="text-right text-lg font-montserrat font-semibold">
@@ -240,7 +302,7 @@ export default function ProfilePage() {
                           onClick={() => {
                             setShowPasswordForm(false);
                           }}
-                          className="flex mb-4 w-full justify-center rounded-md bg-customGreen-200 opacity-70 px-3 py-1.5 text-sm text-customGreen-800 font-semibold leading-6 text-white shadow-sm hover:bg-customGreen-500 hover:opacity-90 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                          className="flex mb-4 w-full justify-center rounded-md bg-customGreen-300 opacity-70 px-3 py-1.5 text-sm text-customGreen-800 font-semibold leading-6 text-white shadow-sm hover:bg-customGreen-500 hover:opacity-90 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                         >
                           Cancel
                         </button>

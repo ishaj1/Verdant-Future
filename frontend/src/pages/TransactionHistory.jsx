@@ -26,11 +26,11 @@ export default function TransactionHistory() {
           <div className="font-montserrat w-full max-w-lg p-10 bg-white shadow-md rounded-md">
             <h2 className="text-center p-2 font-semibold text-lg">Transaction History</h2>
             {transactions.map((transaction, index) => (
-              <div key={index}>
-                <p>From: {transaction.sender_username}</p>
-                <p>To: {transaction.receiver_username}</p>
-                <p>Credits: {transaction.credits_transferred}</p>
-                <p>Amount: ${transaction.amount_transferred}</p>
+              <div key={index} className="border-b-2 border-gray-200 py-2">
+                <p className="mb-1"><span className="font-semibold">From:</span> {transaction.sender_company_name}</p>
+                <p className="mb-1"><span className="font-semibold">To:</span> {transaction.receiver_company_name}</p>
+                <p className="mb-1"><span className="font-semibold">Credits:</span> {transaction.credits_transferred}</p>
+                <p className="mb-1"><span className="font-semibold">Amount:</span> ${transaction.amount_transferred}</p>
               </div>
             ))}
           </div>

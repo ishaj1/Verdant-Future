@@ -675,7 +675,25 @@ def company_transfer_response():
 def get_past_transactions():
     username = request.args['username']
 
-    query_companies = "SELECT transaction_name, sender_username, receiver_username, amount_transferred, credits_transferred from Company_Transaction WHERE (sender_username = %s OR receiver_username = %s) AND transfer_status = 'accepted'"
+    query_companies = """
+    SELECT 
+        ct.transaction_name,
+        ct.sender_username,
+        sender.company_name AS sender_company_name,
+        ct.receiver_username,
+        receiver.company_name AS receiver_company_name,
+        ct.amount_transferred,
+        ct.credits_transferred
+    FROM 
+        Company_Transaction ct
+    JOIN 
+        Company sender ON (ct.sender_username = sender.company_username)
+    JOIN
+        Company receiver ON (ct.receiver_username = receiver.company_username)
+    WHERE 
+        (ct.sender_username = %s OR ct.receiver_username = %s) 
+        AND ct.transfer_status = 'accepted'
+    """
     query_projects = "SELECT transaction_name, sender_username, receiver_username, amount_transferred, credits_transferred from Project_Transaction WHERE (sender_username = %s OR receiver_username = %s)"
 
     cursor = conn.cursor()
@@ -698,9 +716,29 @@ def get_pending_transactions():
 
     query_pending = "SELECT transaction_name, sender_username, receiver_username, amount_transferred, credits_transferred from Company_Transaction WHERE (sender_username = %s OR receiver_username = %s) AND transfer_status = 'pending'"
 
+    query = """
+    SELECT 
+        ct.transaction_name,
+        ct.sender_username,
+        sender.company_name AS sender_company_name,
+        ct.receiver_username,
+        receiver.company_name AS receiver_company_name,
+        ct.amount_transferred,
+        ct.credits_transferred
+    FROM 
+        Company_Transaction ct
+    JOIN 
+        Company sender ON (ct.sender_username = sender.company_username)
+    JOIN
+        Company receiver ON (ct.receiver_username = receiver.company_username)
+    WHERE 
+        (ct.sender_username = %s OR ct.receiver_username = %s) 
+        AND ct.transfer_status = 'pending'
+    """
+
     cursor = conn.cursor()
 
-    cursor.execute(query_pending, (username, username))
+    cursor.execute(query, (username, username))
     pending_transactions = cursor.fetchall()
 
     cursor.close()
