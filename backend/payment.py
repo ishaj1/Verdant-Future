@@ -20,6 +20,8 @@ CORS(app)
 app.secret_key = "secret_key"
 stripe.api_key = 'sk_test_51Oe5AZKlgwtgt0eBACDFWMTEWAP1XzGbXa4MhgJRUaPIxza3JMJqcaNj4E2820ioJgPLJZiEQyAr3Y7CODV8Hxsm00BxyqGbKO'
 
+frontend_url = "http://localhost:5173"
+
 conn = pymysql.connect(
     host="localhost",
     user="root",
@@ -690,6 +692,43 @@ def get_pending_transactions():
 
     return pending_transactions if pending_transactions else []
       
+@app.route('/check_stripe_account', methods=['POST'])
+def check_stripe_account():
+    username = request.form['username']
+    isProject = request.form['isProject']
+
+    if isProject == "true":
+        query_payment_id = "SELECT payment_id from Project WHERE project_username = %s"
+    else:
+        query_payment_id = "SELECT payment_id from Company WHERE company_username = %s"
+
+    cursor = conn.cursor()
+
+    cursor.execute(query_payment_id, (username))
+    payment_id = cursor.fetchone()['payment_id']
+
+    cursor.close()
+
+    account_info = stripe.Account.retrieve(payment_id)
+
+    # finds whether Stripe account has been onboarded and sends link to update the account
+    if (account_info['details_submitted'] == False):
+        account_link = stripe.AccountLink.create(
+            account = payment_id,
+            refresh_url = frontend_url,
+            return_url = frontend_url,
+            type = "account_onboarding",
+            collection_options = {"fields": "eventually_due"},
+        )
+        return {"onboarded" : False, "account_update_link": account_link["url"]}
+    else:
+        account_link = stripe.AccountLink.create(
+            account = payment_id,
+            refresh_url = frontend_url,
+            return_url = frontend_url,
+            type = "account_update",
+        )
+        return {"onboarded": True, "account_update_link": account_link["url"]}
 
 
 
