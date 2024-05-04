@@ -50,6 +50,7 @@ export default function Transaction() {
       .catch((err) => {
         setMessage("Issue processing request. Please try again later.");
         button.disabled = false;
+        console.log(err);
       });
   };
 
