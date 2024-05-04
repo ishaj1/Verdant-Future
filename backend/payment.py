@@ -108,7 +108,7 @@ def registerAuth():
         )
     else:
         query = (
-            "SELECT project_username FROM project WHERE project_username = %s"
+            "SELECT project_username FROM Project WHERE project_username = %s"
         )
 
     cursor.execute(query, (username))
@@ -480,7 +480,7 @@ def project_transfer_funds():
     source= "acct_1P5t9bQSnkzLsREY",
   )
   #result.receipt_url
-  trans_amount = int(amount)*0.95
+  trans_amount = int(int(amount)*0.95)
   trans = stripe.Transfer.create(
     amount= trans_amount,
     currency='usd',
@@ -490,10 +490,10 @@ def project_transfer_funds():
     )
   payer_id = src
   payee_id = dest
-  amount_transferred = amount
+  amount_transferred = int(amount)
   transaction_name = trans.id
   #transaction_name = trans["id"] # for testing purpose
-  credits_transferred = int(amount)/1000
+  credits_transferred = int(amount)/100/1000
   query = "INSERT INTO Project_Transaction VALUES(%s, %s, %s, %s, %s, %s, %s)"
   cursor.execute(
     query,
@@ -518,13 +518,12 @@ def project_transfer_funds():
       ),
   )
 
-  query3 = "UPDATE Project SET funds_received = %s, funds_required = funds_required - %s WHERE project_username = %s"
+  query3 = "UPDATE Project SET funds_received = funds_received + %s WHERE project_username = %s"
   cursor.execute(
     query3,
       (
-        amount_transferred,
-        amount_transferred,
-        receiver_username         
+        amount_transferred/100,
+        receiver_username
       ),
   )
 
@@ -539,8 +538,12 @@ def company_transfer_funds():
   amount = request.form["amount"]
   sender_username = request.form["source"]
   receiver_username = request.form["destination"]
-  cursor.execute('SELECT payment_id FROM Company WHERE company_username =  %s', (receiver_username))
+  cursor.execute('SELECT total_credits, payment_id FROM Company WHERE company_username =  %s', (receiver_username))
   dest= cursor.fetchone()['payment_id']
+  receiver_credit = float(cursor.fetchone()['total_credits'])
+  # prevent transaction if receiver has less than 50 credits
+  if(receiver_credit < 50):
+      return {"create": False, 'message': "Cannot request trade with company with less than 50 green credits."}
   cursor.execute('SELECT payment_id FROM Company WHERE company_username =  %s', (sender_username))
   src = cursor.fetchone()['payment_id']
   payer_id = src
@@ -549,7 +552,7 @@ def company_transfer_funds():
   res = ''.join(random.choices(string.ascii_uppercase +
                              string.digits, k=10))
   transaction_name = res
-  credits_transferred = int(amount)/1000
+  credits_transferred = (int(amount)/100)/1000
   transfer_status = "pending"
   query = "INSERT INTO Company_Transaction VALUES(%s, %s, %s, %s, %s, %s, %s, %s)"
   cursor.execute(
@@ -585,6 +588,13 @@ def company_transfer_response():
         sender_username = cursor.fetchone()['sender_username']
         cursor.execute("SELECT receiver_username FROM Company_Transaction WHERE transaction_name = %s", (transaction_name))
         receiver_username = cursor.fetchone()['receiver_username']
+        
+        cursor.execute('SELECT total_credits FROM Company WHERE company_username =  %s', (receiver_username))
+        receiver_credit = float(cursor.fetchone()['total_credits'])
+        # prevent transaction if receiver has less than 50 credits
+        if(receiver_credit < 50):
+            return {"success": False, 'message': "You don't meet the minimum requirement for credit transaction (50)."}
+  
         result = stripe.Charge.create(
         amount= amount,
         currency="usd",
@@ -603,7 +613,7 @@ def company_transfer_response():
 
         # Update the total credit in the Company table
         transaction_status = "accepted"
-        credits_transferred = int(amount)/1000
+        credits_transferred = int(amount)/100/1000
         query2 = "UPDATE Company_Transaction SET transaction_name = %s, transfer_status = %s WHERE transaction_name = %s"
         cursor.execute(
             query2,
@@ -627,7 +637,7 @@ def company_transfer_response():
         cursor.execute(
         query4,
             (
-            amount,
+            int(amount)/100,
             credits_transferred,
             receiver_username
             ),
