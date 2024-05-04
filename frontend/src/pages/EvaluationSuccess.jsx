@@ -51,7 +51,7 @@ function EvaluationSuccess() {
       }
       {greenCredit &&
         <div class="bg-gray-100 h-screen flex items-center">
-          <div class="bg-white p-6 md:mx-auto">
+          <div class="bg-white p-6 h-4/5 md:mx-auto">
             <img src={fav} className="w-20 h-20 mx-auto my-6"></img>
             <div class="text-center">
                 <h3 class="md:text-2xl text-base text-gray-900 font-semibold text-center">Evaluation Successful!</h3>
