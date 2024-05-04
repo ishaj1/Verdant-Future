@@ -17,9 +17,7 @@ import fav6 from "../icons/trade.png";
 
 export default function ProfilePage() {
   const path = useLocation().pathname;
-  console.log(path);
-  const uidmatch = /(?<=^\/profile\/|^\/company\/|^\/project\/)[^\/]*/
-  console.log(uidmatch);
+  const uidmatch = /(?<=^\/profile\/|^\/company\/|^\/project\/)[^\/]*/;
   const uid = path.match(uidmatch)[0];
   
 
