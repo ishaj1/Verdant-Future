@@ -20,3 +20,5 @@ The backend folder contains the code for our backend API server.
 The frontend folder contains the code for our frontend web client.
 
 We also have tests for both our backend and frontend. See the [Testing Information file](testingInfo.md) for more information.
+
+Details on how company evaluations work in Verdant Future can be found in the [Evaluation Information file](evaluationInfo.md).
