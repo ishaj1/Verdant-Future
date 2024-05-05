@@ -97,6 +97,7 @@ function UpdateProfileForm() {
                 <input
                   type="text"
                   name="orgName"
+                  id="orgName"
                   defaultValue={
                     auth.isProject ? curProfileData?.project_name : curProfileData?.company_name
                   }
@@ -112,6 +113,7 @@ function UpdateProfileForm() {
                     <input
                       type="text"
                       name="projectAssociation"
+                      id="projectAssociation"
                       defaultValue={curProfileData?.project_association}
                       required
                       class="block rounded-t-lg px-2.5 pb-2.5 pt-5 w-full text-sm text-gray-900 bg-gray-50 bg-opacity-40 dark:bg-gray-700 border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-customGreen-500 focus:outline-none focus:ring-0 focus:border-customGreen-600 peer"
@@ -125,6 +127,7 @@ function UpdateProfileForm() {
                 <input
                   type="text"
                   name="contactName"
+                  id="contactName"
                   defaultValue={curProfileData?.contact_name}
                   required
                   class="block rounded-t-lg px-2.5 pb-2.5 pt-5 w-full text-sm text-gray-900 bg-gray-50 bg-opacity-40 dark:bg-gray-700 border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-customGreen-500 focus:outline-none focus:ring-0 focus:border-customGreen-600 peer"
@@ -136,6 +139,7 @@ function UpdateProfileForm() {
                 <input
                   type="email"
                   name="contactEmail"
+                  id="contactEmail"
                   defaultValue={curProfileData?.contact_detail}
                   required
                   class="block rounded-t-lg px-2.5 pb-2.5 pt-5 w-full text-sm text-gray-900 bg-gray-50 bg-opacity-40 dark:bg-gray-700 border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-customGreen-500 focus:outline-none focus:ring-0 focus:border-customGreen-600 peer"
@@ -147,6 +151,7 @@ function UpdateProfileForm() {
                 <textarea
                   maxLength={500}
                   name="orgDescription"
+                  id="orgDescription"
                   defaultValue={
                     auth.isProject
                       ? curProfileData?.project_details
@@ -166,6 +171,7 @@ function UpdateProfileForm() {
                   step=".01"
                   defaultValue={curProfileData?.funds_required}
                   name="fundsRequired"
+                  id="fundsRequired"
                   required
                   class="block rounded-t-lg px-2.5 pb-2.5 pt-5 w-full text-sm text-gray-900 bg-gray-50 bg-opacity-40 dark:bg-gray-700 border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-customGreen-500 focus:outline-none focus:ring-0 focus:border-customGreen-600 peer"
                 />

@@ -29,7 +29,7 @@ describe("RegisterForm", () => {
         fireEvent.change(getByLabelText("Contact Name"), { target: { value: "John Doe" } });
         fireEvent.change(getByLabelText("Contact Email"), { target: { value: "john@example.com" } });
         fireEvent.change(getByLabelText("Tell us a bit more about your organization"), { target: { value: "Description" } });
-        fireEvent.change(getByLabelText("Amount of Funds You Are Aiming to Reach (0 if you are not looking for funds)"), { target: { value: "1000" } });
+        fireEvent.change(getByLabelText("Amount of Funds (USD)(0 if not looking for funds)"), { target: { value: "1000" } });
 
         fireEvent.submit(getByText("Register"));
 
@@ -65,7 +65,7 @@ describe("RegisterForm", () => {
         fireEvent.change(getByLabelText("Contact Name"), { target: { value: "John Doe" } });
         fireEvent.change(getByLabelText("Contact Email"), { target: { value: "john@example.com" } });
         fireEvent.change(getByLabelText("Tell us a bit more about your organization"), { target: { value: "Description" } });
-        fireEvent.change(getByLabelText("Amount of Funds You Are Aiming to Reach (0 if you are not looking for funds)"), { target: { value: "1000" } });
+        fireEvent.change(getByLabelText("Amount of Funds (USD)(0 if not looking for funds)"), { target: { value: "1000" } });
 
         fireEvent.submit(getByText("Register"));
 
@@ -87,7 +87,7 @@ describe("RegisterForm", () => {
         fireEvent.change(getByLabelText("Contact Name"), { target: { value: "John Doe" } });
         fireEvent.change(getByLabelText("Contact Email"), { target: { value: "john@example.com" } });
         fireEvent.change(getByLabelText("Tell us a bit more about your organization"), { target: { value: "Description" } });
-        fireEvent.change(getByLabelText("Amount of Funds You Are Aiming to Reach (0 if you are not looking for funds)"), { target: { value: "1000" } });
+        fireEvent.change(getByLabelText("Amount of Funds (USD)(0 if not looking for funds)"), { target: { value: "1000" } });
 
         fireEvent.click(getByText("Register"));
 
