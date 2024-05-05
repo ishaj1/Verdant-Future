@@ -13,9 +13,11 @@ jest.mock("../../hooks/useAuth", () => ({
   default: () => ({ auth: { username: "testUser" } }),
 }));
 
+jest.mock("../../icons/green_credits.png", () => ({}));
+
 describe("EvaluationSuccess Page", () => {
   afterEach(() => {
-    jest.clearAllMocks(); // Clear mock calls after each test
+    jest.clearAllMocks();
   });
 
   it("renders without crashing", () => {
@@ -25,13 +27,17 @@ describe("EvaluationSuccess Page", () => {
   });
 
   it("fetches green credit data and displays it", async () => {
-    const greenCreditData = {
-      green_credit: 100,
-      total_credit: 200,
-    };
-
-    // Mock axios get function to return a promise that resolves with greenCreditData
-    axios.get.mockResolvedValueOnce({ data: { credits: greenCreditData } });
+    axios.get.mockResolvedValueOnce({
+      data: {
+        credits: {
+          green_credit: 10,
+          total_credit: 20,
+        },
+        target_ratios: {},
+        comp_ratios: {},
+        ratings: {},
+      },
+    });
 
     const { getByText } = render(<Router>
         <EvaluationSuccess />
@@ -39,13 +45,19 @@ describe("EvaluationSuccess Page", () => {
 
     await waitFor(() => {
       expect(axios.get).toHaveBeenCalledWith("/get_green_credit", { params: { username: "testUser" } });
-      expect(getByText(`Your Company's Calculated Green Credit for this evaluation is: ${greenCreditData.green_credit}`)).toBeInTheDocument();
-      expect(getByText(`Your Company's Total Green Credit is updated to: ${greenCreditData.total_credit}`)).toBeInTheDocument();
+      expect(getByText("Evaluation Successful!")).toBeInTheDocument();
+      expect(getByText("Thank you for completing your evaluation.")).toBeInTheDocument();
+      expect(getByText("Emission Intensity (metric tons / capita)")).toBeInTheDocument();
+      expect(getByText("Energy Intensity (MJ / USD)")).toBeInTheDocument();
+      expect(getByText("Water Efficiency (USD / cubic meter)")).toBeInTheDocument();
+      expect(getByText("Waste Ratio (percent recycled)")).toBeInTheDocument();
+      expect(getByText(`Your Company's Calculated Green Credit for this evaluation is:`)).toBeInTheDocument();
+      expect(getByText(`Your Company's Total Green Credit is updated to:`)).toBeInTheDocument();
+      expect(getByText("GO BACK")).toBeInTheDocument();
     });
   });
 
   it("displays error message when API request fails", async () => {
-    // Mock axios get function to return a rejected promise
     axios.get.mockRejectedValueOnce(new Error("API Error"));
 
     const { getByText } = render(<Router>
@@ -59,7 +71,6 @@ describe("EvaluationSuccess Page", () => {
   });
 
   it("displays 'User Not Found' error message when no company is found", async () => {
-    // Mock axios get function to return a response indicating no company found
     axios.get.mockResolvedValueOnce({ data: { message: "No company found!" } });
 
     const { getByText } = render(<Router>

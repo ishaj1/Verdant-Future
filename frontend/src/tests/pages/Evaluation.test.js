@@ -12,9 +12,9 @@ describe("Evaluation Page", () => {
     expect(headerElement).toBeInTheDocument();
   });
 
-  it("renders 'Request an Evaluation' heading", () => {
+  it("renders 'Company Evaluation Form' heading", () => {
     render(<Evaluation />);
-    const headingElement = screen.getByText("Request an Evaluation");
+    const headingElement = screen.getByText("Company Evaluation Form");
     expect(headingElement).toBeInTheDocument();
   });
 

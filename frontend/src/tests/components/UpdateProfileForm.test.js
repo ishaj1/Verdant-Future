@@ -29,8 +29,6 @@ describe("UpdateProfileForm", () => {
           contact_email: 'john@example.com',
           details: 'Description',
           funds_required: '0',
-          funds_received: '0',
-          payment_id: '123456789',
           username: 'testuser', 
         }
       };
@@ -46,9 +44,7 @@ describe("UpdateProfileForm", () => {
     expect(getByLabelText("Contact Name")).toBeInTheDocument();
     expect(getByLabelText("Contact Email")).toBeInTheDocument();
     expect(getByLabelText("Description of Your Organization")).toBeInTheDocument();
-    expect(getByLabelText("Amount of Funds You Are Aiming to Reach (0 if you are not looking for funds)")).toBeInTheDocument();
-    expect(getByLabelText("Amount of Funds You Have Received")).toBeInTheDocument();
-    expect(getByLabelText("Payment ID")).toBeInTheDocument();
+    expect(getByLabelText("Fund Goal (0 if you are not looking for funds)")).toBeInTheDocument();
     expect(getByText("Update")).toBeInTheDocument();
   });
 
@@ -61,9 +57,7 @@ describe("UpdateProfileForm", () => {
     fireEvent.change(getByLabelText("Contact Name"), { target: { value: "New Contact Name" } });
     fireEvent.change(getByLabelText("Contact Email"), { target: { value: "newemail@example.com" } });
     fireEvent.change(getByLabelText("Description of Your Organization"), { target: { value: "New Description" } });
-    fireEvent.change(getByLabelText("Amount of Funds You Are Aiming to Reach (0 if you are not looking for funds)"), { target: { value: "1000" } });
-    fireEvent.change(getByLabelText("Amount of Funds You Have Received"), { target: { value: "500" } });
-    fireEvent.change(getByLabelText("Payment ID"), { target: { value: "payment123" } });
+    fireEvent.change(getByLabelText("Fund Goal (0 if you are not looking for funds)"), { target: { value: "1000" } });
 
     fireEvent.submit(getByText("Update"));
 
@@ -74,13 +68,12 @@ describe("UpdateProfileForm", () => {
         isProject: true,
         association: "New Association",
         username: "testUser",
-        password: "",
         contact_name: "New Contact Name",
-        contact_detail: "newemail@example.com",
+        contact_email: "newemail@example.com",
         details: "New Description",
         funds_required: "1000",
-        funds_received: "500",
-        payment_id: "payment123",
+        funds_received: undefined,
+        payment_id: undefined,
       }, { headers: { "Content-Type": "application/x-www-form-urlencoded" } });
     });
   });

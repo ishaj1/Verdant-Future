@@ -3,6 +3,15 @@ import renderer from 'react-test-renderer';
 import { BrowserRouter as Router } from 'react-router-dom';
 import OrganizationCard from '../../components/OrganizationCard';
 
+jest.mock('../../hooks/useAuth', () => ({
+  __esModule: true,
+  default: () => ({
+    auth: {
+      username: 'testUser',
+      isProject: false,
+    },
+  }),
+}));
 
 it('OrganizationCard snapshot', () => {
   const organization = {

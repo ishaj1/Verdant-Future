@@ -14,11 +14,23 @@ describe('Header component', () => {
     render(
       <BrowserRouter>
         <Header />
-      </BrowserRouter>
-    );
-    expect(screen.getByText('Organizations Directory')).toBeInTheDocument();
-    expect(screen.getByText('Profile')).toBeInTheDocument();
-    expect(screen.getByText('Logout')).toBeInTheDocument();
+      </BrowserRouter>)
+    const Companies = screen.getAllByText('Companies');
+    Companies.forEach(link => {
+      expect(link).toBeInTheDocument();
+    });
+    const Projects = screen.getAllByText('Projects');
+    Projects.forEach(link => {
+      expect(link).toBeInTheDocument();
+    });
+    const Profile = screen.getAllByText('Dashboard');
+    Profile.forEach(link => {
+      expect(link).toBeInTheDocument();
+    });
+    const Logout = screen.getAllByText('Logout');
+    Logout.forEach(link => {
+      expect(link).toBeInTheDocument();
+    });
   });
 
   test('does not render links and button when user is not authenticated', () => {
@@ -28,7 +40,8 @@ describe('Header component', () => {
         <Header />
       </BrowserRouter>
     );
-    expect(screen.queryByText('Organizations Directory')).not.toBeInTheDocument();
+    expect(screen.queryByText('Companies')).not.toBeInTheDocument();
+    expect(screen.queryByText('Projects')).not.toBeInTheDocument();
     expect(screen.queryByText('Profile')).not.toBeInTheDocument();
     expect(screen.queryByText('Logout')).not.toBeInTheDocument();
   });
@@ -42,7 +55,8 @@ describe('Header component', () => {
         <Header />
       </BrowserRouter>
     );
-    fireEvent.click(screen.getByText('Logout'));
+    // fireEvent.click(screen.getByText('Logout'));
+    fireEvent.click(screen.getAllByRole("button", { name: /Logout/i })[0]);
     expect(mockLogout).toHaveBeenCalledTimes(1);
   });
 });

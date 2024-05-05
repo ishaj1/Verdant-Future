@@ -62,19 +62,19 @@ export default function UpdatePasswordForm({ setReturnMessage, setShowForm }) {
         <label htmlFor="old_password">Current Password</label>
       </div>
       <div className="mb-2">
-        <input type="password" name="old_password" required className="mt-2 block text-md w-full rounded-md border-0 px-3 py-1 shadow-sm ring-1 ring-inset ring-customGreen-300 focus:ring-5 focus:ring-inset focus:ring-customGreen-600 focus:outline-1 focus:outline-customGreen-400 focus:shadow-md sm:text-sm sm:leading-6"/>
+        <input type="password" name="old_password" id="old_password" required className="mt-2 block text-md w-full rounded-md border-0 px-3 py-1 shadow-sm ring-1 ring-inset ring-customGreen-300 focus:ring-5 focus:ring-inset focus:ring-customGreen-600 focus:outline-1 focus:outline-customGreen-400 focus:shadow-md sm:text-sm sm:leading-6"/>
       </div>
       <div className="mb-2">
         <label htmlFor="new_password">New Password</label>
       </div>
       <div className="mb-2">
-        <input type="password" name="new_password" required className="mt-2 block text-md w-full rounded-md border-0 px-3 py-1 shadow-sm ring-1 ring-inset ring-customGreen-300 focus:ring-5 focus:ring-inset focus:ring-customGreen-600 focus:outline-1 focus:outline-customGreen-400 focus:shadow-md sm:text-sm sm:leading-6"/>
+        <input type="password" name="new_password" id="new_password" required className="mt-2 block text-md w-full rounded-md border-0 px-3 py-1 shadow-sm ring-1 ring-inset ring-customGreen-300 focus:ring-5 focus:ring-inset focus:ring-customGreen-600 focus:outline-1 focus:outline-customGreen-400 focus:shadow-md sm:text-sm sm:leading-6"/>
       </div>
       <div className="mb-2">
         <label htmlFor="verify_password">Confirm New Password</label>
       </div>
       <div className="mb-2">
-        <input type="password" name="verify_password" required className="mt-2 block text-md w-full rounded-md border-0 px-3 py-1 shadow-sm ring-1 ring-inset ring-customGreen-300 focus:ring-5 focus:ring-inset focus:ring-customGreen-600 focus:outline-1 focus:outline-customGreen-400 focus:shadow-md sm:text-sm sm:leading-6"/>
+        <input type="password" name="verify_password" id="verify_password" required className="mt-2 block text-md w-full rounded-md border-0 px-3 py-1 shadow-sm ring-1 ring-inset ring-customGreen-300 focus:ring-5 focus:ring-inset focus:ring-customGreen-600 focus:outline-1 focus:outline-customGreen-400 focus:shadow-md sm:text-sm sm:leading-6"/>
       </div>
       <div className="text-center">
         <button type="submit" className="flex w-full justify-center rounded-md mt-10 bg-gradient-to-br from-customGreen-200 via-customGreen-400 to-customGreen-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-gradient-to-bl focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Change Password</button>

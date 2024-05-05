@@ -1,14 +1,13 @@
 import React from "react";
 import renderer from "react-test-renderer";
+import { BrowserRouter as Router } from "react-router-dom";
 import Home from "../../pages/Home";
 
-jest.mock("../../components/Header", () => () => <div data-testid="mock-header">Mock Header</div>);
-jest.mock("../../components/LoginForm", () => () => <div data-testid="mock-login-form">Mock Login Form</div>);
+jest.mock("../../icons/home.png", () => ({}));
 
 describe("Home Page", () => {
   it("matches snapshot", () => {
-    const tree = renderer
-      .create(<Home />).toJSON();
+    const tree = renderer.create(<Router><Home /></Router>).toJSON();
     expect(tree).toMatchSnapshot();
   });
 });

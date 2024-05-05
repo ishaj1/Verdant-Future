@@ -35,6 +35,14 @@ jest.mock('../../hooks/useAuth', () => ({
   }),
 }));
 
+jest.mock("../../icons/leaves.png", () => ({}));
+jest.mock("../../icons/green_credits.png", () => ({}));
+jest.mock("../../icons/search.png", () => ({}));
+jest.mock("../../icons/gear.png", () => ({}));
+jest.mock("../../icons/trade.png", () => ({}));
+jest.mock("../../icons/password.png", () => ({}));
+jest.mock("../../icons/history.png", () => ({}));
+
 describe("Profile Page", () => {
   it("matches the snapshot", () => {
     const tree = renderer.create(<Router>
