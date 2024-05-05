@@ -20,6 +20,8 @@ CORS(app)
 app.secret_key = "secret_key"
 stripe.api_key = 'sk_test_51Oe5AZKlgwtgt0eBACDFWMTEWAP1XzGbXa4MhgJRUaPIxza3JMJqcaNj4E2820ioJgPLJZiEQyAr3Y7CODV8Hxsm00BxyqGbKO'
 
+frontend_url = "http://localhost:5173"
+
 conn = pymysql.connect(
     host="localhost",
     user="root",
@@ -108,7 +110,7 @@ def registerAuth():
         )
     else:
         query = (
-            "SELECT project_username FROM project WHERE project_username = %s"
+            "SELECT project_username FROM Project WHERE project_username = %s"
         )
 
     cursor.execute(query, (username))
@@ -556,8 +558,12 @@ def company_transfer_funds():
   amount = request.form["amount"]
   sender_username = request.form["source"]
   receiver_username = request.form["destination"]
-  cursor.execute('SELECT payment_id FROM Company WHERE company_username =  %s', (receiver_username))
+  cursor.execute('SELECT total_credits, payment_id FROM Company WHERE company_username =  %s', (receiver_username))
   dest= cursor.fetchone()['payment_id']
+  receiver_credit = float(cursor.fetchone()['total_credits'])
+  # prevent transaction if receiver has less than 50 credits
+  if(receiver_credit < 50):
+      return {"create": False, 'message': "Cannot request trade with company with less than 50 green credits."}
   cursor.execute('SELECT payment_id FROM Company WHERE company_username =  %s', (sender_username))
   src = cursor.fetchone()['payment_id']
   payer_id = src
@@ -602,6 +608,13 @@ def company_transfer_response():
         sender_username = cursor.fetchone()['sender_username']
         cursor.execute("SELECT receiver_username FROM Company_Transaction WHERE transaction_name = %s", (transaction_name))
         receiver_username = cursor.fetchone()['receiver_username']
+        
+        cursor.execute('SELECT total_credits FROM Company WHERE company_username =  %s', (receiver_username))
+        receiver_credit = float(cursor.fetchone()['total_credits'])
+        # prevent transaction if receiver has less than 50 credits
+        if(receiver_credit < 50):
+            return {"success": False, 'message': "You don't meet the minimum requirement for credit transaction (50)."}
+  
         result = stripe.Charge.create(
         amount= amount,
         currency="usd",
@@ -760,6 +773,43 @@ def get_pending_transactions():
 
     return pending_transactions if pending_transactions else []
       
+@app.route('/check_stripe_account', methods=['POST'])
+def check_stripe_account():
+    username = request.form['username']
+    isProject = request.form['isProject']
+
+    if isProject == "true":
+        query_payment_id = "SELECT payment_id from Project WHERE project_username = %s"
+    else:
+        query_payment_id = "SELECT payment_id from Company WHERE company_username = %s"
+
+    cursor = conn.cursor()
+
+    cursor.execute(query_payment_id, (username))
+    payment_id = cursor.fetchone()['payment_id']
+
+    cursor.close()
+
+    account_info = stripe.Account.retrieve(payment_id)
+
+    # finds whether Stripe account has been onboarded and sends link to update the account
+    if (account_info['details_submitted'] == False):
+        account_link = stripe.AccountLink.create(
+            account = payment_id,
+            refresh_url = frontend_url,
+            return_url = frontend_url,
+            type = "account_onboarding",
+            collection_options = {"fields": "eventually_due"},
+        )
+        return {"onboarded" : False, "account_update_link": account_link["url"]}
+    else:
+        account_link = stripe.AccountLink.create(
+            account = payment_id,
+            refresh_url = frontend_url,
+            return_url = frontend_url,
+            type = "account_update",
+        )
+        return {"onboarded": True, "account_update_link": account_link["url"]}
 
 
 

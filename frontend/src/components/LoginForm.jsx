@@ -44,6 +44,8 @@ function LoginForm({ setLoginActive }) {
       })
       .then((response) => {
         if (response.data.user == true) {
+          localStorage.setItem("username", username);
+          localStorage.setItem("isProject", isProject);
           setAuth({ username, isProject });
           navigate(`/profile/${username}`);
         } else {

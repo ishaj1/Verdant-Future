@@ -4,6 +4,7 @@ const useLogout = () => {
   const { setAuth } = useAuth();
 
   const logout = async () => {
+    localStorage.clear();
     setAuth({});
     // communicate logout with server
   };
