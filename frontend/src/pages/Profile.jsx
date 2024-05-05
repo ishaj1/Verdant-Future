@@ -26,7 +26,7 @@ export default function ProfilePage() {
   const [showPasswordForm, setShowPasswordForm] = useState(false);
   const location = useLocation();
   const message = location.state && location.state.message;
-
+  const [stripeAccountURL, setStripeAccountURL] = useState("");
 
   const queryProfileData = (username, isProject) => {
     axios
@@ -46,10 +46,30 @@ export default function ProfilePage() {
       });
   };
 
+  const queryStripeAccount = () => {
+    axios
+      .post(
+        "/check_stripe_account",
+        { username: auth.username, isProject: auth.isProject },
+        {
+          headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        }
+      )
+      .then((res) => {
+        if (res?.data) {
+          setStripeAccountURL(res.data.account_update_link || "#");
+        }
+      })
+      .catch((err) => {
+        setStripeAccountURL("#");
+      });
+  }
+
   useEffect(() => {
     let isProject;
     switch (path.match(/^\/[^\/]*/)[0]) {
       case "/profile":
+        queryStripeAccount();
         isProject = auth.isProject;
         break;
       case "/project":
@@ -312,6 +332,18 @@ export default function ProfilePage() {
                 </div>  
               </>
             )} 
+            <a href={stripeAccountURL} rel="noopener noreferrer" target="_blank">
+                <div className="bg-customGreen-100 bg-opacity-30 p-4 my-10 rounded-lg shadow-md hover:bg-customGreen-200 transition-colors duration-300 ease-in-out h-full">
+                  <div className="flex flex-col justify-between h-full">
+                    <div>
+                      <img src={fav4} alt="Favicon" className="w-20 h-20 m-2 p-1" />
+                    </div>
+                    <div className="bottom-0 right-0">
+                      <h3 className="text-right text-lg font-montserrat font-semibold">Update Payment Information</h3>
+                    </div>
+                  </div>
+                </div>
+            </a>
 
           </div>
           

@@ -45,10 +45,12 @@ export default function Transaction() {
           navigate("/transaction-success", { state: { details: res.data.details } });
         } else if (res?.data?.create == true) {
           navigate(`/profile/${auth.username}`, { state: { message: "Trade Request Submitted!" }});
+        } else {
+          setMessage(res.data.message)
         }
       })
       .catch((err) => {
-        setMessage("Issue processing request. Please try again later.");
+        setMessage("Issue processing request. Please try again later. You may need to update your payment information (you can do so by going to your dashboard and clicking \"Update Payment Information\").");
         button.disabled = false;
       });
   };
