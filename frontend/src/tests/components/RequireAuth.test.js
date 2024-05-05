@@ -1,8 +1,9 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
-import { MemoryRouter, Outlet } from 'react-router-dom';
+import { render, screen, waitFor } from '@testing-library/react';
+import { MemoryRouter, Outlet, Route, Routes } from 'react-router-dom';
 import RequireAuth from '../../components/RequireAuth';
 import useAuth from '../../hooks/useAuth'; 
+import HomePage from '../../pages/Home';
 
 jest.mock('../../hooks/useAuth');
 
@@ -27,11 +28,16 @@ describe('RequireAuth component', () => {
     render(
       <MemoryRouter initialEntries={['/protected']}>
         <RequireAuth />
-        <Outlet />
+        <Routes>
+          <Route path='/' element={<HomePage/>}/>
+          <Route path='/protected' element={<RequireAuth element={<div>Child Componenet</div>} />} />
+        </Routes>
       </MemoryRouter>
     );
 
     expect(screen.queryByText('Child Component')).not.toBeInTheDocument();
-    expect(screen.queryByText('Login Page')).toBeInTheDocument();
+    await waitFor(()=> {
+      expect(screen.queryByText('Login')).toBeInTheDocument();
+    });
   });
 });
