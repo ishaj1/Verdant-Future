@@ -158,10 +158,10 @@ function RegisterForm() {
                     Amount of Funds (USD)(0 if not looking for funds)</label>
               </div>
 
-              <div class="relative mb-5">
-                  <input type="text" name="paymentID" required class="block rounded-t-lg px-2.5 pb-2.5 pt-5 w-full text-sm text-gray-900 bg-gray-50 dark:bg-gray-700 border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-customGreen-500 focus:outline-none focus:ring-0 focus:border-customGreen-600 peer" placeholder=" " />
+              {/* <div class="relative mb-5">
+                  <input type="text" name="paymentID" class="block rounded-t-lg px-2.5 pb-2.5 pt-5 w-full text-sm text-gray-900 bg-gray-50 dark:bg-gray-700 border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-customGreen-500 focus:outline-none focus:ring-0 focus:border-customGreen-600 peer" placeholder=" " />
                   <label htmlFor="paymentID" class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-4 z-10 origin-[0] start-2.5 peer-focus:text-customGreen-600 peer-focus:dark:text-customGreen-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto">Payment ID</label>
-              </div>
+              </div> */}
 
               <button type="submit" className="flex w-full justify-center rounded-md bg-gradient-to-br from-customGreen-300 via-customGreen-400 to-customGreen-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-gradient-to-bl focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Register</button>
             </form>

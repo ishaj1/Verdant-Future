@@ -31,8 +31,10 @@ function UpdateProfileForm() {
     const contactEmail = form.contactEmail.value;
     const orgDescription = form.orgDescription.value;
     const fundsRequired = form.fundsRequired.value;
-    const fundsReceived = form.fundsReceived.value;
-    const paymentID = form.paymentID.value;
+    // const fundsReceived = form.fundsReceived.value;
+    // const paymentID = form.paymentID.value;
+    const fundsReceived = curProfileData?.funds_received
+    const paymentID = curProfileData?.payment_id;
 
     const profileData = {
       name: orgName,
@@ -91,8 +93,7 @@ function UpdateProfileForm() {
 
 
             <form className="UpdateProfileForm" onSubmit={(e) => updateProfile(e)}>
-              <div className="my-4">
-                <label htmlFor="orgName" >{auth.isProject ? "Project" : "Company"} Name</label>
+              <div className="my-4 relative">
                 <input
                   type="text"
                   name="orgName"
@@ -100,46 +101,49 @@ function UpdateProfileForm() {
                     auth.isProject ? curProfileData?.project_name : curProfileData?.company_name
                   }
                   required
-                  className="mt-2 block text-md w-full rounded-md border-0 px-3 py-2 shadow-sm ring-1 ring-inset ring-customGreen-300 focus:ring-5 focus:ring-inset focus:ring-customGreen-600 focus:outline-1 focus:outline-customGreen-400 focus:shadow-md sm:text-sm sm:leading-6"
+                  class="block rounded-t-lg px-2.5 pb-2.5 pt-5 w-full text-sm text-gray-900 bg-gray-50 bg-opacity-40 dark:bg-gray-700 border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-customGreen-500 focus:outline-none focus:ring-0 focus:border-customGreen-600 peer"
                 />
+                <label htmlFor="orgName" class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-4 z-10 origin-[0] start-2.5 peer-focus:text-customGreen-600 peer-focus:dark:text-customGreen-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto">{auth.isProject ? "Project" : "Company"} Name</label>
               </div>
+
               {auth.isProject && (
                 <>
-                  <div className="my-4">
-                    <label htmlFor="projectAssociation" >Project Association</label>
+                  <div className="my-4 relative">
                     <input
                       type="text"
                       name="projectAssociation"
                       defaultValue={curProfileData?.project_association}
                       required
-                      className="mt-2 block text-md w-full rounded-md border-0 px-3 py-2 shadow-sm ring-1 ring-inset ring-customGreen-300 focus:ring-5 focus:ring-inset focus:ring-customGreen-600 focus:outline-1 focus:outline-customGreen-400 focus:shadow-md sm:text-sm sm:leading-6"
+                      class="block rounded-t-lg px-2.5 pb-2.5 pt-5 w-full text-sm text-gray-900 bg-gray-50 bg-opacity-40 dark:bg-gray-700 border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-customGreen-500 focus:outline-none focus:ring-0 focus:border-customGreen-600 peer"
                     />
+                    <label htmlFor="projectAssociation" class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-4 z-10 origin-[0] start-2.5 peer-focus:text-customGreen-600 peer-focus:dark:text-customGreen-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto">Project Association</label>
                   </div>
                 </>
               )}
 
-              <div className="my-4">
-                <label htmlFor="contactName" >Contact Name</label>
+              <div className="my-4 relative">
                 <input
                   type="text"
                   name="contactName"
                   defaultValue={curProfileData?.contact_name}
                   required
-                  className="mt-2 block text-md w-full rounded-md border-0 px-3 py-2 shadow-sm ring-1 ring-inset ring-customGreen-300 focus:ring-5 focus:ring-inset focus:ring-customGreen-600 focus:outline-1 focus:outline-customGreen-400 focus:shadow-md sm:text-sm sm:leading-6"
+                  class="block rounded-t-lg px-2.5 pb-2.5 pt-5 w-full text-sm text-gray-900 bg-gray-50 bg-opacity-40 dark:bg-gray-700 border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-customGreen-500 focus:outline-none focus:ring-0 focus:border-customGreen-600 peer"
                 />
+                <label htmlFor="contactName" class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-4 z-10 origin-[0] start-2.5 peer-focus:text-customGreen-600 peer-focus:dark:text-customGreen-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto">Contact Name</label>
               </div>
-              <div className="my-4">
-                <label htmlFor="contactEmail">Contact Email</label>
+
+              <div className="my-4 relative">
                 <input
                   type="email"
                   name="contactEmail"
                   defaultValue={curProfileData?.contact_detail}
                   required
-                  className="mt-2 block text-md w-full rounded-md border-0 px-3 py-2 shadow-sm ring-1 ring-inset ring-customGreen-300 focus:ring-5 focus:ring-inset focus:ring-customGreen-600 focus:outline-1 focus:outline-customGreen-400 focus:shadow-md sm:text-sm sm:leading-6"
+                  class="block rounded-t-lg px-2.5 pb-2.5 pt-5 w-full text-sm text-gray-900 bg-gray-50 bg-opacity-40 dark:bg-gray-700 border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-customGreen-500 focus:outline-none focus:ring-0 focus:border-customGreen-600 peer"
                 />
+                <label htmlFor="contactEmail" class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-4 z-10 origin-[0] start-2.5 peer-focus:text-customGreen-600 peer-focus:dark:text-customGreen-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto">Contact Email</label>
               </div>
-              <div className="my-4">
-                <label htmlFor="orgDescription">Description of Your Organization</label>
+
+              <div className="my-4 relative">
                 <textarea
                   maxLength={500}
                   name="orgDescription"
@@ -149,13 +153,12 @@ function UpdateProfileForm() {
                       : curProfileData?.company_details
                   }
                   required
-                  className="mt-2 block text-md w-full rounded-md border-0 px-3 py-2 shadow-sm ring-1 ring-inset ring-customGreen-300 focus:ring-5 focus:ring-inset focus:ring-customGreen-600 focus:outline-1 focus:outline-customGreen-400 focus:shadow-md sm:text-sm sm:leading-6"
+                  class="block rounded-t-lg px-2.5 pb-2.5 pt-5 w-full text-sm text-gray-900 bg-gray-50 bg-opacity-40 dark:bg-gray-700 border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-customGreen-500 focus:outline-none focus:ring-0 focus:border-customGreen-600 peer"
                 ></textarea>
+                <label htmlFor="orgDescription" class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-4 z-10 origin-[0] start-2.5 peer-focus:text-customGreen-600 peer-focus:dark:text-customGreen-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto">Description of Your Organization</label>
               </div>
-              <div className="my-4">
-                <label htmlFor="fundsRequired">
-                  Amount of Funds You Are Aiming to Reach (0 if you are not looking for funds)
-                </label>
+
+              <div className="my-4 relative">
                 <input
                   type="number"
                   min="0"
@@ -164,31 +167,11 @@ function UpdateProfileForm() {
                   defaultValue={curProfileData?.funds_required}
                   name="fundsRequired"
                   required
-                  className="mt-2 block text-md w-full rounded-md border-0 px-3 py-2 shadow-sm ring-1 ring-inset ring-customGreen-300 focus:ring-5 focus:ring-inset focus:ring-customGreen-600 focus:outline-1 focus:outline-customGreen-400 focus:shadow-md sm:text-sm sm:leading-6"
+                  class="block rounded-t-lg px-2.5 pb-2.5 pt-5 w-full text-sm text-gray-900 bg-gray-50 bg-opacity-40 dark:bg-gray-700 border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-customGreen-500 focus:outline-none focus:ring-0 focus:border-customGreen-600 peer"
                 />
-              </div>
-              <div className="my-4">
-                <label htmlFor="fundsReceived">Amount of Funds You Have Received</label>
-                <input
-                  type="number"
-                  min="0"
-                  max="99999999999999999.99"
-                  step=".01"
-                  defaultValue={curProfileData?.funds_received}
-                  name="fundsReceived"
-                  required
-                  className="mt-2 block text-md w-full rounded-md border-0 px-3 py-2 shadow-sm ring-1 ring-inset ring-customGreen-300 focus:ring-5 focus:ring-inset focus:ring-customGreen-600 focus:outline-1 focus:outline-customGreen-400 focus:shadow-md sm:text-sm sm:leading-6"
-                />
-              </div>
-              <div className="my-4">
-                <label htmlFor="paymentID">Payment ID</label>
-                <input
-                  type="text"
-                  name="paymentID"
-                  defaultValue={curProfileData?.payment_id}
-                  required
-                  className="mt-2 block text-md w-full rounded-md border-0 px-3 py-2 shadow-sm ring-1 ring-inset ring-customGreen-300 focus:ring-5 focus:ring-inset focus:ring-customGreen-600 focus:outline-1 focus:outline-customGreen-400 focus:shadow-md sm:text-sm sm:leading-6"
-                />
+                <label htmlFor="fundsRequired" class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-4 z-10 origin-[0] start-2.5 peer-focus:text-customGreen-600 peer-focus:dark:text-customGreen-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto">
+                  Fund Goal (0 if you are not looking for funds)
+                </label>
               </div>
             
               <button type="submit" className="flex w-full justify-center rounded-md mt-10 bg-gradient-to-br from-customGreen-200 via-customGreen-400 to-customGreen-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-gradient-to-bl focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Update</button>

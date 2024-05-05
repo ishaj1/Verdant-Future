@@ -247,7 +247,7 @@ def calculate_rating(company_input, benchmark, negative=False):
     if(negative):
         performance *= -1
     performance_ratio = performance / benchmark
-    rating = initial + 50 * performance_ratio
+    rating = round(max(0, min(initial + 50 * performance_ratio, 100)), 3)
     return rating
 
 @app.route('/get_evaluated', methods=['GET', 'POST'])
@@ -303,14 +303,15 @@ def get_evaluated():
         waste_ratio = round(recycled / waste, 3)
         waste_rating = calculate_rating(waste_ratio, WASTE_DIVERSE_RATE, negative=False)
         
-    # Final scoring (green credits) = GHG (35%) + Energy (30%) + Water (15%) + Waste (20%)
+    # Final scoring (green credits) = AVG(GHG, Energy, Water, Waste)
     # Green Company level: green credits >= 50
-    final_rating = 0.35*ghg_rating + 0.3*energy_rating + 0.15*water_rating + 0.2*waste_rating
+    final_rating = 0.25*ghg_rating + 0.25*energy_rating + 0.25*water_rating + 0.25*waste_rating
     green_credits = round(final_rating, 3)
+    # print(green_credits)
     credits_diff = green_credits - past_credits
 
     # Store the company's evaluated green credit into database
-    query = "INSERT INTO Company_eval VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+    query = "INSERT INTO Company_eval VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
     cursor.execute(
         query,
         (
@@ -319,12 +320,14 @@ def get_evaluated():
             green_credits,
             company_size,
             revenue,
-            emission,
-            electricity,
-            natural_gas,
-            water,
-            waste,
-            recycled            
+            ghg_ratio,
+            energy_ratio,
+            water_ratio,
+            waste_ratio,
+            ghg_rating,
+            energy_rating,
+            water_rating,
+            waste_rating            
         ),
     )
 
@@ -350,6 +353,14 @@ def get_green_credit():
     cursor.execute(query, (company_username))
     green_credit = cursor.fetchone()
 
+    query2 = "SELECT ghg_ratio, energy_ratio, water_ratio, waste_ratio FROM Company_eval WHERE company_username = %s ORDER BY entry_date DESC"
+    cursor.execute(query2, (company_username))
+    result = cursor.fetchone()
+
+    query3 = "SELECT ghg_rating, energy_rating, water_rating, waste_rating FROM Company_eval WHERE company_username = %s ORDER BY entry_date DESC"
+    cursor.execute(query3, (company_username))
+    rating = cursor.fetchone()
+
     query1 = "SELECT total_credits FROM Company WHERE company_username = %s"
     cursor.execute(query1, (company_username))
     total_credit = cursor.fetchone()
@@ -363,8 +374,15 @@ def get_green_credit():
         'green_credit': green_credit['green_credits'],
         'total_credit': total_credit['total_credits']
     }
+    
+    targets = {
+        "ghg_ratio": EMISSION_INTENSITY,  
+        "energy_ratio": ENERGY_INTENSITY,       
+        "water_ratio": WATER_EFFICIENCY,        
+        "waste_ratio": WASTE_DIVERSE_RATE     
+    }
 
-    return jsonify({'credits': credits})
+    return jsonify({'credits': credits, "comp_ratios": result, "target_ratios" : targets, "ratings": rating})
 
 @app.route('/update_password', methods=['GET', 'POST'])
 def update_password():
@@ -670,9 +688,42 @@ def company_transfer_response():
 def get_past_transactions():
     username = request.args['username']
 
-    query_companies = "SELECT transaction_name, sender_username, receiver_username, amount_transferred, credits_transferred from Company_Transaction WHERE (sender_username = %s OR receiver_username = %s) AND transfer_status = 'accepted'"
+    query_companies = """
+    SELECT 
+        ct.transaction_name,
+        ct.sender_username,
+        sender.company_name AS sender_company_name,
+        ct.receiver_username,
+        receiver.company_name AS receiver_company_name,
+        ct.amount_transferred,
+        ct.credits_transferred
+    FROM 
+        Company_Transaction ct
+    JOIN 
+        Company sender ON (ct.sender_username = sender.company_username)
+    JOIN
+        Company receiver ON (ct.receiver_username = receiver.company_username)
+    WHERE 
+        (ct.sender_username = %s OR ct.receiver_username = %s) 
+        AND ct.transfer_status = 'accepted'
+    """
     query_projects = "SELECT transaction_name, sender_username, receiver_username, amount_transferred, credits_transferred from Project_Transaction WHERE (sender_username = %s OR receiver_username = %s)"
 
+    query_projects = """
+    SELECT
+        sender.company_name AS sender_company_name,
+        receiver.project_name AS receiver_project_name,
+        ct.amount_transferred,
+        ct.credits_transferred
+    FROM 
+        Project_Transaction ct
+    JOIN 
+        Company sender ON (ct.sender_username = sender.company_username)
+    JOIN
+        Project receiver ON (ct.receiver_username = receiver.project_username)
+    WHERE 
+        (ct.sender_username = %s OR ct.receiver_username = %s) 
+    """
     cursor = conn.cursor()
 
     cursor.execute(query_companies, (username, username))
@@ -693,9 +744,29 @@ def get_pending_transactions():
 
     query_pending = "SELECT transaction_name, sender_username, receiver_username, amount_transferred, credits_transferred from Company_Transaction WHERE (sender_username = %s OR receiver_username = %s) AND transfer_status = 'pending'"
 
+    query = """
+    SELECT 
+        ct.transaction_name,
+        ct.sender_username,
+        sender.company_name AS sender_company_name,
+        ct.receiver_username,
+        receiver.company_name AS receiver_company_name,
+        ct.amount_transferred,
+        ct.credits_transferred
+    FROM 
+        Company_Transaction ct
+    JOIN 
+        Company sender ON (ct.sender_username = sender.company_username)
+    JOIN
+        Company receiver ON (ct.receiver_username = receiver.company_username)
+    WHERE 
+        (ct.sender_username = %s OR ct.receiver_username = %s) 
+        AND ct.transfer_status = 'pending'
+    """
+
     cursor = conn.cursor()
 
-    cursor.execute(query_pending, (username, username))
+    cursor.execute(query, (username, username))
     pending_transactions = cursor.fetchall()
 
     cursor.close()

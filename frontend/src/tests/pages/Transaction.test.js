@@ -33,7 +33,7 @@ describe("Transaction Page", () => {
     expect(getByText("Price per credit: $0.10")).toBeInTheDocument();
   });
 
-  it("submits an investment in a project", async () => {
+  it("submits an donation in a project", async () => {
     useLocation.mockReturnValue({ state: { total_cost: 100, price: 10, credits: 10, sendToUser: "testproject", isTrade: false } });
     axios.post.mockResolvedValueOnce({
       data: {

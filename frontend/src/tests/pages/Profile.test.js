@@ -52,10 +52,10 @@ describe("Viewing project's profile page when logged in as a company", () => {
     });
   });
 
-  it("displays 'Invest' button when user is authenticated and viewing project profile", async () => {
+  it("displays 'Donate' button when user is authenticated and viewing project profile", async () => {
     render(<MemoryRouter initialEntries={["/project/project_username"]}> <Profile /> </MemoryRouter>);
 
-    expect(await screen.findByText("Invest")).toBeInTheDocument();
+    expect(await screen.findByText("Donate")).toBeInTheDocument();
   });
 });
 

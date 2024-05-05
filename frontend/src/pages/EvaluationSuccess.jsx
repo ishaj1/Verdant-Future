@@ -6,6 +6,9 @@ import Header from "../components/Header";
 import fav from "../icons/green_credits.png"
 function EvaluationSuccess() {
   const [greenCredit, setGreenCredit] = useState(null);
+  const [targets, setTargets] = useState(null);
+  const [results, setResults] = useState(null);
+  const [ratings, setRatings] = useState(null);
   const [errors, setErrors] = useState("");
   const { auth } = useAuth();
 
@@ -19,6 +22,9 @@ function EvaluationSuccess() {
         } else {
           setErrors();
           setGreenCredit(response.data.credits);
+          setTargets(response.data.target_ratios);
+          setResults(response.data.comp_ratios);
+          setRatings(response.data.ratings);
         }
       } catch (error) {
         setErrors("Error fetching green credit. Please try again.");
@@ -45,11 +51,63 @@ function EvaluationSuccess() {
       }
       {greenCredit &&
         <div class="bg-gray-100 h-screen flex items-center">
-          <div class="bg-white p-6 md:mx-auto">
+          <div class="bg-white p-6 h-4/5 md:mx-auto">
             <img src={fav} className="w-20 h-20 mx-auto my-6"></img>
             <div class="text-center">
                 <h3 class="md:text-2xl text-base text-gray-900 font-semibold text-center">Evaluation Successful!</h3>
                 <p class="text-gray-600 my-2 mb-5">Thank you for completing your evaluation.</p>
+
+
+                <table style={{ margin: '0 auto' }}>
+                  <colgroup>
+                    <col style={{ width: '280px' }} />
+                    <col style={{ width: '100px' }} />
+                    <col style={{ width: '100px' }} /> 
+                    <col style={{ width: '100px' }} />
+                  </colgroup>
+                  <thead>
+                    <tr>
+                      <th> </th>
+                      <th>Result</th>
+                      <th>Target Value</th>
+                      <th>Rating</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr style={{ backgroundColor: results.ghg_ratio > targets.ghg_ratio ? '#fef08a' : '#d9f99d' }}>
+                      <td>Emission Intensity (metric tons / capita)</td>
+                      <td><span className="text-customGreen-700">{results.ghg_ratio}</span></td>
+                      <td><span className="text-customGreen-700">{targets.ghg_ratio}</span></td>
+                      <td><span className="text-customGreen-700">{ratings.ghg_rating}</span></td>
+                    </tr>
+                    <tr style={{ backgroundColor: results.energy_ratio > targets.energy_ratio ? '#fef08a' : '#d9f99d' }}>
+                      <td>Energy Intensity (MJ / USD)</td>
+                      <td><span className="text-customGreen-700">{results.energy_ratio}</span></td>
+                      <td><span className="text-customGreen-700">{targets.energy_ratio}</span></td>
+                      <td><span className="text-customGreen-700">{ratings.energy_rating}</span></td>
+                    </tr>
+                    <tr style={{ backgroundColor: results.water_ratio < targets.water_ratio ? '#fef08a' : '#d9f99d' }}>
+                      <td>Water Efficiency (USD / cubic meter)</td>
+                      <td><span className="text-customGreen-700">{results.water_ratio}</span></td>
+                      <td><span className="text-customGreen-700">{targets.water_ratio}</span></td>
+                      <td><span className="text-customGreen-700">{ratings.water_rating}</span></td>
+                    </tr>
+                    <tr style={{ backgroundColor: results.waste_ratio < targets.waste_ratio ? '#fef08a' : '#d9f99d' }}>
+                      <td>Waste Ratio (percent recycled)</td>
+                      <td><span className="text-customGreen-700">{results.waste_ratio}</span></td>
+                      <td><span className="text-customGreen-700">{targets.waste_ratio}</span></td>
+                      <td><span className="text-customGreen-700">{ratings.waste_rating}</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+
+                <p style={{ color: '#365314', fontSize: '14px' }}> 
+                *It's recommended to aim for low emission and energy intensity values 
+                </p>
+                <p style={{ color: '#365314', fontSize: '14px' , marginBottom: '20px'}}> 
+                and high water efficiency and waste ratio values.
+                </p>                  
+                
                 <p>
                 Your Company's Calculated Green Credit for this evaluation is: 
                 </p>

@@ -21,7 +21,7 @@ export default function Header() {
       <nav>
         <ul className="hidden gap-8 md:flex text-white font-roboto">
           <li>
-            <a href="#">About us</a>
+            <a href="/about-us">About us</a>
           </li>
 
           {auth?.username && ( 
@@ -76,7 +76,7 @@ export default function Header() {
               <nav>
                 <ul className="flex flex-col gap-5 px-2 py-2.5 font-abeezee text-right">
                   <li>
-                    <a href="#">About us</a>
+                    <a href="/about-us">About us</a>
                   </li>
                   {auth?.username && ( 
                       <li>
