@@ -16,6 +16,7 @@ jest.mock("../../icons/history.png", () => ({}));
 
 jest.mock("../../api/axios", () => ({
   get: jest.fn(),
+  post: jest.fn(),
 }));
 
 jest.mock('../../hooks/useAuth', () => ({
@@ -44,6 +45,7 @@ describe("Profile Page", () => {
     axios.get.mockResolvedValueOnce({ data: { records: mockProfileData } });
     axios.get.mockResolvedValueOnce({ data: { records: []}});
     axios.get.mockResolvedValueOnce({ data: [] });
+    axios.post.mockResolvedValueOnce({ account_update_link: "https://example.com"});
   })
   
   it("renders profile correctly", async () => {
