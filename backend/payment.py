@@ -20,16 +20,29 @@ CORS(app)
 app.secret_key = "secret_key"
 stripe.api_key = 'sk_test_51Oe5AZKlgwtgt0eBACDFWMTEWAP1XzGbXa4MhgJRUaPIxza3JMJqcaNj4E2820ioJgPLJZiEQyAr3Y7CODV8Hxsm00BxyqGbKO'
 
-frontend_url = "http://localhost:5173"
+frontend_url = "https://verdantfuture.onrender.com"
+
+# conn = pymysql.connect(
+#     host="localhost",
+#     user="root",
+#     password="",
+#     db="Verdant-Future",
+#     charset="utf8mb4",
+#     cursorclass=pymysql.cursors.DictCursor,
+# )
 
 conn = pymysql.connect(
-    host="localhost",
-    user="root",
-    password="",
-    db="Verdant-Future",
+    host="verdant-future.cxwgwgwoub74.us-east-1.rds.amazonaws.com",
+    user="admin",
+    password="password",
+    db="verdant_future",
     charset="utf8mb4",
     cursorclass=pymysql.cursors.DictCursor,
 )
+
+@app.route("/")
+def hello():
+    return "Hello World!"
 
 # Constants for evaluation referencing
 EMISSION_INTENSITY = 3.671 # metric tons per capita
@@ -814,4 +827,4 @@ def check_stripe_account():
 
 
 if __name__ == '__main__':
-    app.run(port=4242, debug=True, threaded=False)
+    app.run(port=5000, debug=True, threaded=False)
