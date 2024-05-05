@@ -44,7 +44,7 @@ export default function PendingTransactions({
       })
       .catch((error) => {
         setMessage(
-          "Sorry, your request could not be processed. Please try again later."
+          "Sorry, your request could not be processed. Please try again later. You may need to update your payment information (you can do so by going to your dashboard and clicking \"Update Payment Information\")."
         );
       });
     setNumTransactionResponses(numTransactionResponses + 1);
