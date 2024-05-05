@@ -9,6 +9,7 @@ jest.mock("react-router-dom", () => ({
   ...jest.requireActual("react-router-dom"),
   useLocation: jest.fn(),
 }));
+jest.mock("../../icons/green_credits.png", () => ({}));
 
 describe("TransactionResult Component", () => {
   beforeEach(() => {
@@ -26,7 +27,7 @@ describe("TransactionResult Component", () => {
         <TransactionResult />
       </MemoryRouter>
     );
-    expect(screen.getByText("Payment Successful")).toBeInTheDocument();
+    expect(screen.getByText("Payment Successful!")).toBeInTheDocument();
   });
 
   it("renders receipt link correctly", () => {
@@ -35,7 +36,7 @@ describe("TransactionResult Component", () => {
         <TransactionResult />
       </MemoryRouter>
     );
-    const receiptLink = screen.getByText("Receipt");
+    const receiptLink = screen.getByText("View Receipt");
     expect(receiptLink).toBeInTheDocument();
     expect(receiptLink).toHaveAttribute("href", "example.com");
     expect(receiptLink).toHaveAttribute("target", "_blank");

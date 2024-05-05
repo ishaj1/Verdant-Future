@@ -1,55 +1,35 @@
-import React from "react";
-import { render, screen } from "@testing-library/react";
-import { MemoryRouter, useLocation } from "react-router-dom";
+import React from 'react';
+import { MemoryRouter } from 'react-router-dom';
+import renderer from 'react-test-renderer';
 import TransactionResult from "../../pages/TransactionResult";
-import useAuth from "../../hooks/useAuth";
 
-jest.mock("../../hooks/useAuth");
-jest.mock("react-router-dom", () => ({
-  ...jest.requireActual("react-router-dom"),
+jest.mock('../../hooks/useAuth');
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
   useLocation: jest.fn(),
 }));
+jest.mock("../../icons/green_credits.png", () => ({}));
 
-describe("TransactionResult Component", () => {
-  beforeEach(() => {
-    useLocation.mockReturnValue({ state: { details: { receipt_url: "example.com" } } });
-    useAuth.mockReturnValue({ auth: { username: "testuser" } });
-  });
+describe('TransactionResult component', () => {
+  it('matches the snapshot', () => {
+    const mockState = {
+      details: {
+        receipt_url: 'https://example.com/receipt',
+      },
+    };
 
-  afterEach(() => {
-    jest.clearAllMocks();
-  });
+    const authMock = { auth: { username: 'testUser' } };
+    const locationMock = { state: mockState };
 
-  it("renders without errors", () => {
-    render(
+    require('../../hooks/useAuth').default.mockReturnValue(authMock);
+    require('react-router-dom').useLocation.mockReturnValue(locationMock);
+
+    const tree = renderer.create(
       <MemoryRouter>
         <TransactionResult />
       </MemoryRouter>
-    );
-    expect(screen.getByText("Payment Successful")).toBeInTheDocument();
-  });
+    ).toJSON();
 
-  it("renders receipt link correctly", () => {
-    render(
-      <MemoryRouter>
-        <TransactionResult />
-      </MemoryRouter>
-    );
-    const receiptLink = screen.getByText("Receipt");
-    expect(receiptLink).toBeInTheDocument();
-    expect(receiptLink).toHaveAttribute("href", "example.com");
-    expect(receiptLink).toHaveAttribute("target", "_blank");
-    expect(receiptLink).toHaveAttribute("rel", "noopener noreferrer");
-  });
-
-  it("renders Return to Profile link correctly", () => {
-    render(
-      <MemoryRouter>
-        <TransactionResult />
-      </MemoryRouter>
-    );
-    const returnToProfileLink = screen.getByText("Return to Profile");
-    expect(returnToProfileLink).toBeInTheDocument();
-    expect(returnToProfileLink).toHaveAttribute("href", "/profile/testuser");
+    expect(tree).toMatchSnapshot();
   });
 });

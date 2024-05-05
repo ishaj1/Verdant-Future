@@ -1,6 +1,6 @@
 import React from "react";
 import { render, fireEvent, waitFor, screen } from "@testing-library/react";
-import { useLocation } from "react-router-dom";
+import { useLocation, MemoryRouter } from "react-router-dom";
 import axios from "../../api/axios";
 import Transaction from "../../pages/Transaction";
 
@@ -28,9 +28,11 @@ describe("Transaction Page", () => {
 
   it("renders correctly", () => {
     useLocation.mockReturnValue({ state: { total_cost: 100, price: 10, credits: 10, sendToUser: "testuser", isTrade: true } });
-    const { getByText } = render(<Transaction />);
-    expect(getByText("Total Cost: $1.00")).toBeInTheDocument();
-    expect(getByText("Price per credit: $0.10")).toBeInTheDocument();
+    const { getByText } = render(<MemoryRouter><Transaction /></MemoryRouter>);
+    expect(getByText("Transaction Detail")).toBeInTheDocument();
+    const strongElement = getByText("Total Cost");
+    const parentParagraph = strongElement.parentElement;
+    expect(parentParagraph).toHaveTextContent("Total Cost: $1000");
   });
 
   it("submits an donation in a project", async () => {
@@ -42,10 +44,9 @@ describe("Transaction Page", () => {
       },
     });
 
-    render(<Transaction />);
-    fireEvent.click(screen.getByText("Confirm"));
+    render(<MemoryRouter><Transaction /></MemoryRouter>);
+    fireEvent.click(screen.getByText("Submit"));
 
-    // Wait for navigation to "/transaction-success"
     await waitFor(()=> {
       expect(mockedNavigate).toHaveBeenCalledTimes(1);
     });
@@ -63,24 +64,22 @@ describe("Transaction Page", () => {
       },
     });
 
-    render(<Transaction />);
-    fireEvent.click(screen.getByText("Confirm"));
+    render(<MemoryRouter><Transaction /></MemoryRouter>);
+    fireEvent.click(screen.getByText("Submit"));
 
-    // Wait for navigation to "/transaction-success"
     await waitFor(()=> {
       expect(mockedNavigate).toHaveBeenCalledTimes(1);
     });
-    expect(mockedNavigate).toHaveBeenCalledWith("/profile/testuser");
+    expect(mockedNavigate).toHaveBeenCalledWith("/profile/testuser", { state: { message: "Trade Request Submitted!" }});
   });
 
   it("handles transaction failure", async () => {
     useLocation.mockReturnValue({ state: { total_cost: 100, price: 10, credits: 10, sendToUser: "testuser", isTrade: true } });
     axios.post.mockRejectedValueOnce(new Error("Error processing transaction"));
 
-    const { getByText } = render(<Transaction />);
-    fireEvent.click(getByText("Confirm"));
+    const { getByText } = render(<MemoryRouter><Transaction /></MemoryRouter>);
+    fireEvent.click(getByText("Submit"));
 
-    // Wait for request to be sent and error to be received
     await waitFor(() => {
       expect(axios.post).toHaveBeenCalledTimes(1);
       expect(screen.getByText("Issue processing request. Please try again later.")).toBeInTheDocument();

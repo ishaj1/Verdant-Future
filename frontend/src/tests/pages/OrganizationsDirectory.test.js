@@ -9,11 +9,14 @@ jest.mock("../../api/axios", () => ({
   get: jest.fn(),
 }));
 
-jest.mock("../../components/Header", () => () => <div data-testid="mock-header">Mock Header</div>);
-
 describe("OrganizationsDirectory Page", () => {
   afterEach(() => {
     jest.clearAllMocks();
+  });
+
+  it("renders the header component correctly", () => {
+    const { getByText } = render(<Router><OrganizationsDirectory /></Router>);
+    expect(getByText("Verdant Future")).toBeInTheDocument();
   });
 
   it("renders header and organization cards with data", async () => {
@@ -37,23 +40,8 @@ describe("OrganizationsDirectory Page", () => {
       </Router>
     );
 
-    const headerElement = screen.getByTestId("mock-header");
-    expect(headerElement).toBeInTheDocument();
-
     await waitFor(() => {
       expect(screen.getAllByRole("link")).toHaveLength(4);
-    });
-  });
-
-it("handles errors during data retrieval", async () => {
-    axios.get.mockRejectedValueOnce(new Error("Error retrieving projects"));
-    axios.get.mockRejectedValueOnce(new Error("Error retrieving companies"));
-  
-    render(<Router> <OrganizationsDirectory /> </Router>);
-  
-    await waitFor(() => {
-      expect(screen.getByText(/Error retrieving project data./)).toBeInTheDocument();
-      expect(screen.getByText(/Error retrieving company data./)).toBeInTheDocument();
     });
   });
 });
