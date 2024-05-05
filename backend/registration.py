@@ -1,11 +1,8 @@
 import pymysql.cursors
 from flask import (
     Flask,
-    render_template,
     request,
     session,
-    url_for,
-    redirect,
     jsonify,
 )
 from flask_cors import CORS
@@ -96,7 +93,7 @@ def registerAuth():
 
     cursor = conn.cursor()
 
-    if isCompany:
+    if isCompany == "true":
         query = (
             "SELECT company_username FROM Company WHERE company_username = %s"
         )
@@ -109,6 +106,7 @@ def registerAuth():
 
     # stores the results in a variable
     data = cursor.fetchone()
+
     if data:
         # If the previous query returns data, then user exists
         return {
@@ -179,8 +177,6 @@ def display_profiles():
     record.pop("project_password" if isProject == "true" else "company_password")
     
     return jsonify({'records': record})
-
-
 
 @app.route("/view_companies", methods=['GET'])
 def view_companies():
@@ -337,6 +333,7 @@ def get_evaluated():
 @app.route('/get_green_credit', methods=['GET'])
 def get_green_credit():
     company_username = request.args["username"]
+
     cursor = conn.cursor()
     query = "SELECT green_credits FROM Company_eval WHERE company_username = %s ORDER BY entry_date DESC"
     cursor.execute(query, (company_username))
@@ -398,8 +395,6 @@ def update_password():
         return {
             "changePassword": False
         }
-
-
 
 @app.route('/update_profile', methods=['GET', 'POST'])
 def update_profile():

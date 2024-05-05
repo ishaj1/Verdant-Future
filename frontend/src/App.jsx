@@ -1,5 +1,7 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
+import "./App.css";
+
 import Home from "./pages/Home";
 import OrganizationsDirectory from "./pages/OrganizationsDirectory";
 import Profile from "./pages/Profile";
@@ -7,16 +9,22 @@ import Register from "./pages/Register";
 import Transaction from "./pages/Transaction";
 import Evaluation from "./pages/Evaluation";
 import RequireAuth from "./components/RequireAuth";
-import EvaluationSuccess from "./components/EvaluationSuccess";
+import EvaluationSuccess from "./pages/EvaluationSuccess";
 import UpdateProfileForm from "./components/UpdateProfileForm";
-
-import "./App.css";
+import TransactionResult from "./pages/TransactionResult";
+import PendingTransactions from "./pages/PendingTransactions";
+import TransactionHistory from "./pages/TransactionHistory";
+import AboutUs from "./pages/AboutUs";
 
 function App() {
   const router = createBrowserRouter([
     {
       path: "/",
       element: <Home />,
+    },
+    {
+      path: "/about-us",
+      element: <AboutUs />,
     },
     {
       path: "/register",
@@ -48,11 +56,39 @@ function App() {
     },
     {
       path: "/organizations",
-      element: <RequireAuth children={<OrganizationsDirectory />} />,
+      element: (
+        <RequireAuth
+          children={<OrganizationsDirectory show="organizations" />}
+        />
+      ),
+    },
+    {
+      path: "/projects",
+      element: (
+        <RequireAuth children={<OrganizationsDirectory show="projects" />} />
+      ),
+    },
+    {
+      path: "/companies",
+      element: (
+        <RequireAuth children={<OrganizationsDirectory show="companies" />} />
+      ),
     },
     {
       path: "/transaction",
-      element: <Transaction />,
+      element: <RequireAuth children={<Transaction />} />,
+    },
+    {
+      path: "/transaction-success",
+      element: <RequireAuth children={<TransactionResult />} />,
+    },
+    {
+      path: "/pending-trades",
+      element: <RequireAuth children={<PendingTransactions />} />,
+    },
+    {
+      path: "/transaction-history",
+      element: <RequireAuth children={<TransactionHistory />} />,
     },
     { path: "/evaluation", element: <RequireAuth children={<Evaluation />} /> },
     {
