@@ -174,6 +174,8 @@ function RegisterForm() {
                   required
                   className="block rounded-t-lg px-2.5 pb-2.5 pt-5 w-full text-sm text-gray-900 bg-gray-50 bg-opacity-40 dark:bg-gray-700 border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-customGreen-500 focus:outline-none focus:ring-0 focus:border-customGreen-600 peer"
                   placeholder=" "
+                  pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*_=+]).{12,64}"
+                  title="Must be 12-64 characters long and include: one uppercase letter, one lowercase letter, one number, and one special character (!@#$%^&*_=+)"
                 />
                 <label
                   htmlFor="password"
