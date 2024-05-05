@@ -82,7 +82,7 @@ describe("Transaction Page", () => {
 
     await waitFor(() => {
       expect(axios.post).toHaveBeenCalledTimes(1);
-      expect(screen.getByText("Issue processing request. Please try again later.")).toBeInTheDocument();
+      expect(screen.getByText(/Issue processing request. Please try again later./)).toBeInTheDocument();
     });
   });
 });
