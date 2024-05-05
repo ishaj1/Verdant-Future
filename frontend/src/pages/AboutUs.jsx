@@ -15,7 +15,7 @@ export default function AboutUs() {
               online platform in collaboration with environmental agencies,
               enabling companies to assess their progress toward environmental
               sustainability. Through data-driven analysis and encouraging
-              investments in emissions reduction projects, this platform
+              donations to emissions reduction projects, this platform
               empowers companies to make sustainable decisions in combating
               climate change.
             </p>

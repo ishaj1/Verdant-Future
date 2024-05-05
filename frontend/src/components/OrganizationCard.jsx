@@ -61,7 +61,7 @@ export default function OrganizationCard({
             <button class="transition ease-in-out delay-50 p-1 px-2 rounded-md shadow-md text-gray-700 bg-customGreen-300 hover:-translate-y-1 hover:scale-110 hover:bg-customGreen-500 hover:text-white duration-200 ..."
               onClick={initiateTransaction}
             >
-              {isProject ? "Invest" : "Trade"}
+              {isProject ? "Donate" : "Trade"}
             </button>
            )
           }
