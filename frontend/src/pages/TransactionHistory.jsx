@@ -21,7 +21,7 @@ export default function TransactionHistory() {
   return (
     <>
       <Header />
-      <div className="relative h-full bg-customGreen-50">
+      <div className="relative h-full bg-customGreen-50 FillScreen">
         <div className="flex justify-center items-start py-10">
           <div className="font-montserrat w-full max-w-lg p-10 bg-white shadow-md rounded-md">
             <h2 className="text-center p-2 font-semibold text-lg">Transaction History</h2>

@@ -97,3 +97,8 @@
 .OrganizationCard {
   background-color: lightgray;
 }
+
+div.FillScreen {
+  min-height: 100vh;
+  height: 100%;
+}

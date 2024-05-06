@@ -68,7 +68,7 @@ export default function OrganizationsDirectory({ show }) {
   return (
     <>
       <Header />
-      <div className="relative h-screen bg-customGreen-50">
+      <div className="relative h-screen bg-customGreen-50 FillScreen">
         <div className="flex justify-center items-start py-10">
           <div className="font-montserrat w-full max-w-6xl p-10 bg-white shadow-md rounded-md">
             <h1 className="font-semibold font-montserrat text-xl text-center m-3">View {show}</h1>
