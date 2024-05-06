@@ -103,7 +103,7 @@ export default function PendingTransactions({}) {
                 </p>
                 {transaction.sender_username == auth.username ? (
                   <button
-                    className="mr-2 bg-customGreen-300"
+                    className="mt-3 mr-10 p-2 bg-customGreen-200 rounded-sm hover:bg-customGreen-400"
                     onClick={() =>
                       respondToTransaction(
                         transaction.transaction_name,

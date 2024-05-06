@@ -196,7 +196,7 @@ export default function ProfilePage() {
               <h1 className="text-3xl font-bold tracking-tight text-gray-900">
                 Welcome,{" "}
                 {profileData.isProject
-                  ? profileData.project_association
+                  ? profileData.project_name
                   : profileData.company_name}
               </h1>
             </div>
@@ -297,7 +297,7 @@ export default function ProfilePage() {
               )}
 
               {/* Pending Trading Request */}
-              {!auth.isProject && profileData.funds_required > 0 && (
+              {!auth.isProject && (
                 <Link to="/pending-trades">
                   <div className="bg-customGreen-100 bg-opacity-30 p-4 my-10 rounded-lg shadow-md hover:bg-customGreen-200 transition-colors duration-300 ease-in-out h-full">
                     <div className="flex flex-col justify-between h-full">
