@@ -92,7 +92,7 @@ function EvaluationSuccess() {
                     style={{
                       backgroundColor:
                         results.ghg_ratio > targets.ghg_ratio
-                          ? "#fef08a"
+                          ? "#fecaca"
                           : "#d9f99d",
                     }}
                   >
@@ -117,7 +117,7 @@ function EvaluationSuccess() {
                     style={{
                       backgroundColor:
                         results.energy_ratio > targets.energy_ratio
-                          ? "#fef08a"
+                          ? "#fecaca"
                           : "#d9f99d",
                     }}
                   >
@@ -142,7 +142,7 @@ function EvaluationSuccess() {
                     style={{
                       backgroundColor:
                         results.water_ratio < targets.water_ratio
-                          ? "#fef08a"
+                          ? "#fecaca"
                           : "#d9f99d",
                     }}
                   >
@@ -167,7 +167,7 @@ function EvaluationSuccess() {
                     style={{
                       backgroundColor:
                         results.waste_ratio < targets.waste_ratio
-                          ? "#fef08a"
+                          ? "#fecaca"
                           : "#d9f99d",
                     }}
                   >
