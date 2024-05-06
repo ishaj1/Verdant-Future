@@ -37,7 +37,7 @@ describe('RequireAuth component', () => {
 
     expect(screen.queryByText('Child Component')).not.toBeInTheDocument();
     await waitFor(()=> {
-      expect(screen.queryByText('Login')).toBeInTheDocument();
+      expect(screen.queryAllByText('Login')[0]).toBeInTheDocument();
     });
   });
 });

@@ -28,13 +28,13 @@ describe('TransactionHistory component', () => {
         sender_company_name: 'Company A',
         receiver_company_name: 'Company B',
         credits_transferred: 100,
-        amount_transferred: 500,
+        amount_transferred: 50000,
       },
       {
         sender_company_name: 'Company C',
         receiver_project_name: 'Project X',
         credits_transferred: 200,
-        amount_transferred: 1000,
+        amount_transferred: 100000,
       },
     ];
 
@@ -48,11 +48,11 @@ describe('TransactionHistory component', () => {
       expect(getByText('Company A')).toBeInTheDocument();
       expect(getByText('Company B')).toBeInTheDocument();
       expect(getByText('100')).toBeInTheDocument();
-      expect(getByText('$500')).toBeInTheDocument();
+      expect(getByText('$500.00')).toBeInTheDocument();
       expect(getByText('Company C')).toBeInTheDocument();
       expect(getByText('Project X')).toBeInTheDocument();
       expect(getByText('200')).toBeInTheDocument();
-      expect(getByText('$1000')).toBeInTheDocument();
+      expect(getByText('$1000.00')).toBeInTheDocument();
     });
   });
 
@@ -62,13 +62,13 @@ describe('TransactionHistory component', () => {
           sender_company_name: 'Company A',
           receiver_company_name: 'Company B',
           credits_transferred: 100,
-          amount_transferred: 500,
+          amount_transferred: 50000,
         },
         {
           sender_company_name: 'Company C',
           receiver_project_name: 'Project X',
           credits_transferred: 200,
-          amount_transferred: 1000,
+          amount_transferred: 100000,
         },
     ];
 

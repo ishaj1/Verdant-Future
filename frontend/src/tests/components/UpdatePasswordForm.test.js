@@ -82,7 +82,8 @@ describe('UpdatePasswordForm', () => {
 
   it('informs user if the request to change their password was unsuccessful', async () => {
     axios.post.mockResolvedValueOnce({ data: { changePassword: false } });
-    const { getByLabelText, getByText } = render(<UpdatePasswordForm setReturnMessage={() => {}} setShowForm={() => {}} />);
+    const setErrorMessageMock = jest.fn();
+    const { getByLabelText, getByText } = render(<UpdatePasswordForm setErrorMessage={setErrorMessageMock} setReturnMessage={() => {}} setShowForm={() => {}} />);
 
     fireEvent.change(getByLabelText("Current Password"), { target: { value: "incorrectpasswd"} });
     fireEvent.change(getByLabelText("New Password"), { target: { value: "newpasswd"} });
@@ -103,6 +104,6 @@ describe('UpdatePasswordForm', () => {
       headers: {"Content-Type": "application/x-www-form-urlencoded" },
     });
 
-    expect(getByText("Could not update password. Please check if the current password is correctly entered.")).toBeInTheDocument();
+    expect(setErrorMessageMock).toHaveBeenCalledWith("Could not update password. Please check if the current password is correctly entered.");
   })
 });

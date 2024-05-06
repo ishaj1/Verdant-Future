@@ -9,6 +9,17 @@ jest.mock("../../api/axios", () => ({
   get: jest.fn(),
 }));
 
+jest.mock('../../hooks/useAuth', () => ({
+  __esModule: true,
+  default: () => ({
+    auth: {
+      username: 'testUser',
+      isProject: false,
+    },
+  }),
+}));
+
+
 describe("OrganizationsDirectory Page", () => {
   afterEach(() => {
     jest.clearAllMocks();
@@ -29,19 +40,19 @@ describe("OrganizationsDirectory Page", () => {
 
     axios.get.mockResolvedValueOnce({
       data: [
-        { company_name: "Company 1", company_details: "Details 1", company_username: "company1" },
-        { company_name: "Company 2", company_details: "Details 2", company_username: "company2" },
+        { company_name: "Company 1", company_details: "Details 1", company_username: "company1", funds_required: 1 },
+        { company_name: "Company 2", company_details: "Details 2", company_username: "company2", funds_required: 2 },
       ],
     });
 
     render(
       <Router>
-        <OrganizationsDirectory />
+        <OrganizationsDirectory show="organizations"/>
       </Router>
     );
 
     await waitFor(() => {
-      expect(screen.getAllByRole("link")).toHaveLength(4);
+      expect(screen.getAllByText(/(Project [0-9]|Company [0-9])/)).toHaveLength(4);
     });
   });
 });
