@@ -2,7 +2,7 @@ import { useState } from "react";
 import axios from "../api/axios";
 import useAuth from "../hooks/useAuth";
 
-export default function UpdatePasswordForm({ setReturnMessage, setShowForm }) {
+export default function UpdatePasswordForm({ setErrorMessage, setReturnMessage, setShowForm }) {
   const { auth } = useAuth();
 
   const [message, setMessage] = useState();
@@ -34,7 +34,7 @@ export default function UpdatePasswordForm({ setReturnMessage, setShowForm }) {
       })
       .then((response) => {
         if (response.data.changePassword == false) {
-          setMessage(
+          setErrorMessage(
             "Could not update password. Please check if the current password is correctly entered."
           );
         } else if (response.data.changePassword == true) {

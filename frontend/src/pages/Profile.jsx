@@ -23,7 +23,7 @@ export default function ProfilePage() {
   const [errors, setErrors] = useState();
   const [showPasswordForm, setShowPasswordForm] = useState(false);
   const location = useLocation();
-  const message = location.state && location.state.message;
+  const [message, setMessage] = useState(location.state && location.state.message);
   const [stripeAccountURL, setStripeAccountURL] = useState("");
 
   const queryProfileData = (username, isProject) => {
@@ -376,6 +376,7 @@ export default function ProfilePage() {
                           onClick={() => {
                             setShowPasswordForm(true);
                             setErrors();
+                            setMessage();
                           }}
                         >
                           <img
@@ -391,6 +392,7 @@ export default function ProfilePage() {
                             onClick={() => {
                               setShowPasswordForm(true);
                               setErrors();
+                              setMessage();
                             }}
                           >
                             Update Password
@@ -401,7 +403,8 @@ export default function ProfilePage() {
                       {showPasswordForm && (
                         <>
                           <UpdatePasswordForm
-                            setReturnMessage={setErrors}
+                            setReturnMessage={setMessage}
+                            setErrorMessage={setErrors}
                             setShowForm={setShowPasswordForm}
                           />
                           <button
