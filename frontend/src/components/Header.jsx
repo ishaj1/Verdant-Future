@@ -95,7 +95,22 @@ export default function Header() {
                   {auth?.username ?
                   <li>
                     <button onClick={signOut}>Logout</button>
-                  </li> : <p>hi</p>}
+                  </li> : 
+                  <div>
+                    <li>
+                      <a href="/register">Sign up</a>
+                    </li>
+                    <li className="mt-4">
+                      <button
+                        onClick={() => {
+                          setLoginForm(true);
+                        }}
+                      >
+                        Login
+                      </button>
+                    </li>
+                  </div>
+                  }
 
                   {auth?.username && (
                     <li>

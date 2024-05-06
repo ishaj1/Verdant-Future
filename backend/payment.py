@@ -559,8 +559,9 @@ def company_transfer_funds():
   sender_username = request.form["source"]
   receiver_username = request.form["destination"]
   cursor.execute('SELECT total_credits, payment_id FROM Company WHERE company_username =  %s', (receiver_username))
-  dest= cursor.fetchone()['payment_id']
-  receiver_credit = float(cursor.fetchone()['total_credits'])
+  result = cursor.fetchone()
+  dest= result['payment_id']
+  receiver_credit = float(result['total_credits'])
   # prevent transaction if receiver has less than 50 credits
   if(receiver_credit < 50):
       return {"create": False, 'message': "Cannot request trade with company with less than 50 green credits."}
@@ -591,6 +592,7 @@ def company_transfer_funds():
   conn.commit()
   cursor.close()
   return {"create": True}
+
 @app.route('/company_response', methods=['POST'])
 def company_transfer_response(): 
   cursor = conn.cursor()
