@@ -497,14 +497,14 @@ def project_transfer_funds():
   result = stripe.Charge.create(
     amount= amount,
     currency="usd",
-    source= "acct_1P5t9bQSnkzLsREY",
+    source= src,
   )
   #result.receipt_url
   trans_amount = int(int(amount)*0.95)
   trans = stripe.Transfer.create(
     amount= trans_amount,
     currency='usd',
-    destination= "acct_1P5t9bQSnkzLsREY"
+    destination= dest
     # source_transaction = 'acct_1Oe5AZKlgwtgt0eB' # Use the transfer ID from the previous transfer
     # source_transaction = charge.id
     )
@@ -618,7 +618,7 @@ def company_transfer_response():
         result = stripe.Charge.create(
         amount= amount,
         currency="usd",
-        source= "acct_1P5t9bQSnkzLsREY"
+        source= source
         )
         #result.receipt_url
         # amount *=0.95
@@ -626,7 +626,7 @@ def company_transfer_response():
         amount= amount,
         
         currency='usd',
-        destination= "acct_1P5t9bQSnkzLsREY"
+        destination= destination
         # source_transaction = 'acct_1Oe5AZKlgwtgt0eB' # Use the transfer ID from the previous transfer
         # source_transaction = charge.id
         )
