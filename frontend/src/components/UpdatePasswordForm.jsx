@@ -39,6 +39,7 @@ export default function UpdatePasswordForm({ setErrorMessage, setReturnMessage, 
           );
         } else if (response.data.changePassword == true) {
           setReturnMessage("Password Updated");
+          setErrorMessage();
           setShowForm(false);
         }
       })
