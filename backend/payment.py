@@ -13,6 +13,7 @@ from flask import (
 )
 from flask_cors import CORS
 import hashlib
+import bcrypt
 
 app = Flask(__name__)
 CORS(app)
@@ -47,12 +48,12 @@ def login():
     cursor = conn.cursor()
 
     if isCompany == "true":
-        query = ("SELECT company_username, company_password FROM Company WHERE company_username = %s and company_password = %s")
+        query = ("SELECT company_username, company_password FROM Company WHERE company_username = %s")
 
     else:
-        query = ("SELECT project_username, project_password FROM Project WHERE project_username = %s and project_password = %s")
+        query = ("SELECT project_username, project_password FROM Project WHERE project_username = %s")
 
-    cursor.execute(query, (username, str(hashlib.md5(password.encode()).hexdigest())))
+    cursor.execute(query, (username))
     
     data = cursor.fetchone()
     cursor.close()
@@ -60,15 +61,21 @@ def login():
         session["user"] = True
         
         if isCompany == "true":
-            return {
-                "user": True,
-                "userName": data["company_username"]
-            }
+            if bcrypt.checkpw(password.encode(), data["company_password"]):
+                return {
+                    "user": True,
+                    "userName": data["company_username"]
+                }
+            else:
+                return {"user": False}
         else:
-            return {
-                "user":True,
-                "userName": data["project_username"]
-            }
+            if bcrypt.checkpw(password.encode(), data["project_password"]):
+                return {
+                    "user":True,
+                    "userName": data["project_username"]
+                }
+            else:
+                return {"user": False}
 
     else:
         return {
@@ -130,7 +137,7 @@ def registerAuth():
             cursor.execute(
                 ins,
                 (username,
-                 str(hashlib.md5(password.encode()).hexdigest()),
+                 bcrypt.hashpw(password.encode(), bcrypt.gensalt()),
                  name,
                  contact_name,
                  contact_email,
@@ -149,7 +156,7 @@ def registerAuth():
             cursor.execute(
                 ins,
                 (username,
-                 str(hashlib.md5(password.encode()).hexdigest()),
+                 bcrypt.hashpw(password.encode(), bcrypt.gensalt()),
                  name,
                  project_association,
                  contact_name,
@@ -395,30 +402,36 @@ def update_password():
     cursor = conn.cursor()
 
     if isProject == "true":
-        query = ("SELECT project_username, project_password FROM Project WHERE project_username = %s and project_password = %s")
+        query = ("SELECT project_username, project_password FROM Project WHERE project_username = %s")
 
     else:
-        query = ("SELECT company_username, company_password FROM Company WHERE company_username = %s and company_password = %s")
+        query = ("SELECT company_username, company_password FROM Company WHERE company_username = %s")
 
-    cursor.execute(query, (username, str(hashlib.md5(old_password.encode()).hexdigest())))
+    cursor.execute(query, (username))
     data = cursor.fetchone()
 
     if data:
         
         if isProject == "true":
-            query1 = ("UPDATE Project SET project_password = %s WHERE project_username = %s")
-            cursor.execute(query1, (str(hashlib.md5(new_password.encode()).hexdigest()), username))
-                           
-            return {
-                "changePassword": True
-            }
-        else:
-            query1 = ("UPDATE Company SET company_password = %s WHERE company_username = %s")
-            cursor.execute(query1, (str(hashlib.md5(new_password.encode()).hexdigest()), username))
+            if bcrypt.checkpw(password.encode(), data["company_password"]):
+                query1 = ("UPDATE Project SET project_password = %s WHERE project_username = %s")
+                cursor.execute(query1, (bcrypt.hashpw(new_password.encode(), bcrypt.gensalt()), username))
 
-            return {
-                "changePassword": True
-            }
+                return {
+                    "changePassword": True
+                }
+            else:
+                return {"changePassword": False}
+        else:
+            if bcrypt.checkpw(password.encode(), data["company_password"].encode()):
+                query1 = ("UPDATE Company SET company_password = %s WHERE company_username = %s")
+                cursor.execute(query1, (bcrypt.hashpw(new_password.encode(), bcrypt.gensalt()), username))
+
+                return {
+                    "changePassword": True
+                }
+            else:
+                return {"changePassword": False}
 
     else:
         return {

@@ -1,6 +1,6 @@
 CREATE TABLE Company(
     company_username varchar(50) not null,
-    company_password varchar(50) not null,
+    company_password binary(60) not null,
     company_name varchar(50) not null,
     contact_name varchar(50) not null,
     contact_detail varchar(50) not null,
@@ -33,7 +33,7 @@ CREATE TABLE Company_eval(
 
 CREATE TABLE Project(
     project_username varchar(50) not null,
-    project_password varchar(50) not null,
+    project_password binary(60) not null,
     project_name varchar(50) not null,
     -- Project association refers to what university or lab they work with to prevent unverified projects to register on the platform
     project_association varchar(50) not null,
